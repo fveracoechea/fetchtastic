@@ -17,13 +17,13 @@ describe('Compose operator', () => {
       return instance;
     });
 
-    const mockOperator2 = jest.fn((i?: x.XShield) => {
+    const mockOperator2 = jest.fn((i?: x.XShieldRequest) => {
       const instance = x.initialize(i);
       instance.url = '/testing';
       return instance;
     });
 
-    const mockOperator3 = jest.fn((i?: x.XShield) => {
+    const mockOperator3 = jest.fn((i?: x.XShieldRequest) => {
       const instance = x.initialize(i);
       instance.options = { cache: 'no-cache' };
       return instance;
