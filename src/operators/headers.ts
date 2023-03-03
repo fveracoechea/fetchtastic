@@ -7,14 +7,15 @@ export function headers(
   return (request?: XShieldRequest) => {
     const instance = initialize(request);
 
+    const newHeaders = new Headers(data);
+
     if (replace) {
       return {
         ...instance,
-        headers: new Headers(data),
+        headers: newHeaders,
       };
     }
 
-    const newHeaders = new Headers(data);
     instance.headers.forEach((value, key) => {
       if (!newHeaders.has(key)) {
         newHeaders.set(key, value);

@@ -2,8 +2,8 @@
 export * from './core';
 export * from './error';
 // operators
-export * from './helpers/compose';
-export * from './helpers/headers';
-export * from './helpers/onError';
-export * from './helpers/send';
-export * from './helpers/url';
+export * from './operators/compose';
+export * from './operators/headers';
+export * from './operators/searchParams';
+export * from './actions/send';
+export * from './operators/url';

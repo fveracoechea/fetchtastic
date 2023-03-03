@@ -27,7 +27,10 @@ export const ResponseParsers = [
 
 export type ResponseParser = typeof ResponseParsers[number];
 
-// * Core Interface
+// * Core Interfaces
+
+export interface XShieldOptions
+  extends Omit<RequestInit, 'headers' | 'method'> {}
 
 export interface XShieldRequest<Schema extends ZodSchema = ZodAny> {
   _type: 'XShieldRequest';
@@ -38,6 +41,7 @@ export interface XShieldRequest<Schema extends ZodSchema = ZodAny> {
   parser: ResponseParser;
   schema: Schema;
   method: HttpMethod;
+  searchParams: URLSearchParams;
 }
 
 // * Composition
@@ -54,10 +58,7 @@ export interface XShieldCatcher<T = unknown> {
 
 export interface XShieldCatchers extends Map<number, XShieldCatcher> {}
 
-// * Request Options
-
-export interface XShieldOptions
-  extends Omit<RequestInit, 'headers' | 'method'> {}
+// * Constructor
 
 export function initialize(instance?: XShieldRequest): XShieldRequest {
   return (
@@ -70,6 +71,7 @@ export function initialize(instance?: XShieldRequest): XShieldRequest {
       catchers: new Map<number, XShieldCatcher>(),
       parser: 'JSON',
       schema: zodAny(),
+      searchParams: new URLSearchParams(),
     }
   );
 }
