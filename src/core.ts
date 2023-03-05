@@ -1,5 +1,4 @@
 import { XShieldError } from './error';
-import { ZodSchema, ZodAny, any as zodAny } from 'zod';
 
 // * HttpMethods
 
@@ -32,16 +31,16 @@ export type ResponseParser = typeof ResponseParsers[number];
 export interface XShieldOptions
   extends Omit<RequestInit, 'headers' | 'method'> {}
 
-export interface XShieldRequest<Schema extends ZodSchema = ZodAny> {
+export interface XShieldRequest<Result = unknown> {
   _type: 'XShieldRequest';
   url: string | URL;
   headers: Headers;
   options: XShieldOptions;
   catchers: XShieldCatchers;
   parser: ResponseParser;
-  schema: Schema;
   method: HttpMethod;
   searchParams: URLSearchParams;
+  validateResponse(data: unknown): Result;
 }
 
 // * Composition
@@ -60,7 +59,9 @@ export interface XShieldCatchers extends Map<number, XShieldCatcher> {}
 
 // * Constructor
 
-export function initialize(instance?: XShieldRequest): XShieldRequest {
+export function initialize<Result = unknown>(
+  instance?: XShieldRequest<Result>,
+): XShieldRequest<Result> {
   return (
     instance || {
       _type: 'XShieldRequest',
@@ -70,7 +71,7 @@ export function initialize(instance?: XShieldRequest): XShieldRequest {
       options: {},
       catchers: new Map<number, XShieldCatcher>(),
       parser: 'JSON',
-      schema: zodAny(),
+      validateResponse: data => data as Result,
       searchParams: new URLSearchParams(),
     }
   );
