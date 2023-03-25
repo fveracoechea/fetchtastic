@@ -1,15 +1,11 @@
-import { initialize, XShieldRequest } from '../core';
+import { XShield } from '../core';
 
 export function signal(signal: AbortSignal | null) {
-  return (request?: XShieldRequest): XShieldRequest => {
-    const instance = initialize(request);
-
-    return {
-      ...instance,
-      options: {
-        ...instance.options,
-        signal,
-      },
-    };
-  };
+  return <T>(config: XShield<T>): XShield<T> => ({
+    ...config,
+    options: {
+      ...config.options,
+      signal,
+    },
+  });
 }

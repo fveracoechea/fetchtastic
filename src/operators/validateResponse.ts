@@ -1,11 +1,9 @@
-import { initialize, XShieldRequest } from '../core';
+import { XShield } from '../core';
 
-export function validateResponse<T>(validate: (data: unknown) => T) {
-  return (request?: XShieldRequest): XShieldRequest<T> => {
-    const instance = initialize(request);
-
+export function validateResponse<B>(validate: (data: unknown) => B) {
+  return <A>(config: XShield<A>): XShield<B> => {
     return {
-      ...instance,
+      ...config,
       validateResponse: validate,
     };
   };

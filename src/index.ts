@@ -1,9 +1,8 @@
 // Core types
 export * from './core';
+// error types
 export * from './error';
+// utils
+export * from './compose';
 // operators
-export * from './operators/compose';
-export * from './operators/headers';
-export * from './operators/searchParams';
-export * from './actions/send';
-export * from './operators/url';
+export * from './operators';

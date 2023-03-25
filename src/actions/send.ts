@@ -1,66 +1,59 @@
-import { XShieldComposable, XShieldRequest } from '../core';
+import { XShield } from '../core';
 import { createError, isXShieldError } from '../error';
 
-async function parse<T extends XShieldRequest>(
-  request: T,
+type ParseOptions = Record<XShield['parser'], () => Promise<unknown>>;
+
+function getResponseParser(response: Response, parser: XShield['parser']) {
+  const cases: ParseOptions = {
+    JSON: () => response.json(),
+    Text: () => response.text(),
+    ArrayBuffer: () => response.arrayBuffer(),
+    Blob: () => response.blob(),
+    FormData: () => response.formData(),
+  };
+  return cases[parser];
+}
+
+async function parse<Type, Config extends XShield<Type>>(
+  config: Config,
   response: Response,
-): Promise<T['schema']> {
-  let data: unknown;
+) {
   try {
-    switch (request.parser) {
-      case 'JSON':
-        data = await response.json();
-        break;
-      case 'Text':
-        data = await response.text();
-        break;
-      case 'ArrayBuffer':
-        data = await response.arrayBuffer();
-        break;
-      case 'Blob':
-        data = await response.blob();
-        break;
-      case 'FormData':
-        data = await response.formData();
-        break;
-    }
-    return request.schema.parse(data);
+    const parse = getResponseParser(response, config.parser);
+    const data = await parse();
+    return config.validateResponse(data);
   } catch (error) {
-    const xError = createError(response.url, request.method, response);
+    const xError = createError(response.url, config.method, response);
     xError.errorRef = error as Error;
     throw xError;
   }
 }
 
-export function send<T extends XShieldComposable>(
-  composable: T,
-): Promise<ReturnType<T>['schema']> {
-  const instace = composable();
-
+export function send<Type, Config extends XShield<Type>>(config: Config) {
   const options: RequestInit = {
-    headers: instace.headers,
-    ...instace.options,
+    headers: config.headers,
+    ...config.options,
   };
 
-  return fetch(instace.url.toString(), options)
+  return fetch(config.url.toString(), options)
     .then(response => {
       if (!response.ok) {
         const xError = createError(
-          instace.url.toString(),
-          instace.method,
+          config.url.toString(),
+          config.method,
           response,
         );
         const error = new Error(xError.message);
         xError.errorRef = error;
         throw xError;
       }
-      return parse(instace, response);
+      return parse<Type, Config>(config, response);
     })
     .catch((error: Error) => {
       if (isXShieldError(error)) {
         throw error;
       } else {
-        const xError = createError(instace.url.toString(), instace.method);
+        const xError = createError(config.url.toString(), config.method);
         xError.message = error.message;
         xError.errorRef = error;
         throw xError;

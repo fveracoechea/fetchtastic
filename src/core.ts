@@ -31,8 +31,8 @@ export type ResponseParser = typeof ResponseParsers[number];
 export interface XShieldOptions
   extends Omit<RequestInit, 'headers' | 'method'> {}
 
-export interface XShieldRequest<Result = unknown> {
-  _type: 'XShieldRequest';
+export interface XShield<T = unknown> {
+  _type: 'XShield';
   url: string | URL;
   headers: Headers;
   options: XShieldOptions;
@@ -40,13 +40,7 @@ export interface XShieldRequest<Result = unknown> {
   parser: ResponseParser;
   method: HttpMethod;
   searchParams: URLSearchParams;
-  validateResponse(data: unknown): Result;
-}
-
-// * Composition
-
-export interface XShieldComposable {
-  (instance?: XShieldRequest): XShieldRequest;
+  validateResponse(data: unknown): T;
 }
 
 // * Error Catching
@@ -59,20 +53,18 @@ export interface XShieldCatchers extends Map<number, XShieldCatcher> {}
 
 // * Constructor
 
-export function initialize<Result = unknown>(
-  instance?: XShieldRequest<Result>,
-): XShieldRequest<Result> {
+export function initialize(config?: XShield<unknown>): XShield<unknown> {
   return (
-    instance || {
-      _type: 'XShieldRequest',
+    config || {
+      _type: 'XShield',
       url: '',
       headers: new Headers(),
       method: 'GET',
       options: {},
       catchers: new Map<number, XShieldCatcher>(),
       parser: 'JSON',
-      validateResponse: data => data as Result,
       searchParams: new URLSearchParams(),
+      validateResponse: x => x,
     }
   );
 }

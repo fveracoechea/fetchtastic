@@ -13,35 +13,50 @@ export interface XShieldError {
   errorRef?: Error;
 }
 
-async function parseResponseData(instance: XShieldError) {
-  if (instance.status === 0 || !instance.response) return;
+async function parseResponseData(config: XShieldError) {
+  if (config.status === 0 || !config.response) return;
   try {
-    instance.json = await instance.response.json();
+    config.json = await config.response.json();
   } catch {
-    instance.text = await instance.response.text();
+    config.text = await config.response.text();
   }
 }
 
-function setMessage(instance: XShieldError) {
-  if (instance.message) {
+function setMessage(config: XShieldError) {
+  if (config.message) {
     return;
-  } else if (instance.status > 0 && StatusCodes.has(instance.status)) {
-    instance.message = StatusCodes.get(instance.status)!;
-  } else if (instance?.response?.type === 'opaque') {
-    instance.message = 'Opaque Response (no-cors)';
-  } else if (instance?.response?.type === 'error') {
-    instance.message = 'Network Error';
+  } else if (config.status > 0 && StatusCodes.has(config.status)) {
+    config.message = StatusCodes.get(config.status)!;
+  } else if (config?.response?.type === 'opaque') {
+    config.message = 'Opaque Response (no-cors)';
+  } else if (config?.response?.type === 'error') {
+    config.message = 'Network Error';
   } else {
-    instance.message = 'Fetch Error';
+    config.message = 'Fetch Error';
   }
 }
 
-export function isXShieldError(error: any): error is XShieldError {
+export function isXShieldError(error: unknown): error is XShieldError {
+  if (!error) return false;
   return (
-    error?._type === 'XShieldError' &&
-    typeof error?.url === 'string' &&
-    typeof error?.status === 'number'
+    typeof error === 'object' &&
+    '_type' in error &&
+    error._type === 'XShieldError' &&
+    'url' in error &&
+    typeof error.url === 'string' &&
+    'status' in error &&
+    typeof error?.status === 'number' &&
+    'method' in error &&
+    typeof error.method === 'number'
   );
+}
+
+export function assertXShieldError(
+  error: unknown,
+): asserts error is XShieldError {
+  if (!isXShieldError(error)) {
+    throw new Error('Given error does not satisfy XShieldError type');
+  }
 }
 
 export function createError(
@@ -49,7 +64,7 @@ export function createError(
   method: HttpMethod,
   response?: Response,
 ) {
-  const instance: XShieldError = {
+  const config: XShieldError = {
     _type: 'XShieldError',
     url,
     method,
@@ -58,7 +73,7 @@ export function createError(
     message: '',
     errorRef: new Error('XShieldError'),
   };
-  parseResponseData(instance);
-  setMessage(instance);
-  return instance;
+  parseResponseData(config);
+  setMessage(config);
+  return config;
 }

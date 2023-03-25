@@ -1,4 +1,4 @@
-import { initialize, XShieldRequest } from '../core';
+import { XShield } from '../core';
 
 // INPUT TYPE
 
@@ -34,20 +34,18 @@ function getNewSearchParms(data: SearchParamInput) {
 
 // OVERLOADS
 
-export function searchParams(): (request?: XShieldRequest) => XShieldRequest;
+export function searchParams(): <T>(config: XShield<T>) => XShield<T>;
 
 export function searchParams(
   data: SearchParamInput,
   replace?: boolean,
-): (request?: XShieldRequest) => XShieldRequest;
+): <T>(config: XShield<T>) => XShield<T>;
 
 export function searchParams(data?: SearchParamInput, replace = false) {
-  return (request?: XShieldRequest) => {
-    const instance = initialize(request);
-
+  return <T>(config: XShield<T>): XShield<T> => {
     if (!data) {
       return {
-        ...instance,
+        ...config,
         searchParams: new URLSearchParams(),
       };
     }
@@ -56,17 +54,17 @@ export function searchParams(data?: SearchParamInput, replace = false) {
 
     if (replace) {
       return {
-        ...instance,
+        ...config,
         searchParams: newSearchParams,
       };
     }
 
-    instance.searchParams.forEach((value, key) => {
+    config.searchParams.forEach((value, key) => {
       if (!newSearchParams.has(key)) {
         newSearchParams.set(key, value);
       }
     });
 
-    return { ...instance, searchParams: newSearchParams };
+    return { ...config, searchParams: newSearchParams };
   };
 }
