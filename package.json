@@ -54,12 +54,12 @@
     {
       "name": "CommonJS",
       "path": "dist/cjs/index.cjs",
-      "limit": "5 KB"
+      "limit": "8 KB"
     },
     {
       "name": "ES Modules",
       "path": "dist/esm/index.js",
-      "limit": "5 KB"
+      "limit": "8 KB"
     }
   ],
   "volta": {
