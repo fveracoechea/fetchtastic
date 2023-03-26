@@ -1,33 +1,33 @@
 name: CI
 on: [push]
 jobs:
-    build:
-        name: Build, lint, and test on Node ${{ matrix.node }}
+  build:
+    name: Build, lint, and test on Node ${{ matrix.node }}
 
-        runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                node: ['14.x', '16.x', '18.x']
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ['14.x', '16.x', '18.x']
 
-        steps:
-            - name: Checkout repo
-                uses: actions/checkout@v2
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
 
-            - name: Use Node ${{ matrix.node }}
-                uses: actions/setup-node@v1
-                    with:
-                        node-version: ${{ matrix.node }}
+      - name: Use Node ${{ matrix.node }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
 
-            - name: Install deps and build (with cache)
-                uses: bahmutov/npm-install@v1
-                    with:
-                        install-command: yarn install
+      - name: Install deps and build (with cache)
+        uses: bahmutov/npm-install@v1
+        with:
+          install-command: yarn install
 
-            - name: ESLint
-                run: yarn lint
+      - name: Lint
+        run: yarn lint
 
-            - name: Test
-                run: yarn test --ci --coverage --maxWorkers=2
+      - name: Test
+        run: yarn test --ci --coverage --maxWorkers=2
 
-            - name: Build
-                run: yarn build
+      - name: Build
+        run: yarn build
