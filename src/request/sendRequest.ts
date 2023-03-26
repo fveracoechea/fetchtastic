@@ -1,5 +1,5 @@
-import { XShield } from '../core';
-import { createError, isXShieldError } from '../error';
+import { HttpMethod, XShield } from '../core';
+import { createError, isError, isXShieldError } from '../error';
 
 type ParseOptions = Record<XShield['parser'], () => Promise<unknown>>;
 
@@ -29,40 +29,40 @@ async function parse<Type, Config extends XShield<Type>>(
   }
 }
 
-export function send<Type, Config extends XShield<Type>>(
+export async function sendRequest<Type, Config extends XShield<Type>>(
   config: Config,
+  method: HttpMethod,
   body?: unknown | undefined,
 ) {
   const requestBody = body ? { body: JSON.stringify(body) } : {};
   const options: RequestInit = {
-    method: config.method,
+    method,
     headers: config.headers,
     ...requestBody,
     ...config.options,
   };
 
-  return fetch(config.url.toString(), options)
-    .then(response => {
-      if (!response.ok) {
-        const xError = createError(
-          config.url.toString(),
-          config.method,
-          response,
-        );
-        const error = new Error(xError.message);
-        xError.errorRef = error;
-        throw xError;
-      }
-      return parse<Type, Config>(config, response);
-    })
-    .catch((error: Error) => {
-      if (isXShieldError(error)) {
-        throw error;
-      } else {
-        const xError = createError(config.url.toString(), config.method);
-        xError.message = error.message;
-        xError.errorRef = error;
-        throw xError;
-      }
-    });
+  try {
+    const response = await fetch(config.url.toString(), options);
+    if (!response.ok) {
+      const xError = createError(
+        config.url.toString(),
+        config.method,
+        response,
+      );
+      const error = new Error(xError.message);
+      xError.errorRef = error;
+      throw xError;
+    }
+    return await parse<Type, Config>(config, response);
+  } catch (error) {
+    if (isXShieldError(error)) {
+      throw error;
+    } else {
+      const xError = createError(config.url.toString(), config.method);
+      xError.message = isError(error) ? error.message : 'Fetch Error';
+      xError.errorRef = isError(error) ? error : undefined;
+      throw xError;
+    }
+  }
 }

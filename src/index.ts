@@ -6,5 +6,5 @@ export * from './error';
 export * from './compose';
 // operators
 export * from './operators';
-// actions
-export * from './actions';
+// request
+export * from './request';
