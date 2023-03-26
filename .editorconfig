@@ -11,8 +11,11 @@ indent_style = space
 indent_size = 2
 max_line_length = 80
 
-[*.{css,scss,sass,yml}]
+[*.{css,scss,sass}]
 indent_size = 4
+
+[*.{yml,yaml}]
+indent_size = 2
 
 [*.gql]
 indent_size = 4
