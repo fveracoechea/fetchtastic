@@ -29,10 +29,15 @@ async function parse<Type, Config extends XShield<Type>>(
   }
 }
 
-export function send<Type, Config extends XShield<Type>>(config: Config) {
+export function send<Type, Config extends XShield<Type>>(
+  config: Config,
+  body?: unknown | undefined,
+) {
+  const requestBody = body ? { body: JSON.stringify(body) } : {};
   const options: RequestInit = {
     method: config.method,
     headers: config.headers,
+    ...requestBody,
     ...config.options,
   };
 
