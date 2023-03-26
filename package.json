@@ -1,8 +1,12 @@
 {
+  "name": "xshield",
+  "author": "Francisco Veracoechea",
   "version": "0.1.0",
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
   "typings": "dist/index.d.ts",
+  "module": "dist/index.js",
+  "type": "module",
   "files": [
     "dist"
   ],
@@ -11,40 +15,52 @@
   },
   "scripts": {
     "start": "tsdx watch",
-    "build": "tsdx build",
-    "test": "tsdx test",
-    "lint": "tsdx lint src",
-    "prepare": "tsdx build",
+    "build": "rimraf dist && rollup -c",
+    "test": "jest",
+    "lint": "eslint . --ext .ts,.tsx --max-warnings 0",
+    "format": "prettier --write .",
     "size": "size-limit",
     "analyze": "size-limit --why",
-    "get-codes": "npx ts-node scripts/get-status-codes"
+    "get-codes": "ts-node scripts/get-status-codes"
   },
-  "prettier": {
-    "printWidth": 80,
-    "semi": true,
-    "singleQuote": true,
-    "trailingComma": "all"
-  },
-  "name": "xshield",
-  "author": "Francisco Veracoechea",
-  "module": "dist/nuzzle.esm.js",
   "size-limit": [
     {
-      "path": "dist/nuzzle.cjs.production.min.js",
-      "limit": "10 KB"
+      "path": "dist/index.js",
+      "limit": "5 KB"
     },
     {
-      "path": "dist/nuzzle.esm.js",
-      "limit": "10 KB"
+      "path": "dist/index.cjs",
+      "limit": "5 KB"
     }
   ],
+  "volta": {
+    "node": "18.15.0",
+    "yarn": "3.5.0"
+  },
   "devDependencies": {
+    "@jest/globals": "^29.5.0",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-multi-entry": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-terser": "^0.4.0",
+    "@rollup/plugin-typescript": "^11.0.0",
     "@size-limit/preset-small-lib": "^8.1.2",
-    "@types/jest": "^29.4.0",
-    "husky": "^8.0.3",
+    "@types/jest": "^29.5.0",
+    "@types/node": "^18.15.9",
+    "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "@typescript-eslint/parser": "^5.56.0",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.8.0",
+    "jest": "^29.5.0",
+    "prettier": "2.8.7",
+    "rimraf": "^4.4.1",
+    "rollup": "^3.20.2",
+    "rollup-plugin-progress": "^1.1.2",
     "size-limit": "^8.1.2",
-    "tsdx": "^0.14.1",
+    "ts-jest": "^29.0.5",
+    "ts-node": "^10.9.1",
     "tslib": "^2.5.0",
-    "typescript": "^4.9.4"
+    "typescript": "^5.0.2"
   }
 }

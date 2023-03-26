@@ -1,10 +1,10 @@
-const fs = require('fs');
-const { STATUS_CODES } = require('http');
+import fs from 'fs';
+import { STATUS_CODES } from 'http';
 
 const entries: [number, string][] = [];
 
-for (let code in STATUS_CODES) {
-  entries.push([Number(code), STATUS_CODES[code]]);
+for (const code in STATUS_CODES) {
+  entries.push([Number(code), STATUS_CODES[code] ?? '']);
 }
 
 fs.writeFileSync(

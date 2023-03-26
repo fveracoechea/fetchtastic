@@ -23,10 +23,13 @@ async function parseResponseData(config: XShieldError) {
 }
 
 function setMessage(config: XShieldError) {
+  const message =
+    StatusCodes.has(config.status) && StatusCodes.get(config.status);
+
   if (config.message) {
     return;
-  } else if (config.status > 0 && StatusCodes.has(config.status)) {
-    config.message = StatusCodes.get(config.status)!;
+  } else if (config.status > 0 && message) {
+    config.message = message;
   } else if (config?.response?.type === 'opaque') {
     config.message = 'Opaque Response (no-cors)';
   } else if (config?.response?.type === 'error') {
@@ -37,18 +40,21 @@ function setMessage(config: XShieldError) {
 }
 
 export function isXShieldError(error: unknown): error is XShieldError {
-  if (!error) return false;
-  return (
-    typeof error === 'object' &&
-    '_type' in error &&
-    error._type === 'XShieldError' &&
-    'url' in error &&
-    typeof error.url === 'string' &&
-    'status' in error &&
-    typeof error?.status === 'number' &&
-    'method' in error &&
-    typeof error.method === 'number'
-  );
+  if (error) {
+    return (
+      error != null &&
+      typeof error === 'object' &&
+      '_type' in error &&
+      error._type === 'XShieldError' &&
+      'url' in error &&
+      typeof error.url === 'string' &&
+      'status' in error &&
+      typeof error?.status === 'number' &&
+      'method' in error &&
+      typeof error.method === 'number'
+    );
+  }
+  return false;
 }
 
 export function assertXShieldError(

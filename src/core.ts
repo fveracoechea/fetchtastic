@@ -12,7 +12,7 @@ export const HttpMethods = [
   'PATCH',
 ] as const;
 
-export type HttpMethod = typeof HttpMethods[number];
+export type HttpMethod = (typeof HttpMethods)[number];
 
 // * ResponseParsers
 
@@ -24,12 +24,11 @@ export const ResponseParsers = [
   'Text',
 ] as const;
 
-export type ResponseParser = typeof ResponseParsers[number];
+export type ResponseParser = (typeof ResponseParsers)[number];
 
 // * Core Interfaces
 
-export interface XShieldOptions
-  extends Omit<RequestInit, 'headers' | 'method'> {}
+export type XShieldOptions = Omit<RequestInit, 'headers' | 'method'>;
 
 export interface XShield<T = unknown> {
   _type: 'XShield';
@@ -49,7 +48,7 @@ export interface XShieldCatcher<T = unknown> {
   (error: XShieldError): T;
 }
 
-export interface XShieldCatchers extends Map<number, XShieldCatcher> {}
+export type XShieldCatchers = Map<number, XShieldCatcher>;
 
 // * Constructor
 

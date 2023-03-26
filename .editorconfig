@@ -1,0 +1,21 @@
+
+# Top-most EditorConfig file
+root = true
+
+# Editor default newlines with a newline ending every file
+[*]
+charset = utf-8
+insert_final_newline = true
+end_of_line = lf
+indent_style = space
+indent_size = 2
+max_line_length = 80
+
+[*.{css,scss,sass,yml}]
+indent_size = 4
+
+[*.gql]
+indent_size = 4
+
+[*.graphql]
+indent_size = 4

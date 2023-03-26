@@ -31,6 +31,7 @@ async function parse<Type, Config extends XShield<Type>>(
 
 export function send<Type, Config extends XShield<Type>>(config: Config) {
   const options: RequestInit = {
+    method: config.method,
     headers: config.headers,
     ...config.options,
   };

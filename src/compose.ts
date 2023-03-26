@@ -233,7 +233,7 @@ export function compose<
   P,
   Q,
   R,
-  S
+  S,
 >(
   a: A,
   ab: (a: A) => B,
@@ -276,7 +276,7 @@ export function compose<
   Q,
   R,
   S,
-  T
+  T,
 >(
   a: A,
   ab: (a: A) => B,
@@ -300,7 +300,10 @@ export function compose<
   st: (s: S) => T,
 ): T;
 
-export function compose(a: unknown, ...operators: Function[]): unknown {
+export function compose(
+  a: unknown,
+  ...operators: ((x: unknown) => unknown)[]
+): unknown {
   let config = a;
   if (operators.length > 0) {
     for (const operator of operators) {
