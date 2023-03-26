@@ -5,7 +5,7 @@ export interface XShieldError {
   _type: 'XShieldError';
   status: number;
   method: HttpMethod;
-  response?: Response;
+  response?: Response | undefined;
   url: string;
   message: string;
   text?: string;
@@ -68,14 +68,14 @@ export function assertXShieldError(
 export function createError(
   url: string,
   method: HttpMethod,
-  response?: Response,
+  response?: Response | undefined,
 ) {
   const config: XShieldError = {
     _type: 'XShieldError',
     url,
     method,
     status: response?.status || 0,
-    response: response,
+    response,
     message: '',
     errorRef: new Error('XShieldError'),
   };

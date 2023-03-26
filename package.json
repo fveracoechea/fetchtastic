@@ -2,11 +2,38 @@
   "name": "xshield",
   "author": "Francisco Veracoechea",
   "version": "0.1.0",
-  "license": "MIT",
-  "main": "dist/index.cjs",
-  "typings": "dist/index.d.ts",
-  "module": "dist/index.js",
   "type": "module",
+  "license": "MIT",
+  "main": "./dist/cjs/index.cjs",
+  "typings": "./dist/esm/index.d.ts",
+  "module": "./dist/esm/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/cjs/index.cjs",
+      "import": "./dist/esm/index.js"
+    },
+    "./actions": {
+      "types": "./dist/esm/actions/index.d.ts",
+      "import": "./dist/esm/actions/index.js",
+      "require": "./dist/cjs/actions/index.cjs"
+    },
+    "./actions/*": {
+      "types": "./dist/esm/actions/*.d.ts",
+      "import": "./dist/esm/actions/*.js",
+      "require": "./dist/cjs/actions/*.cjs"
+    },
+    "./operators": {
+      "types": "./dist/esm/operators/index.d.ts",
+      "import": "./dist/esm/operators/index.js",
+      "require": "./dist/cjs/operators/index.cjs"
+    },
+    "./operators/*": {
+      "types": "./dist/esm/operators/*.d.ts",
+      "import": "./dist/esm/operators/*.js",
+      "require": "./dist/cjs/operators/*.cjs"
+    }
+  },
   "files": [
     "dist"
   ],
@@ -25,11 +52,13 @@
   },
   "size-limit": [
     {
-      "path": "dist/index.js",
+      "name": "CommonJS",
+      "path": "dist/cjs/index.cjs",
       "limit": "5 KB"
     },
     {
-      "path": "dist/index.cjs",
+      "name": "ES Modules",
+      "path": "dist/esm/index.js",
       "limit": "5 KB"
     }
   ],

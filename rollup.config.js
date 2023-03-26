@@ -59,7 +59,7 @@ const options = [
   {
     input,
     output: {
-      dir: 'dist',
+      dir: 'dist/esm',
       format: 'esm',
       preserveModules: true,
       preserveModulesRoot: 'src',
@@ -73,27 +73,34 @@ const options = [
     plugins: [
       ...plugins,
       typescript({
+        tsconfig: 'tsconfig.esm.json',
         declaration: true,
-        declarationDir: 'dist',
+        declarationDir: 'dist/esm',
       }),
     ],
   },
   // CJS
   {
-    input: './src/index.ts',
+    input,
     output: {
-      file: 'dist/index.cjs',
+      dir: 'dist/cjs',
       format: 'cjs',
+      preserveModules: true,
+      preserveModulesRoot: 'src',
       sourcemap: true,
+      entryFileNames: '[name].cjs',
       assetFileNames({ name }) {
         return name?.replace(/^src\//, '') ?? '';
       },
+      exports: 'named',
     },
     external,
     plugins: [
       ...plugins,
       typescript({
-        declaration: false,
+        tsconfig: 'tsconfig.cjs.json',
+        declaration: true,
+        declarationDir: 'dist/cjs',
       }),
     ],
   },
