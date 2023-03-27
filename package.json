@@ -13,20 +13,20 @@
       "require": "./dist/cjs/index.cjs",
       "import": "./dist/esm/index.js"
     },
-    "./request": {
-      "types": "./dist/esm/request/index.d.ts",
-      "import": "./dist/esm/request/index.js",
-      "require": "./dist/cjs/request/index.cjs"
+    "./*": {
+      "types": "./dist/esm/*.d.ts",
+      "import": "./dist/esm/*.js",
+      "require": "./dist/cjs/*.cjs"
     },
     "./operators": {
       "types": "./dist/esm/operators/index.d.ts",
       "import": "./dist/esm/operators/index.js",
       "require": "./dist/cjs/operators/index.cjs"
     },
-    "./operators/*": {
-      "types": "./dist/esm/operators/*.d.ts",
-      "import": "./dist/esm/operators/*.js",
-      "require": "./dist/cjs/operators/*.cjs"
+    "./utils": {
+      "types": "./dist/esm/utils/index.d.ts",
+      "import": "./dist/esm/utils/index.js",
+      "require": "./dist/cjs/utils/index.cjs"
     }
   },
   "files": [

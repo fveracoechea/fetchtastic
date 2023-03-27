@@ -34,9 +34,20 @@ const data = {
 
 const endpoint = 'https://catfact.ninja/breeds';
 const headers = { Accept: 'application/json' };
-const body = { test: true };
+const body = {
+  breed: 'American Bobtail',
+  country: 'United States',
+  origin: 'Mutation',
+  coat: 'Short/Long',
+  pattern: 'All',
+};
 
-const config = x.compose(x.initialize(), x.url(endpoint), x.headers(headers));
+const api = x.compose(
+  x.initialize(),
+  x.url(endpoint),
+  x.headers(headers),
+  x.build,
+);
 
 beforeEach(() => {
   fetchMock.mockClear();
@@ -53,7 +64,7 @@ describe('GET Requests', () => {
       }),
     );
 
-    const promise = x.build(config).get();
+    const promise = api.get();
 
     expect(fetchMock).toHaveBeenCalledWith(endpoint, {
       method: 'GET',
@@ -73,7 +84,7 @@ describe('GET Requests', () => {
       }),
     );
 
-    const promise = x.build(config).get();
+    const promise = api.get();
 
     expect(fetchMock).toHaveBeenCalledWith(endpoint, {
       method: 'GET',
@@ -95,7 +106,7 @@ describe('GET Requests', () => {
       Promise.reject(new Error('Failed to fetch')),
     );
 
-    const promise = x.build(config).get();
+    const promise = api.get();
 
     expect(fetchMock).toHaveBeenCalledWith(endpoint, {
       method: 'GET',
@@ -124,7 +135,7 @@ describe('POST Requests', () => {
       }),
     );
 
-    const promise = x.build(config).post(body);
+    const promise = api.post(body);
 
     expect(fetchMock).toHaveBeenCalledWith(endpoint, {
       method: 'GET',
@@ -145,7 +156,7 @@ describe('POST Requests', () => {
       }),
     );
 
-    const promise = x.build(config).post(body);
+    const promise = api.post(body);
 
     expect(fetchMock).toHaveBeenCalledWith(endpoint, {
       method: 'GET',
@@ -168,7 +179,7 @@ describe('POST Requests', () => {
       Promise.reject(new Error('Failed to fetch')),
     );
 
-    const promise = x.build(config).post();
+    const promise = api.post();
 
     expect(fetchMock).toHaveBeenCalledWith(endpoint, {
       method: 'GET',

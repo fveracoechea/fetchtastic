@@ -1,5 +1,5 @@
 import { HttpMethod } from './core';
-import { StatusCodes } from './status-codes';
+import { StatusCodes } from './utils/status-codes';
 
 export function isError(error: unknown): error is Error {
   return error instanceof Error;

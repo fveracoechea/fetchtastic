@@ -1,5 +1,5 @@
-import { HttpMethod, XShield } from '../core';
-import { createError, isError, isXShieldError } from '../error';
+import { HttpMethod, XShield } from './core';
+import { createError, isError, isXShieldError } from './error';
 
 type ParseOptions = Record<XShield['parser'], () => Promise<unknown>>;
 
@@ -29,7 +29,7 @@ async function parse<Type, Config extends XShield<Type>>(
   }
 }
 
-export async function sendRequest<Type, Config extends XShield<Type>>(
+export async function request<Type, Config extends XShield<Type>>(
   config: Config,
   method: HttpMethod,
   body?: unknown | undefined,

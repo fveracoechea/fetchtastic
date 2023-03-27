@@ -8,7 +8,7 @@ for (const code in STATUS_CODES) {
 }
 
 fs.writeFileSync(
-  'src/status-codes.ts',
+  'src/utils/status-codes.ts',
   `
   export const StatusCodes = new Map<number, string>(${JSON.stringify(
     entries,
