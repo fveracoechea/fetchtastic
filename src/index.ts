@@ -3,8 +3,9 @@ export * from './core';
 // error types
 export * from './error';
 // utils
-export * from './compose';
+export * from './utils/compose';
+export * from './utils/status-codes';
 // operators
 export * from './operators';
-// actions
-export * from './actions';
+// request
+export * from './build';

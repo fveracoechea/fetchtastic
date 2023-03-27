@@ -10,7 +10,7 @@ import progress from 'rollup-plugin-progress';
 const input = [
   './src/index.ts',
   ...getFiles('./src'),
-  ...getFiles('./src/actions'),
+  ...getFiles('./src/utils'),
   ...getFiles('./src/operators'),
 ];
 

@@ -13,25 +13,20 @@
       "require": "./dist/cjs/index.cjs",
       "import": "./dist/esm/index.js"
     },
-    "./actions": {
-      "types": "./dist/esm/actions/index.d.ts",
-      "import": "./dist/esm/actions/index.js",
-      "require": "./dist/cjs/actions/index.cjs"
-    },
-    "./actions/*": {
-      "types": "./dist/esm/actions/*.d.ts",
-      "import": "./dist/esm/actions/*.js",
-      "require": "./dist/cjs/actions/*.cjs"
+    "./*": {
+      "types": "./dist/esm/*.d.ts",
+      "import": "./dist/esm/*.js",
+      "require": "./dist/cjs/*.cjs"
     },
     "./operators": {
       "types": "./dist/esm/operators/index.d.ts",
       "import": "./dist/esm/operators/index.js",
       "require": "./dist/cjs/operators/index.cjs"
     },
-    "./operators/*": {
-      "types": "./dist/esm/operators/*.d.ts",
-      "import": "./dist/esm/operators/*.js",
-      "require": "./dist/cjs/operators/*.cjs"
+    "./utils": {
+      "types": "./dist/esm/utils/index.d.ts",
+      "import": "./dist/esm/utils/index.js",
+      "require": "./dist/cjs/utils/index.cjs"
     }
   },
   "files": [
@@ -54,12 +49,12 @@
     {
       "name": "CommonJS",
       "path": "dist/cjs/index.cjs",
-      "limit": "5 KB"
+      "limit": "8 KB"
     },
     {
       "name": "ES Modules",
       "path": "dist/esm/index.js",
-      "limit": "5 KB"
+      "limit": "8 KB"
     }
   ],
   "volta": {
@@ -83,6 +78,7 @@
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.8.0",
     "jest": "^29.5.0",
+    "jest-mock-fetch": "^2.0.5",
     "prettier": "2.8.7",
     "rimraf": "^4.4.1",
     "rollup": "^3.20.2",

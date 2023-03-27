@@ -6,11 +6,11 @@ Small wrapper around fetch designed to perform more predictable and strongly typ
 
 - [x] Setup query helper.
 - [x] Response type validation.
-- [ ] Setup http methods helper.
+- [x] Setup http methods helper.
 - [ ] Response parsing helpers.
 - [ ] Error handing.
 - [ ] Abort controller.
 - [ ] FormData and FormURL requests.
 - [ ] Authenticaion and retry.
+- [ ] React suspense / caching support.
 - [ ] Documentation.
-- [ ] Local testing server with express.

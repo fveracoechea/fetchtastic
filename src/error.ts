@@ -1,5 +1,9 @@
 import { HttpMethod } from './core';
-import { StatusCodes } from './status-codes';
+import { StatusCodes } from './utils/status-codes';
+
+export function isError(error: unknown): error is Error {
+  return error instanceof Error;
+}
 
 export interface XShieldError {
   _type: 'XShieldError';
@@ -10,7 +14,7 @@ export interface XShieldError {
   message: string;
   text?: string;
   json?: unknown;
-  errorRef?: Error;
+  errorRef?: Error | undefined;
 }
 
 async function parseResponseData(config: XShieldError) {
@@ -51,7 +55,7 @@ export function isXShieldError(error: unknown): error is XShieldError {
       'status' in error &&
       typeof error?.status === 'number' &&
       'method' in error &&
-      typeof error.method === 'number'
+      typeof error.method === 'string'
     );
   }
   return false;
