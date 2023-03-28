@@ -1,0 +1,93 @@
+{
+  "name": "xshield",
+  "author": "Francisco Veracoechea",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "MIT",
+  "main": "./dist/cjs/index.cjs",
+  "typings": "./dist/types/index.d.ts",
+  "module": "./dist/esm/index.js",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/types/*/index.d.ts",
+        "./dist/types/index.d.ts"
+      ]
+    }
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/cjs/index.cjs",
+      "import": "./dist/esm/index.js"
+    },
+    "./operators": {
+      "types": "./dist/types/operators/index.d.ts",
+      "import": "./dist/esm/operators/index.js",
+      "require": "./dist/cjs/operators/index.cjs"
+    },
+    "./utils": {
+      "types": "./dist/types/utils/index.d.ts",
+      "import": "./dist/esm/utils/index.js",
+      "require": "./dist/cjs/utils/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "package.json"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "dev": "rollup -c --watch",
+    "build": "rimraf dist && rollup -c",
+    "test": "jest",
+    "lint": "eslint . --ext .ts,.tsx --max-warnings 0",
+    "format": "prettier --write .",
+    "size": "size-limit",
+    "http-codegen": "ts-node scripts/generateHttpCodes"
+  },
+  "size-limit": [
+    {
+      "name": "CommonJS",
+      "path": "dist/cjs/index.cjs",
+      "limit": "8 KB"
+    },
+    {
+      "name": "ES Modules",
+      "path": "dist/esm/index.js",
+      "limit": "8 KB"
+    }
+  ],
+  "volta": {
+    "node": "18.15.0",
+    "yarn": "3.5.0"
+  },
+  "packageManager": "yarn@3.5.0",
+  "devDependencies": {
+    "@jest/globals": "^29.5.0",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-multi-entry": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-terser": "^0.4.0",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "@size-limit/preset-small-lib": "^8.1.2",
+    "@types/jest": "^29.5.0",
+    "@types/node": "^18.15.9",
+    "eslint": "^8.36.0",
+    "eslint-config": "*",
+    "jest": "^29.5.0",
+    "prettier": "2.8.7",
+    "rimraf": "^4.4.1",
+    "rollup": "^3.20.2",
+    "rollup-plugin-progress": "^1.1.2",
+    "size-limit": "^8.1.2",
+    "ts-jest": "^29.0.5",
+    "ts-node": "^10.9.1",
+    "tsconfig": "*",
+    "tslib": "^2.5.0",
+    "typescript": "^5.0.2"
+  }
+}
