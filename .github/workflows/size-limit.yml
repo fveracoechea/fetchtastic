@@ -14,5 +14,6 @@ jobs:
       - name: Runs size-limit
         uses: andresz1/size-limit-action@v1
         with:
+          script: yarn workspace xshield size --json
           github_token: ${{ secrets.GITHUB_TOKEN }}
           package_manager: yarn

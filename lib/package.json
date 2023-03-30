@@ -42,7 +42,7 @@
   "scripts": {
     "dev": "rollup -c --watch",
     "build": "rimraf dist && rollup -c",
-    "test": "jest",
+    "test": "jest --ci --coverage --maxWorkers=2",
     "lint": "eslint . --ext .ts,.tsx --max-warnings 0",
     "format": "prettier --write .",
     "size": "size-limit",
