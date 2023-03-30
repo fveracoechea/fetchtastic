@@ -45,7 +45,6 @@
     "test": "jest --ci --coverage --maxWorkers=2",
     "lint": "eslint . --ext .ts,.tsx --max-warnings 0",
     "format": "prettier --write .",
-    "size": "size-limit",
     "http-codegen": "ts-node scripts/generateHttpCodes"
   },
   "volta": {
@@ -61,7 +60,6 @@
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-terser": "^0.4.0",
     "@rollup/plugin-typescript": "^11.0.0",
-    "@size-limit/preset-small-lib": "^8.1.2",
     "@types/jest": "^29.5.0",
     "@types/node": "^18.15.9",
     "eslint": "^8.36.0",
@@ -71,7 +69,6 @@
     "rimraf": "^4.4.1",
     "rollup": "^3.20.2",
     "rollup-plugin-progress": "^1.1.2",
-    "size-limit": "^8.1.2",
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",
     "tsconfig": "*",

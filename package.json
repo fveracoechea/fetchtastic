@@ -26,13 +26,14 @@
     "test": "turbo run test",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "size-build": "yarn workspace xshield build",
-    "size-limit": "yarn workspace xshield size",
+    "size": "size-limit",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "@size-limit/preset-small-lib": "^8.1.2",
     "eslint-config": "*",
     "prettier": "latest",
+    "size-limit": "^8.1.2",
     "ts-node": "^10.9.1",
     "turbo": "latest"
   },
