@@ -16,6 +16,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           package_manager: yarn
-          build_script: yarn workspace xshield build
-          script: yarn workspace xshield size --json
-          
+          build_script: size-build
+          script: size-limit

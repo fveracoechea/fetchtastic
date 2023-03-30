@@ -26,6 +26,8 @@
     "test": "turbo run test",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
+    "size-build": "yarn workspace xshield build",
+    "size-limit": "yarn workspace xshield size",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
