@@ -9,6 +9,18 @@
     "example",
     "lib"
   ],
+  "size-limit": [
+    {
+      "name": "CommonJS",
+      "path": "lib/dist/cjs/index.cjs",
+      "limit": "8 KB"
+    },
+    {
+      "name": "ES Modules",
+      "path": "lib/dist/esm/index.js",
+      "limit": "8 KB"
+    }
+  ],
   "scripts": {
     "build": "turbo run build",
     "test": "turbo run test",

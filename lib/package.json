@@ -48,18 +48,6 @@
     "size": "size-limit",
     "http-codegen": "ts-node scripts/generateHttpCodes"
   },
-  "size-limit": [
-    {
-      "name": "CommonJS",
-      "path": "dist/cjs/index.cjs",
-      "limit": "8 KB"
-    },
-    {
-      "name": "ES Modules",
-      "path": "dist/esm/index.js",
-      "limit": "8 KB"
-    }
-  ],
   "volta": {
     "node": "18.15.0",
     "yarn": "3.5.0"
