@@ -42,19 +42,14 @@ const body = {
   pattern: 'All',
 };
 
-const api = x.compose(
-  x.initialize(),
-  x.url(endpoint),
-  x.headers(headers),
-  x.build,
-);
+const api = x.compose(x.initialize(), x.url(endpoint), x.headers(headers), x.build);
 
 beforeEach(() => {
   fetchMock.mockClear();
 });
 
 describe('GET Requests', () => {
-  test('Fulfilling', async () => {
+  test('Fulfilling', () => {
     // simulates a successful server response
     fetchMock.mockImplementationOnce(() =>
       Promise.resolve({
@@ -74,7 +69,7 @@ describe('GET Requests', () => {
     expect(promise).resolves.toBe(data);
   });
 
-  test('Rejecting with 404', async () => {
+  test('Rejecting with 404', () => {
     // simulates a 404 server response
     fetchMock.mockImplementationOnce(() =>
       Promise.resolve({
@@ -100,11 +95,9 @@ describe('GET Requests', () => {
     });
   });
 
-  test('Fetch Error', async () => {
+  test('Fetch Error', () => {
     // simulates fetch failure
-    fetchMock.mockImplementationOnce(() =>
-      Promise.reject(new Error('Failed to fetch')),
-    );
+    fetchMock.mockImplementationOnce(() => Promise.reject(new Error('Failed to fetch')));
 
     const promise = api.get();
 
@@ -125,7 +118,7 @@ describe('GET Requests', () => {
 });
 
 describe('POST Requests', () => {
-  test('Fulfilling', async () => {
+  test('Fulfilling', () => {
     // simulates a successful server response
     fetchMock.mockImplementationOnce(() =>
       Promise.resolve({
@@ -138,7 +131,7 @@ describe('POST Requests', () => {
     const promise = api.post(body);
 
     expect(fetchMock).toHaveBeenCalledWith(endpoint, {
-      method: 'GET',
+      method: 'POST',
       headers: new Headers(headers),
       body: JSON.stringify(body),
     });
@@ -146,7 +139,7 @@ describe('POST Requests', () => {
     expect(promise).resolves.toBe(data);
   });
 
-  test('Rejecting with 404', async () => {
+  test('Rejecting with 404', () => {
     // simulates a 404 server response
     fetchMock.mockImplementationOnce(() =>
       Promise.resolve({
@@ -159,7 +152,7 @@ describe('POST Requests', () => {
     const promise = api.post(body);
 
     expect(fetchMock).toHaveBeenCalledWith(endpoint, {
-      method: 'GET',
+      method: 'POST',
       headers: new Headers(headers),
       body: JSON.stringify(body),
     });
@@ -167,29 +160,27 @@ describe('POST Requests', () => {
     expect(promise).rejects.toMatchObject({
       _type: 'XShieldError',
       status: 404,
-      method: 'GET',
+      method: 'POST',
       url: endpoint,
       message: 'Not Found',
     });
   });
 
-  test('Fetch Error', async () => {
+  test('Fetch Error', () => {
     // simulates fetch failure
-    fetchMock.mockImplementationOnce(() =>
-      Promise.reject(new Error('Failed to fetch')),
-    );
+    fetchMock.mockImplementationOnce(() => Promise.reject(new Error('Failed to fetch')));
 
     const promise = api.post();
 
     expect(fetchMock).toHaveBeenCalledWith(endpoint, {
-      method: 'GET',
+      method: 'POST',
       headers: new Headers(headers),
     });
     // checks the response
     expect(promise).rejects.toMatchObject({
       _type: 'XShieldError',
       status: 0,
-      method: 'GET',
+      method: 'POST',
       url: endpoint,
       message: 'Failed to fetch',
       response: undefined,

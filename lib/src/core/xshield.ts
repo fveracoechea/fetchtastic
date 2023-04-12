@@ -40,7 +40,6 @@ export interface XShield<T = unknown> {
   options: XShieldOptions;
   catchers: XShieldCatchers;
   parser: ResponseParser;
-  method: HttpMethod;
   searchParams: URLSearchParams;
   validateResponse: DataAssertionFn<T>;
 }
@@ -60,7 +59,6 @@ export function initialize(): XShield<unknown> {
     _type: XShieldID,
     url: '',
     headers: new Headers(),
-    method: 'GET',
     options: {},
     catchers: new Map<number, XShieldCatcher>(),
     parser: 'JSON',

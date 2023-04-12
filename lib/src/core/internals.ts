@@ -15,7 +15,6 @@ export function isXShield(x: unknown): x is XShield {
     '_type' in x &&
     x._type === XShieldID &&
     'url' in x &&
-    'method' in x &&
     'options' in x
   );
 }
