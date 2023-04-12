@@ -1,5 +1,5 @@
-import { HttpMethod, XShield } from './core';
-import { createError, isError, isXShieldError } from './error';
+import { HttpMethod, XShield } from './xshield';
+import { createError, isError, isXShieldError } from '../error';
 
 type ParseOptions = Record<XShield['parser'], () => Promise<unknown>>;
 

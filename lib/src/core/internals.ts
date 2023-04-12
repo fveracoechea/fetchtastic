@@ -1,7 +1,12 @@
-import { XShield } from './core';
+import { XShield } from './xshield';
 
 export const XShieldID = Symbol('XShield');
 export const XShieldErrorID = Symbol('XShieldError');
+
+/**
+ * No operation
+ */
+export const noop: (data: unknown) => unknown = x => x;
 
 export function isXShield(x: unknown): x is XShield {
   return (

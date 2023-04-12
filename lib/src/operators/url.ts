@@ -1,5 +1,5 @@
-import { XShield } from '../core';
-import { assertsXShield } from '../internals';
+import { XShield } from '../core/xshield';
+import { assertsXShield } from '../core/internals';
 
 export function url(url: URL): <T>(config: XShield<T>) => XShield<T>;
 

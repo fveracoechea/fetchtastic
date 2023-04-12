@@ -1,5 +1,7 @@
-import { XShieldError } from './error';
+import { XShieldError } from '../error';
 import { XShieldID } from './internals';
+
+export type DataAssertionFn<T = unknown> = (data: unknown) => T;
 
 // * HttpMethods
 
@@ -40,7 +42,7 @@ export interface XShield<T = unknown> {
   parser: ResponseParser;
   method: HttpMethod;
   searchParams: URLSearchParams;
-  validateResponse(data: unknown): T;
+  validateResponse: DataAssertionFn<T>;
 }
 
 // * Error Catching

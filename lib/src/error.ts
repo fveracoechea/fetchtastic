@@ -1,4 +1,4 @@
-import { HttpMethod } from './core';
+import { HttpMethod } from './core/xshield';
 import { StatusCodes } from './utils/statusCodes';
 
 export function isError(error: unknown): error is Error {
