@@ -64,7 +64,7 @@ const postsApi = x.compose(
   x.url('https://jsonplaceholder.typicode.com/posts'),
   x.headers({ Accept: 'application/json' }),
   x.signal(controller.signal),
-  x.buildWithAssertions({
+  x.build({
     get(res) {
       assertResponse(res);
       return res;

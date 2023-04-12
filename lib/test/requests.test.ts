@@ -42,7 +42,7 @@ const body = {
   pattern: 'All',
 };
 
-const api = x.compose(x.initialize(), x.url(endpoint), x.headers(headers), x.build);
+const api = x.compose(x.initialize(), x.url(endpoint), x.headers(headers), x.build());
 
 beforeEach(() => {
   fetchMock.mockClear();

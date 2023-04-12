@@ -14,34 +14,7 @@ export type DataAssertions<A, B, C, D, E, F, G> = {
   patch?: DataAssertionFn<G>;
 };
 
-export function build<Type>(config: XShield<Type>) {
-  return {
-    config,
-    post(body?: unknown | undefined) {
-      return request(config, 'POST', body);
-    },
-    get() {
-      return request(config, 'GET');
-    },
-    put(body?: unknown | undefined) {
-      return request(config, 'PUT', body);
-    },
-    delete(body?: unknown | undefined) {
-      return request(config, 'DELETE', body);
-    },
-    head() {
-      return request(config, 'HEAD');
-    },
-    options(body?: unknown | undefined) {
-      return request(config, 'OPTIONS', body);
-    },
-    patch(body?: unknown | undefined) {
-      return request(config, 'PATCH', body);
-    },
-  };
-}
-
-export function buildWithAssertions<
+export function build<
   A = unknown,
   B = unknown,
   C = unknown,
@@ -49,12 +22,12 @@ export function buildWithAssertions<
   E = unknown,
   F = unknown,
   G = unknown,
->(assertions: DataAssertions<A, B, C, D, E, F, G>) {
+>(assertions: DataAssertions<A, B, C, D, E, F, G> = {}) {
   return function <Type>(config: XShield<Type>) {
     return {
       config,
-      post(body?: unknown | undefined) {
-        const assertion = (assertions.get ?? noop) as DataAssertionFn<A>;
+      post(body?: unknown) {
+        const assertion = (assertions.post ?? noop) as DataAssertionFn<A>;
         return request(compose(config, validateResponse(assertion)), 'POST', body);
       },
       get(path = '') {
@@ -62,23 +35,23 @@ export function buildWithAssertions<
         return request(compose(config, validateResponse(assertion), url(path)), 'GET');
       },
       put(body?: unknown | undefined) {
-        const assertion = (assertions.get ?? noop) as DataAssertionFn<C>;
+        const assertion = (assertions.put ?? noop) as DataAssertionFn<C>;
         return request(compose(config, validateResponse(assertion)), 'PUT', body);
       },
       delete(body?: unknown | undefined) {
-        const assertion = (assertions.get ?? noop) as DataAssertionFn<D>;
+        const assertion = (assertions.delete ?? noop) as DataAssertionFn<D>;
         return request(compose(config, validateResponse(assertion)), 'DELETE', body);
       },
       head() {
-        const assertion = (assertions.get ?? noop) as DataAssertionFn<E>;
+        const assertion = (assertions.head ?? noop) as DataAssertionFn<E>;
         return request(compose(config, validateResponse(assertion)), 'HEAD');
       },
       options(body?: unknown | undefined) {
-        const assertion = (assertions.get ?? noop) as DataAssertionFn<F>;
+        const assertion = (assertions.options ?? noop) as DataAssertionFn<F>;
         return request(compose(config, validateResponse(assertion)), 'OPTIONS', body);
       },
       patch(body?: unknown | undefined) {
-        const assertion = (assertions.get ?? noop) as DataAssertionFn<G>;
+        const assertion = (assertions.patch ?? noop) as DataAssertionFn<G>;
         return request(compose(config, validateResponse(assertion)), 'PATCH', body);
       },
     };
