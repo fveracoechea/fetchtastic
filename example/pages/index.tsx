@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { x } from 'xshield';
 
 let status = 'pending';
@@ -40,37 +40,49 @@ type Post = {
   id: number;
 };
 
+function isPost(v: unknown): v is Post {
+  return (
+    v != null &&
+    typeof v === 'object' &&
+    'title' in v &&
+    typeof v.title === 'string' &&
+    'body' in v &&
+    typeof v.body === 'string'
+  );
+}
+
 function assertResponse(res: unknown): asserts res is Post[] {
-  if (
-    !(
-      res != null &&
-      Array.isArray(res) &&
-      res.every(
-        v =>
-          v != null &&
-          typeof v === 'object' &&
-          typeof v['title'] === 'string' &&
-          typeof v['body'] === 'string',
-      )
-    )
-  ) {
+  if (!(res != null && Array.isArray(res) && res.every(isPost))) {
     throw new Error('Invalid object');
   }
 }
+
+const controller = new AbortController();
 
 const postsApi = x.compose(
   x.initialize(),
   x.url('https://jsonplaceholder.typicode.com/posts'),
   x.headers({ Accept: 'application/json' }),
-  x.validateResponse(res => {
-    assertResponse(res);
-    return res;
+  x.signal(controller.signal),
+  x.buildWithAssertions({
+    get(res) {
+      assertResponse(res);
+      return res;
+    },
+    post(res) {
+      if (!isPost(res)) {
+        throw new Error('Invalid object');
+      }
+      return res;
+    },
   }),
-  x.build,
 );
 
 function Posts() {
   const result = suspender(() => postsApi.get());
+
+  useEffect(() => () => controller.abort(), []);
+  
   return <pre>{JSON.stringify(result, null, 2)}</pre>;
 }
 
