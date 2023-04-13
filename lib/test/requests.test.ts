@@ -59,14 +59,14 @@ describe('GET Requests', () => {
       }),
     );
 
-    const promise = api.get();
+    // checks the response
+    expect(api.get()).resolves.toBe(data);
 
     expect(fetchMock).toHaveBeenCalledWith(endpoint, {
       method: 'GET',
       headers: new Headers(headers),
+      body: null,
     });
-    // checks the response
-    expect(promise).resolves.toBe(data);
   });
 
   test('Rejecting with 404', () => {
@@ -78,20 +78,19 @@ describe('GET Requests', () => {
         json: () => Promise.resolve(null),
       }),
     );
-
-    const promise = api.get();
-
-    expect(fetchMock).toHaveBeenCalledWith(endpoint, {
-      method: 'GET',
-      headers: new Headers(headers),
-    });
     // checks the response
-    expect(promise).rejects.toMatchObject({
+    expect(api.get()).rejects.toMatchObject({
       _type: 'XShieldError',
       status: 404,
       method: 'GET',
       url: endpoint,
       message: 'Not Found',
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(endpoint, {
+      method: 'GET',
+      headers: new Headers(headers),
+      body: null,
     });
   });
 
@@ -99,20 +98,20 @@ describe('GET Requests', () => {
     // simulates fetch failure
     fetchMock.mockImplementationOnce(() => Promise.reject(new Error('Failed to fetch')));
 
-    const promise = api.get();
-
-    expect(fetchMock).toHaveBeenCalledWith(endpoint, {
-      method: 'GET',
-      headers: new Headers(headers),
-    });
     // checks the response
-    expect(promise).rejects.toMatchObject({
+    expect(api.get()).rejects.toMatchObject({
       _type: 'XShieldError',
       status: 0,
       method: 'GET',
       url: endpoint,
       message: 'Failed to fetch',
       response: undefined,
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(endpoint, {
+      method: 'GET',
+      headers: new Headers(headers),
+      body: null,
     });
   });
 });
@@ -128,15 +127,14 @@ describe('POST Requests', () => {
       }),
     );
 
-    const promise = api.post(body);
+    // checks the response
+    expect(api.post(body)).resolves.toBe(data);
 
     expect(fetchMock).toHaveBeenCalledWith(endpoint, {
       method: 'POST',
       headers: new Headers(headers),
       body: JSON.stringify(body),
     });
-    // checks the response
-    expect(promise).resolves.toBe(data);
   });
 
   test('Rejecting with 404', () => {
@@ -149,20 +147,19 @@ describe('POST Requests', () => {
       }),
     );
 
-    const promise = api.post(body);
-
-    expect(fetchMock).toHaveBeenCalledWith(endpoint, {
-      method: 'POST',
-      headers: new Headers(headers),
-      body: JSON.stringify(body),
-    });
     // checks the response
-    expect(promise).rejects.toMatchObject({
+    expect(api.post(body)).rejects.toMatchObject({
       _type: 'XShieldError',
       status: 404,
       method: 'POST',
       url: endpoint,
       message: 'Not Found',
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(endpoint, {
+      method: 'POST',
+      headers: new Headers(headers),
+      body: JSON.stringify(body),
     });
   });
 
@@ -170,20 +167,20 @@ describe('POST Requests', () => {
     // simulates fetch failure
     fetchMock.mockImplementationOnce(() => Promise.reject(new Error('Failed to fetch')));
 
-    const promise = api.post();
-
-    expect(fetchMock).toHaveBeenCalledWith(endpoint, {
-      method: 'POST',
-      headers: new Headers(headers),
-    });
     // checks the response
-    expect(promise).rejects.toMatchObject({
+    expect(api.post()).rejects.toMatchObject({
       _type: 'XShieldError',
       status: 0,
       method: 'POST',
       url: endpoint,
       message: 'Failed to fetch',
       response: undefined,
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(endpoint, {
+      method: 'POST',
+      headers: new Headers(headers),
+      body: null,
     });
   });
 });
