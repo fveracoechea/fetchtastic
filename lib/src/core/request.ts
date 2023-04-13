@@ -1,5 +1,5 @@
-import { HttpMethod, XShield } from './core';
-import { createError, isError, isXShieldError } from './error';
+import { HttpMethod, XShield } from './xshield';
+import { createError, isError, isXShieldError } from '../error';
 
 type ParseOptions = Record<XShield['parser'], () => Promise<unknown>>;
 
@@ -14,13 +14,17 @@ function getResponseParser(response: Response, parser: XShield['parser']) {
   return cases[parser];
 }
 
-async function parse<Type>(config: XShield<Type>, response: Response) {
+async function parse<Type>(
+  config: XShield<Type>,
+  method: HttpMethod,
+  response: Response,
+) {
   try {
     const parse = getResponseParser(response, config.parser);
     const data = await parse();
     return config.validateResponse(data);
   } catch (error) {
-    const xError = createError(response.url, config.method, response);
+    const xError = createError(response.url, method, response);
     xError.errorRef = error as Error;
     throw xError;
   }
@@ -31,28 +35,31 @@ export async function request<Type>(
   method: HttpMethod,
   body?: unknown | undefined,
 ) {
-  const requestBody = body ? { body: JSON.stringify(body) } : {};
   const options: RequestInit = {
     method,
     headers: config.headers,
-    ...requestBody,
+    body: body ? JSON.stringify(body) : null,
     ...config.options,
   };
 
+  const endpoint = config.searchParams.toString()
+    ? `${config.url.toString()}?${config.searchParams.toString()}`
+    : config.url.toString();
+
   try {
-    const response = await fetch(config.url.toString(), options);
+    const response = await fetch(endpoint, options);
     if (!response.ok) {
-      const xError = createError(config.url.toString(), config.method, response);
+      const xError = createError(config.url.toString(), method, response);
       const error = new Error(xError.message);
       xError.errorRef = error;
       throw xError;
     }
-    return await parse(config, response);
+    return await parse(config, method, response);
   } catch (error) {
     if (isXShieldError(error)) {
       throw error;
     } else {
-      const xError = createError(config.url.toString(), config.method);
+      const xError = createError(config.url.toString(), method);
       xError.message = isError(error) ? error.message : 'Fetch Error';
       xError.errorRef = isError(error) ? error : undefined;
       throw xError;

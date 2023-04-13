@@ -6,5 +6,3 @@ export * from './error';
 export * from './utils';
 // operators
 export * from './operators';
-// request
-export * from './build';

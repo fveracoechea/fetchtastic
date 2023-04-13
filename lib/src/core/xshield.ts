@@ -1,5 +1,7 @@
-import { XShieldError } from './error';
+import { XShieldError } from '../error';
 import { XShieldID } from './internals';
+
+export type DataAssertionFn<T = unknown> = (data: unknown) => T;
 
 // * HttpMethods
 
@@ -38,9 +40,8 @@ export interface XShield<T = unknown> {
   options: XShieldOptions;
   catchers: XShieldCatchers;
   parser: ResponseParser;
-  method: HttpMethod;
   searchParams: URLSearchParams;
-  validateResponse(data: unknown): T;
+  validateResponse: DataAssertionFn<T>;
 }
 
 // * Error Catching
@@ -58,7 +59,6 @@ export function initialize(): XShield<unknown> {
     _type: XShieldID,
     url: '',
     headers: new Headers(),
-    method: 'GET',
     options: {},
     catchers: new Map<number, XShieldCatcher>(),
     parser: 'JSON',

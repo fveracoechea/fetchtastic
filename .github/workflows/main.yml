@@ -11,7 +11,7 @@ jobs:
       - name: Use Node 18
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 18.16.0
           cache: 'yarn'
 
       - name: Install deps and build (with cache)

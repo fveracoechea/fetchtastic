@@ -47,10 +47,6 @@
     "format": "prettier --write .",
     "http-codegen": "ts-node scripts/generateHttpCodes"
   },
-  "volta": {
-    "node": "18.15.0",
-    "yarn": "3.5.0"
-  },
   "packageManager": "yarn@3.5.0",
   "devDependencies": {
     "@jest/globals": "^29.5.0",
@@ -73,6 +69,6 @@
     "ts-node": "^10.9.1",
     "tsconfig": "*",
     "tslib": "^2.5.0",
-    "typescript": "^5.0.2"
+    "typescript": "^5.0.0"
   }
 }

@@ -29,6 +29,10 @@
     "size": "size-limit",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
+  "volta": {
+    "node": "18.16.0",
+    "yarn": "3.5.0"
+  },
   "devDependencies": {
     "@size-limit/preset-small-lib": "^8.1.2",
     "eslint-config": "*",
