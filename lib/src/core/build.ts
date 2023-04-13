@@ -1,6 +1,6 @@
 import { XShield, DataAssertionFn } from './xshield';
 import { noop } from './internals';
-import { url, validateResponse } from '../operators';
+import { SearchParamInput, searchParams, url, validateResponse } from '../operators';
 import { request } from './request';
 import { compose } from '../utils/compose';
 
@@ -30,9 +30,12 @@ export function build<
         const assertion = (assertions.post ?? noop) as DataAssertionFn<A>;
         return request(compose(config, validateResponse(assertion)), 'POST', body);
       },
-      get(path = '') {
+      get(path = '', search: SearchParamInput = '') {
         const assertion = (assertions.get ?? noop) as DataAssertionFn<B>;
-        return request(compose(config, validateResponse(assertion), url(path)), 'GET');
+        return request(
+          compose(config, validateResponse(assertion), url(path), searchParams(search)),
+          'GET',
+        );
       },
       put(body?: unknown | undefined) {
         const assertion = (assertions.put ?? noop) as DataAssertionFn<C>;
