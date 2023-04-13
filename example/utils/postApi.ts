@@ -29,6 +29,7 @@ export const postsApi = x.compose(
   x.initialize(),
   x.url('https://jsonplaceholder.typicode.com/posts'),
   x.headers({ Accept: 'application/json' }),
+  x.searchParams({ page: 2, per_page: 12 }),
   x.signal(controller.signal),
   x.build({
     get(res) {

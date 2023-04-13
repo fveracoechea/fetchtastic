@@ -35,16 +35,19 @@ export async function request<Type>(
   method: HttpMethod,
   body?: unknown | undefined,
 ) {
-  const requestBody = body ? { body: JSON.stringify(body) } : {};
   const options: RequestInit = {
     method,
     headers: config.headers,
-    ...requestBody,
+    body: body ? JSON.stringify(body) : null,
     ...config.options,
   };
 
+  const endpoint = config.searchParams.toString()
+    ? `${config.url.toString()}?${config.searchParams.toString()}`
+    : config.url.toString();
+
   try {
-    const response = await fetch(config.url.toString(), options);
+    const response = await fetch(endpoint, options);
     if (!response.ok) {
       const xError = createError(config.url.toString(), method, response);
       const error = new Error(xError.message);

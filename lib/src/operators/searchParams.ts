@@ -45,7 +45,7 @@ export function searchParams(
 export function searchParams(data?: SearchParamInput, replace = false) {
   return <T>(config: XShield<T>): XShield<T> => {
     assertsXShield(config);
-    if (!data) {
+    if (typeof data === 'undefined' || data === null) {
       return {
         ...config,
         searchParams: new URLSearchParams(),
