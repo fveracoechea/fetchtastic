@@ -12,12 +12,12 @@
   "size-limit": [
     {
       "name": "CommonJS",
-      "path": "lib/dist/cjs/index.cjs",
+      "path": "lib/dist/cjs/core/index.cjs",
       "limit": "8 KB"
     },
     {
       "name": "ES Modules",
-      "path": "lib/dist/esm/index.js",
+      "path": "lib/dist/esm/core/index.js",
       "limit": "8 KB"
     }
   ],

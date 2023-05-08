@@ -1,17 +1,38 @@
-export function compose<A>(a: A): A;
+/**
+ * Pipes the value of an expression into a pipeline of functions.
+ *
+ * Performs left-to-right function composition,
+ * where the first argument is a value,
+ * and the remaining arguments must be unary functions.
+ *
+ *
+ * @example
+ * import { pipe } from 'xshield/utils'
+ *
+ * const length = (s: string) => s.length
+ * const addOne = (n: number) => n + 1
+ * const double = (n: number) => n * 2
+ *
+ * // without pipe
+ * double(addOne(length('aaa'))); // 8
+ *
+ * // with pipe
+ * pipe('aaa', length, addOne, double); // 8
+ */
+export function pipe<A>(a: A): A;
 
-export function compose<A, B>(a: A, ab: (a: A) => B): B;
+export function pipe<A, B>(a: A, ab: (a: A) => B): B;
 
-export function compose<A, B, C>(a: A, ab: (a: A) => B, bc: (b: B) => C): C;
+export function pipe<A, B, C>(a: A, ab: (a: A) => B, bc: (b: B) => C): C;
 
-export function compose<A, B, C, D>(
+export function pipe<A, B, C, D>(
   a: A,
   ab: (a: A) => B,
   bc: (b: B) => C,
   cd: (c: C) => D,
 ): D;
 
-export function compose<A, B, C, D, E>(
+export function pipe<A, B, C, D, E>(
   a: A,
   ab: (a: A) => B,
   bc: (b: B) => C,
@@ -19,7 +40,7 @@ export function compose<A, B, C, D, E>(
   de: (d: D) => E,
 ): E;
 
-export function compose<A, B, C, D, E, F>(
+export function pipe<A, B, C, D, E, F>(
   a: A,
   ab: (a: A) => B,
   bc: (b: B) => C,
@@ -28,7 +49,7 @@ export function compose<A, B, C, D, E, F>(
   ef: (e: E) => F,
 ): F;
 
-export function compose<A, B, C, D, E, F, G>(
+export function pipe<A, B, C, D, E, F, G>(
   a: A,
   ab: (a: A) => B,
   bc: (b: B) => C,
@@ -38,7 +59,7 @@ export function compose<A, B, C, D, E, F, G>(
   fg: (f: F) => G,
 ): G;
 
-export function compose<A, B, C, D, E, F, G, H>(
+export function pipe<A, B, C, D, E, F, G, H>(
   a: A,
   ab: (a: A) => B,
   bc: (b: B) => C,
@@ -49,7 +70,7 @@ export function compose<A, B, C, D, E, F, G, H>(
   gh: (g: G) => H,
 ): H;
 
-export function compose<A, B, C, D, E, F, G, H, I>(
+export function pipe<A, B, C, D, E, F, G, H, I>(
   a: A,
   ab: (a: A) => B,
   bc: (b: B) => C,
@@ -61,7 +82,7 @@ export function compose<A, B, C, D, E, F, G, H, I>(
   hi: (h: H) => I,
 ): I;
 
-export function compose<A, B, C, D, E, F, G, H, I, J>(
+export function pipe<A, B, C, D, E, F, G, H, I, J>(
   a: A,
   ab: (a: A) => B,
   bc: (b: B) => C,
@@ -74,7 +95,7 @@ export function compose<A, B, C, D, E, F, G, H, I, J>(
   ij: (i: I) => J,
 ): J;
 
-export function compose<A, B, C, D, E, F, G, H, I, J, K>(
+export function pipe<A, B, C, D, E, F, G, H, I, J, K>(
   a: A,
   ab: (a: A) => B,
   bc: (b: B) => C,
@@ -88,7 +109,7 @@ export function compose<A, B, C, D, E, F, G, H, I, J, K>(
   jk: (j: J) => K,
 ): K;
 
-export function compose<A, B, C, D, E, F, G, H, I, J, K, L>(
+export function pipe<A, B, C, D, E, F, G, H, I, J, K, L>(
   a: A,
   ab: (a: A) => B,
   bc: (b: B) => C,
@@ -103,7 +124,7 @@ export function compose<A, B, C, D, E, F, G, H, I, J, K, L>(
   kl: (k: K) => L,
 ): L;
 
-export function compose<A, B, C, D, E, F, G, H, I, J, K, L, M>(
+export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M>(
   a: A,
   ab: (a: A) => B,
   bc: (b: B) => C,
@@ -119,7 +140,7 @@ export function compose<A, B, C, D, E, F, G, H, I, J, K, L, M>(
   lm: (l: L) => M,
 ): M;
 
-export function compose<A, B, C, D, E, F, G, H, I, J, K, L, M, N>(
+export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N>(
   a: A,
   ab: (a: A) => B,
   bc: (b: B) => C,
@@ -136,7 +157,7 @@ export function compose<A, B, C, D, E, F, G, H, I, J, K, L, M, N>(
   mn: (m: M) => N,
 ): N;
 
-export function compose<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O>(
+export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O>(
   a: A,
   ab: (a: A) => B,
   bc: (b: B) => C,
@@ -154,7 +175,7 @@ export function compose<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O>(
   no: (n: N) => O,
 ): O;
 
-export function compose<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P>(
+export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P>(
   a: A,
   ab: (a: A) => B,
   bc: (b: B) => C,
@@ -173,7 +194,7 @@ export function compose<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P>(
   op: (o: O) => P,
 ): P;
 
-export function compose<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q>(
+export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q>(
   a: A,
   ab: (a: A) => B,
   bc: (b: B) => C,
@@ -193,7 +214,7 @@ export function compose<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q>(
   pq: (p: P) => Q,
 ): Q;
 
-export function compose<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R>(
+export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R>(
   a: A,
   ab: (a: A) => B,
   bc: (b: B) => C,
@@ -214,27 +235,7 @@ export function compose<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R>(
   qr: (q: Q) => R,
 ): R;
 
-export function compose<
-  A,
-  B,
-  C,
-  D,
-  E,
-  F,
-  G,
-  H,
-  I,
-  J,
-  K,
-  L,
-  M,
-  N,
-  O,
-  P,
-  Q,
-  R,
-  S,
->(
+export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S>(
   a: A,
   ab: (a: A) => B,
   bc: (b: B) => C,
@@ -256,7 +257,7 @@ export function compose<
   rs: (r: R) => S,
 ): S;
 
-export function compose<
+export function pipe<
   A,
   B,
   C,
@@ -300,15 +301,15 @@ export function compose<
   st: (s: S) => T,
 ): T;
 
-export function compose(
+export function pipe(
   a: unknown,
   ...operators: ((x: unknown) => unknown)[]
 ): unknown {
-  let config = a;
+  let value = a;
   if (operators.length > 0) {
     for (const operator of operators) {
-      config = operator(config);
+      value = operator(value);
     }
   }
-  return config;
+  return value;
 }

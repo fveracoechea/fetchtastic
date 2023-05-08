@@ -9,7 +9,7 @@ insert_final_newline = true
 end_of_line = lf
 indent_style = space
 indent_size = 2
-max_line_length = 90
+max_line_length = 86
 
 [*.{css,scss,sass}]
 indent_size = 4

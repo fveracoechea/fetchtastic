@@ -1,46 +1,50 @@
-import { useEffect } from 'react';
-import { postsApi } from '../utils/postApi';
+import { DataGrab } from 'xshield/core';
+import { suspender } from 'xshield/react';
 
-let status = 'pending';
-let cache: any = null;
-let error: Error;
+type Post = {
+  title: string;
+  body: string;
+  id: number;
+};
 
-function suspender<T>(getPromise: () => Promise<T>) {
-  let result: T;
-  let suspender: Promise<any>;
-
-  if (status === 'pending') {
-    suspender = getPromise()
-      .then(r => {
-        status = 'fulfilled';
-        cache = r;
-      })
-      .catch(e => {
-        status = 'rejected';
-        error = e;
-      });
-  }
-
-  if (cache) {
-    result = cache;
-  }
-
-  if (status === 'pending') {
-    throw suspender!;
-  } else if (status === 'rejected') {
-    throw error!;
-  } else {
-    return result!;
-  }
+function isPost(v: unknown): v is Post {
+  return (
+    v != null &&
+    typeof v === 'object' &&
+    'title' in v &&
+    typeof v.title === 'string' &&
+    'body' in v &&
+    typeof v.body === 'string'
+  );
 }
 
+export function assertPosts(res: unknown) {
+  if (!(res != null && Array.isArray(res) && res.every(isPost))) {
+    throw new Error('Invalid data format');
+  }
+  return res;
+}
+
+const api = new DataGrab('https://jsonplaceholder.typicode.com')
+  .setUrl('/posts')
+  .appendHeader('Accept', 'application/json')
+  .appendHeader('Content-Type', 'application/json');
+
 export default function Posts() {
-  const result = suspender(() => postsApi.get());
+  const posts = suspender(() => api.get.json(assertPosts));
 
   return (
-    <div>
+    <main>
       <h2>Posts</h2>
-      <pre>{JSON.stringify(result, null, 2)}</pre>
-    </div>
+      {posts.map(post => (
+        <article
+          key={post.id}
+          style={{ padding: 16, background: '#f2f2f2', marginBottom: 16 }}
+        >
+          <h3>{post.title}</h3>
+          <p>{post.body}</p>
+        </article>
+      ))}
+    </main>
   );
 }

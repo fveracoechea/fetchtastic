@@ -21,15 +21,20 @@
       "require": "./dist/cjs/index.cjs",
       "import": "./dist/esm/index.js"
     },
-    "./operators": {
-      "types": "./dist/types/operators/index.d.ts",
-      "import": "./dist/esm/operators/index.js",
-      "require": "./dist/cjs/operators/index.cjs"
+    "./core": {
+      "types": "./dist/types/core/index.d.ts",
+      "import": "./dist/esm/core/index.js",
+      "require": "./dist/cjs/core/index.cjs"
     },
     "./utils": {
       "types": "./dist/types/utils/index.d.ts",
       "import": "./dist/esm/utils/index.js",
       "require": "./dist/cjs/utils/index.cjs"
+    },
+    "./react": {
+      "types": "./dist/types/react/index.d.ts",
+      "import": "./dist/esm/react/index.js",
+      "require": "./dist/cjs/react/index.cjs"
     }
   },
   "files": [
