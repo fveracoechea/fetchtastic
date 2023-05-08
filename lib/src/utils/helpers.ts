@@ -8,14 +8,14 @@ export const identity: <T = unknown>(data: T) => T = x => x;
 /**
  * No operation
  */
-export const noop = () => void null;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const noop = (..._any: unknown[]) => void null;
 
 /**
  * Returns `true` if the given value is a valid `HttpMethod`
  */
 export function isHttpMethod(value: unknown): value is HttpMethod {
   return (
-    typeof value === 'string' &&
-    HttpMethods.some(m => m === value.toUpperCase())
+    typeof value === 'string' && HttpMethods.some(m => m === value.toUpperCase())
   );
 }
