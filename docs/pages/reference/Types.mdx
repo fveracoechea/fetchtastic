@@ -1,0 +1,183 @@
+# Typescript Documentation
+
+## HttpMethods
+
+`HttpMethods` is an array of strings that represents the HTTP methods available for making requests. It includes the following methods:
+
+-   `OPTIONS`
+-   `GET`
+-   `HEAD`
+-   `PUT`
+-   `POST`
+-   `DELETE`
+-   `PATCH`
+
+### Usage
+
+```typescript
+import { HttpMethods } from 'module';
+
+// Access individual HTTP methods
+const optionsMethod = HttpMethods[0]; // 'OPTIONS'
+const getMethod = HttpMethods[1]; // 'GET'
+// ...
+
+// Iterate over all HTTP methods
+for (const method of HttpMethods) {
+    console.log(method);
+}
+```
+
+## HttpMethod
+
+`HttpMethod` is a type alias that represents a single HTTP method. It is defined as `(typeof HttpMethods)[number]`, which means that it can only be one of the values in the `HttpMethods` array.
+
+### Usage
+
+```typescript
+import { HttpMethod } from 'module';
+
+const method: HttpMethod = 'GET';
+```
+
+## ResponseParsers
+
+`ResponseParsers` is an array of strings that represents the possible response types that can be parsed. It includes the following parsers:
+
+-   `ArrayBuffer`
+-   `Blob`
+-   `FormData`
+-   `JSON`
+-   `Text`
+
+### Usage
+
+```typescript
+import { ResponseParsers } from 'module';
+
+// Access individual response parsers
+const arrayBufferParser = ResponseParsers[0]; // 'ArrayBuffer'
+const blobParser = ResponseParsers[1]; // 'Blob'
+// ...
+
+// Iterate over all response parsers
+for (const parser of ResponseParsers) {
+    console.log(parser);
+}
+```
+
+## ResponseParser
+
+`ResponseParser` is a type alias that represents a single response type that can be parsed. It is defined as `(typeof ResponseParsers)[number]`, which means that it can only be one of the values in the `ResponseParsers` array.
+
+### Usage
+
+```typescript
+import { ResponseParser } from 'module';
+
+const parser: ResponseParser = 'JSON';
+```
+
+## SearchParamInput
+
+`SearchParamInput` is a type alias that represents the different types of inputs that can be used for a search parameter. It can be one of the following types:
+
+-   `string`
+-   `URLSearchParams`
+-   `[string, string | boolean | number][]`
+-   `Record<string, string | boolean | number>`
+
+### Usage
+
+```typescript
+import { SearchParamInput } from 'module';
+
+const input1: SearchParamInput = 'key=value';
+const input2: SearchParamInput = new URLSearchParams('key1=value1&key2=value2');
+const input3: SearchParamInput = [
+    ['key', 'value'],
+    ['key2', true],
+];
+const input4: SearchParamInput = { key: 'value', key2: 123 };
+```
+
+## DataGrabOptions
+
+`DataGrabOptions` is a type alias that represents the options that can be passed to the `fetch` function. It is defined as `Omit<RequestInit, 'signal' | 'method'>`, which means that it includes all of the options from `RequestInit` except for `signal` and `method`.
+
+### Usage
+
+```typescript
+import { DataGrabOptions } from 'module';
+
+const options: DataGrabOptions = {
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    // ...
+};
+```
+
+## FetchOptions
+
+`FetchOptions` is a type alias that extends `RequestInit` and includes the `method` property, which specifies the HTTP method to use for the request.
+
+### Usage
+
+```typescript
+import { FetchOptions } from 'module';
+
+const options: FetchOptions = {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ key: 'value' }),
+    // ...
+};
+```
+
+## FetchRequestHeader
+
+`FetchRequestHeader` is a type alias that represents the different types of headers that are most commonly included in a `fetch` request. It includes the following headers:
+
+-   `Accept`
+-   `Content-Type`
+-   `Authorization`
+-   `User-Agent`
+-   `Referer`
+-   `Cache-Control`
+-   `Accept-Encoding`
+-   `Origin`
+-   `Connection`
+-   `Cookie`
+-   `Pragma`
+-   `If-Modified-Since`
+
+### Usage
+
+```typescript
+import { FetchRequestHeader } from 'module';
+
+const header: FetchRequestHeader = 'Accept';
+```
+
+## DataAssertionFn
+
+A function type that asserts and transforms data. It takes an `unknown` data parameter and returns a transformed value of type `T`.
+
+### Usage
+
+```typescript
+import { DataAssertionFn } from 'module';
+
+const assertData: DataAssertionFn<number> = data => {
+    if (typeof data === 'number') {
+        return data * 2;
+    }
+    return 0;
+};
+```
+
+This type can be used to define a function that validates the response data returned by a `fetch` request, for example by checking that it matches a particular interface or schema.

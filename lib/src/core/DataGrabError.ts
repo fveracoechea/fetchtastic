@@ -30,9 +30,10 @@ export class DataGrabError extends Error {
   async #parseResponseData() {
     if (!this.response || this.status === 0) return;
     try {
-      this.json = await this.response.json();
-    } catch {
       this.text = await this.response.text();
+      this.json = JSON.parse(this.text);
+    } catch {
+      /* empty */
     }
   }
 

@@ -1,0 +1,69 @@
+# DataGrabResolver Class
+
+The `DataGrabResolver` class is a generic class that represents a resolver for making HTTP requests with a specific HTTP method. It is used in conjunction with the `DataGrab` class to perform various HTTP operations such as sending requests, handling responses, and parsing response data.
+
+## Generic Type
+
+-   `Method`: Represents the HTTP method of the request (`GET`, `POST`, `PUT`, etc.).
+
+## Properties
+
+-   `method: HttpMethod`: The HTTP method associated with the resolver.
+
+## Constructor
+
+### `constructor(config: DataGrab, method: Method)`
+
+Creates a new instance of the `DataGrabResolver` class.
+
+-   `config: DataGrab`: The `DataGrab` instance representing the request configuration.
+-   `method: Method`: The HTTP method associated with the resolver.
+
+## Methods
+
+### `setConfig(updateFn: (config: DataGrab) => void): DataGrabResolver<Method>`
+
+Updates the configuration of the associated `DataGrab` instance.
+
+-   `updateFn: (config: DataGrab) => void`: A function that takes the current `DataGrab` instance as a parameter and modifies it.
+
+Returns the `DataGrabResolver` instance.
+
+### `resolve(): Promise<Response>`
+
+Sends the HTTP request and resolves with the `Response` object representing the response.
+
+Returns a promise that resolves with the `Response` object if the request is successful.
+
+### `json<T = unknown>(assertData?: DataAssertionFn<T>): Promise<T>`
+
+Parses the response data as JSON and resolves with the parsed data.
+
+-   `assertData: DataAssertionFn<T>` (optional): An assertion function to validate the parsed JSON data. If provided, the parsed data is passed to this function for validation.
+
+Returns a promise that resolves with the parsed JSON data.
+
+### `arrayBuffer(): Promise<ArrayBuffer>`
+
+Parses the response data as an `ArrayBuffer` and resolves with the parsed data.
+
+Returns a promise that resolves with the parsed `ArrayBuffer` data.
+
+### `blob(): Promise<Blob>`
+
+Parses the response data as a `Blob` and resolves with the parsed data.
+
+Returns a promise that resolves with the parsed `Blob` data.
+
+### `formData(): Promise<FormData>`
+
+Parses the response data as a `FormData` object and resolves with the parsed data.
+
+Returns a promise that resolves with the parsed `FormData` object.
+
+### `text(): Promise<string>`
+
+Parses the response data as plain text and resolves with the parsed data.
+
+Returns a promise that resolves with the parsed text data.
+
