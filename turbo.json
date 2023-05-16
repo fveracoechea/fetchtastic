@@ -10,8 +10,7 @@
       "outputs": []
     },
     "test": {
-      "dependsOn": ["^build"],
-      "inputs": ["*.test.ts"]
+      "cache": false
     },
     "dev": {
       "cache": false

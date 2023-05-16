@@ -47,7 +47,7 @@
   "scripts": {
     "dev": "rollup -c --watch",
     "build": "rimraf dist && rollup -c",
-    "test": "jest --ci --coverage --maxWorkers=2",
+    "test": "jest --ci --json --coverage --testLocationInResults --outputFile=report.json",
     "lint": "eslint . --ext .ts,.tsx --max-warnings 0",
     "format": "prettier --write .",
     "http-codegen": "ts-node scripts/generateHttpCodes"
