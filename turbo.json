@@ -10,7 +10,8 @@
       "outputs": []
     },
     "test": {
-      "cache": false
+      "inputs": ["*.test.ts"],
+      "outputs": ["coverage/**", "report.json"]
     },
     "dev": {
       "cache": false
