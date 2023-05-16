@@ -9,5 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: ArtiomTr/jest-coverage-report-action@v2
-      with:
-        github-token: ${{ secrets.SECRET_TOKEN }}
+        with:
+          github-token: ${{ secrets.SECRET_TOKEN }}
+          package_manager: yarn
+          test-script: yarn test --ci --json --coverage --testLocationInResults --outputFile=report.json maxWorkers=2

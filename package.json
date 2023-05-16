@@ -9,28 +9,32 @@
     "example",
     "lib"
   ],
-  "size-limit": [
-    {
-      "name": "CommonJS Core",
-      "path": "lib/dist/cjs/core/index.cjs",
-      "limit": "8 KB"
-    },
-    {
-      "name": "CommonJS Utils",
-      "path": "lib/dist/cjs/utils/index.cjs",
-      "limit": "8 KB"
-    },
-    {
-      "name": "ES Modules Core",
-      "path": "lib/dist/esm/core/index.js",
-      "limit": "8 KB"
-    },
-    {
-      "name": "ES Modules Utils",
-      "path": "lib/dist/esm/utils/index.js",
-      "limit": "8 KB"
-    }
-  ],
+  "size-limit": {
+    "CommonJS": [
+      {
+        "name": "Core",
+        "path": "lib/dist/cjs/core/index.cjs",
+        "limit": "8 KB"
+      },
+      {
+        "name": "Utils",
+        "path": "lib/dist/cjs/utils/index.cjs",
+        "limit": "8 KB"
+      }
+    ],
+    "ES Modules": [
+      {
+        "name": "Core",
+        "path": "lib/dist/esm/core/index.js",
+        "limit": "8 KB"
+      },
+      {
+        "name": "Utils",
+        "path": "lib/dist/esm/utils/index.js",
+        "limit": "8 KB"
+      }
+    ]
+  },
   "scripts": {
     "build": "turbo run build",
     "test": "turbo run test",
