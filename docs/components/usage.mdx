@@ -1,0 +1,57 @@
+## Usage
+
+### Get JSON
+
+```typescript
+const url = 'https://jsonplaceholder.typicode.com/posts';
+
+const posts = await new Fetchtastic(url).get.json();
+```
+
+### Sending a json object
+
+```typescript
+const url = 'https://jsonplaceholder.typicode.com/posts';
+const newPost = {
+    title: 'foo',
+    body: 'bar',
+    userId: 1,
+};
+
+await new Fetchtastic(url)
+    .appendHeader('Content-Type', 'application/json')
+    .body(newPost)
+    .post.json();
+```
+
+### Composable configuration
+
+```typescript
+// 1. Global config
+
+const config = new Fetchtastic('https://jsonplaceholder.typicode.com')
+    .appendHeader('Authorization', 'Bearer token')
+    .setOptions({ credentials: 'include', mode: 'cors' });
+
+// 2. Endpoint level config
+
+const postsAPI = Fetchtastic.clone(config)
+    .appendHeader('Cache-Control', 'no-cache')
+    .url('/posts');
+
+const commentsAPI = Fetchtastic.clone(config)
+    .appendHeader('Content-Type', 'application/json')
+    .url('/comments');
+
+// 3. Send Requests!
+
+const blogPost = await postsAPI.get.url('/2').json();
+
+await commentsAPI.post
+    .body({
+        text: 'Lorem ipsum dolor sit amet',
+        userId: 1,
+        postId: 2,
+    })
+    .resolve();
+```

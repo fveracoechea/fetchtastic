@@ -26,7 +26,7 @@ export function assertPosts(res: unknown) {
 }
 
 const api = new Fetchtastic('https://jsonplaceholder.typicode.com')
-  .setUrl('/posts')
+  .url('/posts')
   .appendHeader('Accept', 'application/json')
   .appendHeader('Content-Type', 'application/json');
 

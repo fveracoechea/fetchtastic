@@ -7,13 +7,14 @@ import {
   FetchtasticOptions,
   HttpMethod,
   FetchOptions,
+  ConfigurableFetch,
 } from './types';
 
-export class Fetchtastic {
+export class Fetchtastic implements ConfigurableFetch {
   static clone(instace: Fetchtastic) {
     return new Fetchtastic(instace.#url.toString())
-      .setHeaders(new Headers(instace.#headers), true)
-      .setBody(structuredClone(instace.#body))
+      .headers(new Headers(instace.#headers), true)
+      .body(structuredClone(instace.#body))
       .setOptions(structuredClone(instace.#options), true);
   }
 
@@ -24,12 +25,12 @@ export class Fetchtastic {
   #options: Omit<FetchtasticOptions, 'body' | 'headers'> = {};
   controller: AbortController;
 
-  get url() {
+  get URL() {
     const search = this.#searchParams.toString();
     return search ? `${this.#url.toString()}?${search}` : this.#url.toString();
   }
 
-  get searchParams() {
+  get jsonSearchParams() {
     const json: Record<string, string> = {};
     this.#searchParams.forEach((value, key) => {
       json[key] = value;
@@ -37,7 +38,7 @@ export class Fetchtastic {
     return json;
   }
 
-  get headers() {
+  get jsonHeaders() {
     const json: Record<string, string> = {};
     this.#headers.forEach((value, key) => {
       json[key] = value;
@@ -78,7 +79,7 @@ export class Fetchtastic {
     this.controller = controller ?? new AbortController();
   }
 
-  setHeaders(data?: HeadersInit, replace = false) {
+  headers(data?: HeadersInit, replace = false) {
     const newHeaders = new Headers(data);
     if (!replace) {
       this.#headers.forEach((value, key) => {
@@ -105,9 +106,9 @@ export class Fetchtastic {
     return this;
   }
 
-  setUrl(url: URL): this;
-  setUrl(url: string, replace?: boolean): this;
-  setUrl(url: string | URL, replace = false) {
+  url(url: URL): this;
+  url(url: string, replace?: boolean): this;
+  url(url: string | URL, replace = false) {
     if (replace || url instanceof URL) {
       this.#url = url;
     } else {
@@ -118,7 +119,7 @@ export class Fetchtastic {
     return this;
   }
 
-  setSearchParams(data?: SearchParamInput, replace = false) {
+  searchParams(data?: SearchParamInput, replace = false) {
     let newSearchParams = new URLSearchParams();
     if (data) {
       newSearchParams = getNewSearchParms(data);
@@ -146,7 +147,7 @@ export class Fetchtastic {
     return this;
   }
 
-  setBody(body: BodyInit | null | unknown) {
+  body(body: BodyInit | null | unknown) {
     this.#body = body;
     return this;
   }
@@ -157,7 +158,7 @@ export class Fetchtastic {
       this.#body = body ?? null;
     }
     if (Object.prototype.hasOwnProperty.call(options, 'headers')) {
-      this.setHeaders(headers, replace);
+      this.headers(headers, replace);
     }
     this.#options = replace ? otherOptions : { ...this.#options, ...otherOptions };
     return this;

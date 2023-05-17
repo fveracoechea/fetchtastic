@@ -42,8 +42,8 @@ const body = {
   pattern: 'All',
 };
 
-const getConfig = new Fetchtastic(endpoint).setHeaders(headers);
-const postConfig = Fetchtastic.clone(getConfig).setBody(body);
+const getConfig = new Fetchtastic(endpoint).headers(headers);
+const postConfig = Fetchtastic.clone(getConfig).body(body);
 
 beforeEach(() => {
   fetchMock.mockClear();

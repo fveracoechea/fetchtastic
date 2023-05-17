@@ -3,10 +3,10 @@ import { Fetchtastic } from '../src';
 describe('Headers operator', () => {
   it('Concats', async () => {
     const config = new Fetchtastic()
-      .setHeaders({
+      .headers({
         'Content-Type': 'application/json',
       })
-      .setHeaders([['Accept', 'application/json']])
+      .headers([['Accept', 'application/json']])
       .appendHeader('Authorization', 'Token XXX');
 
     const headers = config.getOptions('GET').headers as Headers;
@@ -20,11 +20,11 @@ describe('Headers operator', () => {
 
   it('Replaces', async () => {
     const config = new Fetchtastic()
-      .setHeaders({
+      .headers({
         'Content-Type': 'application/json',
       })
       .appendHeader('Accept', 'application/json')
-      .setHeaders([['X-Headers', 'all']], true);
+      .headers([['X-Headers', 'all']], true);
 
     const headers = config.getOptions('GET').headers as Headers;
 
@@ -38,7 +38,7 @@ describe('Headers operator', () => {
 
   it('Removes', async () => {
     const config = new Fetchtastic()
-      .setHeaders({
+      .headers({
         'Content-Type': 'application/json',
         'Fake-Header': 'test',
         Accept: 'application/json',
