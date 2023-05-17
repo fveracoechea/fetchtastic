@@ -1,43 +1,38 @@
-import * as x from '../src';
+import { Fetchtastic } from '../src';
 
 describe('Search params operator', () => {
-  it('Concat works', async () => {
-    const pagination = x.compose(
-      x.initialize(),
-      x.searchParams({ offset: 2 }),
-      x.searchParams('perPage=12'),
-    );
+  it('Concats', async () => {
+    const config = new Fetchtastic()
+      .setSearchParams({ offset: 2 })
+      .setSearchParams('perPage=12')
+      .appendSearchParam('published', true);
 
-    const config = x.compose(pagination, x.searchParams({ published: true }));
-
-    expect(config.searchParams.has('perPage')).toBe(true);
-    expect(config.searchParams.get('perPage')).toBe('12');
-
-    expect(config.searchParams.has('offset')).toBe(true);
-    expect(config.searchParams.get('offset')).toBe('2');
-
-    expect(config.searchParams.has('published')).toBe(true);
-    expect(config.searchParams.get('published')).toBe('true');
+    expect(config.searchParams).toHaveProperty('perPage', '12');
+    expect(config.searchParams).toHaveProperty('offset', '2');
+    expect(config.searchParams).toHaveProperty('published', 'true');
   });
 
-  it('Replace works', async () => {
-    const pagination = x.compose(
-      x.initialize(),
-      x.searchParams({ perPage: 12, offset: 2 }),
-    );
+  it('Replaces', async () => {
+    const config = new Fetchtastic()
+      .setSearchParams({ perPage: 12, offset: 2 })
+      .appendSearchParam('first', 10)
+      .setSearchParams({ published: true }, true);
 
-    const config = x.compose(
-      pagination,
-      x.searchParams({ published: true }, true),
-    );
+    expect(config.searchParams).not.toHaveProperty('perPage');
+    expect(config.searchParams).not.toHaveProperty('offset');
+    expect(config.searchParams).not.toHaveProperty('first');
 
-    expect(config.searchParams.has('perPage')).toBe(false);
-    expect(config.searchParams.get('perPage')).toBe(null);
+    expect(config.searchParams).toHaveProperty('published', 'true');
+  });
 
-    expect(config.searchParams.has('offset')).toBe(false);
-    expect(config.searchParams.get('offset')).toBe(null);
+  it('Removes', async () => {
+    const config = new Fetchtastic()
+      .setSearchParams({ offset: 2, perPage: 12, published: true })
+      .deleteSearchParam('published');
 
-    expect(config.searchParams.has('published')).toBe(true);
-    expect(config.searchParams.get('published')).toBe('true');
+    expect(config.searchParams).toHaveProperty('perPage', '12');
+    expect(config.searchParams).toHaveProperty('offset', '2');
+
+    expect(config.searchParams).not.toHaveProperty('published');
   });
 });

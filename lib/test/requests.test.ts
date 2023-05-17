@@ -1,4 +1,4 @@
-import * as x from '../src';
+import { Fetchtastic, FetchError } from '../src/core';
 
 const fetchMock = jest.fn();
 global.fetch = fetchMock;
@@ -33,7 +33,7 @@ const data = {
 };
 
 const endpoint = 'https://catfact.ninja/breeds';
-const headers = { Accept: 'application/json' };
+const headers = { accept: 'application/json' };
 const body = {
   breed: 'American Bobtail',
   country: 'United States',
@@ -42,7 +42,8 @@ const body = {
   pattern: 'All',
 };
 
-const api = x.compose(x.initialize(), x.url(endpoint), x.headers(headers), x.build());
+const getConfig = new Fetchtastic(endpoint).setHeaders(headers);
+const postConfig = Fetchtastic.clone(getConfig).setBody(body);
 
 beforeEach(() => {
   fetchMock.mockClear();
@@ -60,16 +61,12 @@ describe('GET Requests', () => {
     );
 
     // checks the response
-    expect(api.get()).resolves.toBe(data);
+    expect(getConfig.get.json()).resolves.toMatchObject(data);
 
-    expect(fetchMock).toHaveBeenCalledWith(endpoint, {
-      method: 'GET',
-      headers: new Headers(headers),
-      body: null,
-    });
+    expect(fetchMock).toHaveBeenCalledWith(endpoint, getConfig.getOptions('GET'));
   });
 
-  test('Rejecting with 404', () => {
+  it('Rejects 404', () => {
     // simulates a 404 server response
     fetchMock.mockImplementationOnce(() =>
       Promise.resolve({
@@ -79,28 +76,24 @@ describe('GET Requests', () => {
       }),
     );
     // checks the response
-    expect(api.get()).rejects.toMatchObject({
-      _type: 'XShieldError',
+    expect(getConfig.get.json()).rejects.toMatchObject({
       status: 404,
       method: 'GET',
       url: endpoint,
       message: 'Not Found',
     });
 
-    expect(fetchMock).toHaveBeenCalledWith(endpoint, {
-      method: 'GET',
-      headers: new Headers(headers),
-      body: null,
-    });
+    expect(fetchMock).toHaveBeenCalledWith(endpoint, getConfig.getOptions('GET'));
   });
 
   test('Fetch Error', () => {
     // simulates fetch failure
-    fetchMock.mockImplementationOnce(() => Promise.reject(new Error('Failed to fetch')));
+    fetchMock.mockImplementationOnce(() =>
+      Promise.reject(new Error('Failed to fetch')),
+    );
 
     // checks the response
-    expect(api.get()).rejects.toMatchObject({
-      _type: 'XShieldError',
+    expect(getConfig.get.json()).rejects.toMatchObject({
       status: 0,
       method: 'GET',
       url: endpoint,
@@ -108,11 +101,7 @@ describe('GET Requests', () => {
       response: undefined,
     });
 
-    expect(fetchMock).toHaveBeenCalledWith(endpoint, {
-      method: 'GET',
-      headers: new Headers(headers),
-      body: null,
-    });
+    expect(fetchMock).toHaveBeenCalledWith(endpoint, getConfig.getOptions('GET'));
   });
 });
 
@@ -128,18 +117,14 @@ describe('POST Requests', () => {
     );
 
     // checks the response
-    expect(api.post(body)).resolves.toBe(data);
+    expect(postConfig.post.json()).resolves.toMatchObject(data);
 
-    expect(fetchMock).toHaveBeenCalledWith(endpoint, {
-      method: 'POST',
-      headers: new Headers(headers),
-      body: JSON.stringify(body),
-    });
+    expect(fetchMock).toHaveBeenCalledWith(endpoint, postConfig.getOptions('POST'));
   });
 
   test('Rejecting with 404', () => {
     // simulates a 404 server response
-    fetchMock.mockImplementationOnce(() =>
+    fetchMock.mockImplementation(() =>
       Promise.resolve({
         status: 404,
         ok: false,
@@ -148,28 +133,25 @@ describe('POST Requests', () => {
     );
 
     // checks the response
-    expect(api.post(body)).rejects.toMatchObject({
-      _type: 'XShieldError',
+    expect(postConfig.post.json()).rejects.toBeInstanceOf(FetchError);
+
+    expect(postConfig.post.json()).rejects.toMatchObject({
       status: 404,
       method: 'POST',
       url: endpoint,
       message: 'Not Found',
     });
 
-    expect(fetchMock).toHaveBeenCalledWith(endpoint, {
-      method: 'POST',
-      headers: new Headers(headers),
-      body: JSON.stringify(body),
-    });
+    expect(fetchMock).toHaveBeenCalledWith(endpoint, postConfig.getOptions('POST'));
   });
 
   test('Fetch Error', () => {
     // simulates fetch failure
-    fetchMock.mockImplementationOnce(() => Promise.reject(new Error('Failed to fetch')));
-
+    fetchMock.mockImplementation(() => Promise.reject(new Error('Failed to fetch')));
     // checks the response
-    expect(api.post()).rejects.toMatchObject({
-      _type: 'XShieldError',
+    expect(postConfig.post.json()).rejects.toBeInstanceOf(FetchError);
+
+    expect(postConfig.post.json()).rejects.toMatchObject({
       status: 0,
       method: 'POST',
       url: endpoint,
@@ -177,10 +159,6 @@ describe('POST Requests', () => {
       response: undefined,
     });
 
-    expect(fetchMock).toHaveBeenCalledWith(endpoint, {
-      method: 'POST',
-      headers: new Headers(headers),
-      body: null,
-    });
+    expect(fetchMock).toHaveBeenCalledWith(endpoint, postConfig.getOptions('POST'));
   });
 });

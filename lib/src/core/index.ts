@@ -1,3 +1,4 @@
-export * from './build';
-export * from './xshield';
-export * from './request';
+export * from './types';
+export * from './Fetchtastic';
+export * from './FetchError';
+export * from './FetchResolver';

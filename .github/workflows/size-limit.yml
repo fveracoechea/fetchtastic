@@ -1,4 +1,4 @@
-name: Size limit report
+name: Size Limit report
 on:
   pull_request:
     branches:

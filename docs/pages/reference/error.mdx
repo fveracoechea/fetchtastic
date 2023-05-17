@@ -1,0 +1,27 @@
+# FetchError Class
+
+The `FetchError` class extends the built-in `Error` class and represents an error that occurs during an HTTP request made with `Fetchtastic`. It encapsulates information about the error, including the request URL, HTTP method, response details, and error message.
+
+## Properties
+
+-   `status: number`: The HTTP status code of the error response.
+-   `method: HttpMethod`: The HTTP method used in the request.
+-   `response?: Response | undefined`: The `Response` object representing the error response.
+-   `url: string`: The URL of the request that resulted in the error.
+-   `text?: string`: The response body as plain text (if available).
+-   `json?: unknown`: The response body parsed as JSON (if available).
+
+## Constructor
+
+### `constructor(url: string, method: HttpMethod, response?: Response, message?: string)`
+
+Creates a new instance of the `FetchError` class.
+
+-   `url: string`: The URL of the request that resulted in the error.
+-   `method: HttpMethod`: The HTTP method used in the request.
+-   `response?: Response`: The `Response` object representing the error response (optional).
+-   `message?: string`: A custom error message (optional).
+
+## Methods
+
+The `FetchError` class does not expose any public methods.

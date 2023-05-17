@@ -1,5 +1,5 @@
 {
-  "name": "xshield-monorepo",
+  "name": "fetchtastic-monorepo",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -12,12 +12,12 @@
   "size-limit": [
     {
       "name": "CommonJS",
-      "path": "lib/dist/cjs/index.cjs",
+      "path": "lib/dist/cjs/core/index.cjs",
       "limit": "8 KB"
     },
     {
       "name": "ES Modules",
-      "path": "lib/dist/esm/index.js",
+      "path": "lib/dist/esm/core/index.js",
       "limit": "8 KB"
     }
   ],
@@ -27,7 +27,7 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "size": "size-limit",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md,mdx}\""
   },
   "volta": {
     "node": "18.16.0",
@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@size-limit/preset-small-lib": "^8.1.2",
+    "@typescript-eslint/eslint-plugin": "^5.59.2",
     "eslint-config": "*",
     "prettier": "latest",
     "size-limit": "^8.1.2",

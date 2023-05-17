@@ -1,0 +1,129 @@
+# TypeScript Utility Code Documentation
+
+## pipe
+
+Pipes the value of an expression into a pipeline of functions.
+
+Performs left-to-right function composition, where the first argument is a value, and the remaining arguments must be unary functions.
+
+### Signature
+
+```typescript
+export function pipe<A>(a: A): A;
+export function pipe<A, B>(a: A, ab: (a: A) => B): B;
+export function pipe<A, B, C>(a: A, ab: (a: A) => B, bc: (b: B) => C): C;
+// ... (additional overloads for higher arities)
+```
+
+### Usage
+
+The `pipe` function allows you to apply a sequence of functions to a value, passing the result of each function as the argument to the next one. This provides a concise and readable way to perform a series of transformations on a value.
+
+```typescript
+import { pipe } from 'fetchtastic/utils';
+
+const length = (s: string) => s.length;
+const addOne = (n: number) => n + 1;
+const double = (n: number) => n * 2;
+
+// without pipe
+double(addOne(length('aaa'))); // 8
+
+// with pipe
+pipe('aaa', length, addOne, double); // 8
+```
+
+In the example above, the `pipe` function is used to compose the `length`, `addOne`, and `double` functions together. The value `'aaa'` is passed as the initial argument, and each subsequent function is applied to the result of the previous function. The final result is `8`.
+
+### Overloads
+
+The `pipe` function is overloaded to support function composition of various arities. There are overloads for up to 20 functions (`pipe<A, B, C, ..., T>`), allowing you to chain a variable number of functions together.
+
+Note: The TypeScript type parameter letters (`A`, `B`, `C`, etc.) are used to represent the input and output types of the functions in the pipeline.
+
+## identity
+
+A function that returns the same argument passed to it.
+
+### Signature
+
+```typescript
+export const identity: <T = unknown>(data: T) => T = x => x;
+```
+
+### Usage
+
+```typescript
+const result = identity('Hello, World!');
+console.log(result); // Output: 'Hello, World!'
+```
+
+### Description
+
+The `identity` function is a simple utility that takes an argument and returns it unchanged. It is useful in scenarios where you need to pass a function as an argument but want a no-op function that doesn't modify the input.
+
+## noop
+
+A no-operation function.
+
+### Signature
+
+```typescript
+export const noop = (..._any: unknown[]) => void null;
+```
+
+### Usage
+
+```typescript
+noop(); // Does nothing
+```
+
+### Description
+
+The `noop` function is a utility that does nothing. It is commonly used as a placeholder or a default function when no action is required.
+
+## isHttpMethod
+
+Returns `true` if the given value is a valid `HttpMethod`.
+
+### Signature
+
+```typescript
+export function isHttpMethod(value: unknown): value is HttpMethod;
+```
+
+### Usage
+
+```typescript
+const result1 = isHttpMethod('GET'); // true
+const result2 = isHttpMethod('INVALID'); // false
+```
+
+### Description
+
+The `isHttpMethod` function checks whether the provided value is a valid `HttpMethod`. It validates that the value is a string and matches one of the predefined `HttpMethods`.
+
+## StatusCodes
+
+A map of HTTP status codes and their corresponding descriptions.
+
+### Signature
+
+```typescript
+export const StatusCodes = new Map<number, string>([
+    [100, 'Continue'],
+    [101, 'Switching Protocols'],
+    // ...
+]);
+```
+
+### Usage
+
+```typescript
+const description = StatusCodes.get(200); // 'OK'
+console.log(description); // Output: 'OK'
+```
+
+### Description
+
+The `StatusCodes` map provides a mapping of HTTP status codes to their descriptive phrases. It can be used to retrieve the description for a given status code.

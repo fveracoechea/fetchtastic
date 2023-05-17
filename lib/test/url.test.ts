@@ -1,29 +1,35 @@
-import * as x from '../src';
+import { Fetchtastic } from '../src';
 
 describe('Url operator', () => {
-  it('Concat works', async () => {
+  it('Concats', () => {
     const expected = 'https://catfact.ninja/breeds/77';
 
-    const config = x.compose(
-      x.initialize(),
-      x.url('https://catfact.ninja'),
-      x.url('/breeds'),
-      x.url('/77'),
-    );
+    const config = new Fetchtastic('https://catfact.ninja')
+      .setUrl('/breeds')
+      .setUrl('/77');
 
-    expect(config).toHaveProperty(['url'], expected);
+    expect(config.url).toBe(expected);
   });
 
-  it('Replace works', async () => {
-    const expected = 'https://other.url';
+  it('Replaces', () => {
+    const expected = 'https://other.url/test';
 
-    const config = x.compose(
-      x.initialize(),
-      x.url('https://catfact.ninja'),
-      x.url('/breeds'),
-      x.url('https://other.url', true),
-    );
+    const config = new Fetchtastic('https://catfact.ninja')
+      .setUrl('/breeds')
+      .setUrl('https://other.url', true)
+      .setUrl('/test');
 
-    expect(config).toHaveProperty(['url'], expected);
+    expect(config.url).toBe(expected);
+  });
+
+  it('Includes search params', () => {
+    const expected = 'https://catfact.ninja/breeds?perPage=12&offset=2&first=10';
+
+    const config = new Fetchtastic('https://catfact.ninja')
+      .setSearchParams({ perPage: 12, offset: 2 })
+      .setUrl('/breeds')
+      .appendSearchParam('first', 10);
+
+    expect(config.url).toBe(expected);
   });
 });

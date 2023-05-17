@@ -1,30 +1,57 @@
-import * as x from '../src';
+import { Fetchtastic } from '../src';
 
 describe('Headers operator', () => {
-  it('Concat works', async () => {
-    const config = x.compose(
-      x.initialize(),
-      x.headers({ 'Content-Type': 'application/json' }),
-      x.headers([['Accept', 'application/json']]),
-    );
+  it('Concats', async () => {
+    const config = new Fetchtastic()
+      .setHeaders({
+        'Content-Type': 'application/json',
+      })
+      .setHeaders([['Accept', 'application/json']])
+      .appendHeader('Authorization', 'Token XXX');
 
-    expect(config.headers.has('Content-Type')).toBe(true);
-    expect(config.headers.get('Content-Type')).toBe('application/json');
-    expect(config.headers.has('Accept')).toBe(true);
-    expect(config.headers.get('Accept')).toBe('application/json');
+    const headers = config.getOptions('GET').headers as Headers;
+
+    expect(headers).toBeTruthy();
+    expect(headers).toBeInstanceOf(Headers);
+    expect(headers.get('Content-Type')).toBe('application/json');
+    expect(headers.get('Accept')).toBe('application/json');
+    expect(headers.get('Authorization')).toBe('Token XXX');
   });
 
-  it('Replace works', async () => {
-    const config = x.compose(
-      x.initialize(),
-      x.headers({ 'Content-Type': 'application/json' }),
-      x.headers([['Accept', 'application/json']]),
-      x.headers([['X-Headers', 'all']], true),
-    );
+  it('Replaces', async () => {
+    const config = new Fetchtastic()
+      .setHeaders({
+        'Content-Type': 'application/json',
+      })
+      .appendHeader('Accept', 'application/json')
+      .setHeaders([['X-Headers', 'all']], true);
 
-    expect(config.headers.has('Content-Type')).toBe(false);
-    expect(config.headers.has('Accept')).toBe(false);
-    expect(config.headers.has('X-Headers')).toBe(true);
-    expect(config.headers.get('X-Headers')).toBe('all');
+    const headers = config.getOptions('GET').headers as Headers;
+
+    expect(headers).toBeTruthy();
+    expect(headers).toBeInstanceOf(Headers);
+    expect(headers.has('Content-Type')).toBe(false);
+    expect(headers.has('Accept')).toBe(false);
+    expect(headers.has('X-Headers')).toBe(true);
+    expect(headers.get('X-Headers')).toBe('all');
+  });
+
+  it('Removes', async () => {
+    const config = new Fetchtastic()
+      .setHeaders({
+        'Content-Type': 'application/json',
+        'Fake-Header': 'test',
+        Accept: 'application/json',
+      })
+      .deleteHeader('Fake-Header');
+
+    const headers = config.getOptions('GET').headers as Headers;
+
+    expect(headers).toBeTruthy();
+    expect(headers).toBeInstanceOf(Headers);
+
+    expect(headers.has('Fake-Header')).toBe(false);
+    expect(headers.has('Content-Type')).toBe(true);
+    expect(headers.has('Accept')).toBe(true);
   });
 });

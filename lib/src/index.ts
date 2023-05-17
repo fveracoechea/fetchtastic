@@ -1,4 +1,3 @@
-import * as x from './exports';
-export * from './exports';
-export { x };
-export default x;
+export * from './core';
+export * from './utils';
+export * from './react';

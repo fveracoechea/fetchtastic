@@ -1,17 +1,18 @@
-# XShield
+# Fetchtastic
 
 Small wrapper around fetch designed to perform more predictable and strongly typed network requests.
 
-### Features:
+```bash
+npm install fetchtastic
+# or
+yarn add fetchtastic
+```
 
-- [x] Setup query helper.
-- [x] Response type validation.
-- [x] Setup http methods helper.
-- [x] Monorepo setup with, Example and Docs.
-- [x] Response parsing helpers.
-- [ ] Error handing.
-- [x] Abort controller.
-- [ ] FormData and FormURL requests.
-- [ ] Authenticaion and retry.
-- [ ] React suspense / caching support.
-- [ ] Documentation.
+## Features
+
+-   Small - Less than 3KB
+-   Composable - Safely reuse previous configurations
+-   Intuitive - Clean and easy to use API
+-   Type safe - Strongly typed, written in TypeScript
+-   Isomorphic - Compatible with modern browsers, Node.js and Deno
+-   Well Tested - Fully covered by unit tests

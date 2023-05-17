@@ -1,0 +1,124 @@
+# Fetchtastic Class
+
+The `Fetchtastic` class represents an HTTP request configuration. It provides methods for setting headers, URL parameters, request body, and other options. It also provides convenience methods for performing common HTTP methods such as GET, POST, PUT, DELETE, OPTIONS, PATCH, and HEAD.
+
+## Static Method
+
+### `clone(instance: Fetchtastic): Fetchtastic`
+
+Creates a new instance of the `Fetchtastic` class by cloning an existing instance.
+
+-   `instance`: The `Fetchtastic` instance to clone.
+
+Returns a new `Fetchtastic` instance with the same configuration as the cloned instance.
+
+## Properties
+
+-   `url: string`: The URL of the request, including any URL parameters.
+-   `searchParams: Record<string, string>`: An object representing the URL parameters of the request.
+-   `headers: Record<string, string>`: An object representing the headers of the request.
+-   `get: FetchResolver<GET>`: A `FetchResolver` instance for performing a GET request.
+-   `post: FetchResolver<POST>`: A `FetchResolver` instance for performing a POST request.
+-   `put: FetchResolver<PUT>`: A `FetchResolver` instance for performing a PUT request.
+-   `delete: FetchResolver<DELETE>`: A `FetchResolver` instance for performing a DELETE request.
+-   `options: FetchResolver<OPTIONS>`: A `FetchResolver` instance for performing an OPTIONS request.
+-   `patch: FetchResolver<PATCH>`: A `FetchResolver` instance for performing a PATCH request.
+-   `head: FetchResolver<HEAD>`: A `FetchResolver` instance for performing a HEAD request.
+
+## Constructor
+
+### `constructor(baseUrl?: string | URL, controller?: AbortController)`
+
+Creates a new instance of the `Fetchtastic` class.
+
+-   `baseUrl: string | URL`: The base URL of the request. Optional.
+-   `controller: AbortController`: An `AbortController` instance for aborting the request. Optional.
+
+## Methods
+
+### `setHeaders(data?: HeadersInit, replace = false): Fetchtastic`
+
+Sets the headers of the request.
+
+-   `data: HeadersInit`: The headers to set.
+-   `replace: boolean`: Indicates whether to replace the existing headers or append to them. Default is `false`.
+
+Returns the `Fetchtastic` instance.
+
+### `appendHeader(name: string, value: string): Fetchtastic`
+
+Appends a header to the request.
+
+-   `name: string`: The name of the header.
+-   `value: string`: The value of the header.
+
+Returns the `Fetchtastic` instance.
+
+### `deleteHeader(name: string): Fetchtastic`
+
+Deletes a header from the request.
+
+-   `name: string`: The name of the header to delete.
+
+Returns the `Fetchtastic` instance.
+
+### `setUrl(url: string | URL, replace = false): Fetchtastic`
+
+Sets the URL of the request.
+
+-   `url: string | URL`: The URL to set.
+-   `replace: boolean`: Indicates whether to replace the existing URL or append to it. Default is `false`.
+
+Returns the `Fetchtastic` instance.
+
+### `setSearchParams(data?: SearchParamInput, replace = false): Fetchtastic`
+
+Sets the URL parameters of the request.
+
+-   `data: SearchParamInput`: The URL parameters to set.
+-   `replace: boolean`: Indicates whether to replace the existing URL parameters or append to them. Default is `false`.
+
+Returns the `Fetchtastic` instance.
+
+### `appendSearchParam(name: string, value: string | number | boolean): Fetchtastic`
+
+Appends a URL parameter to the request.
+
+-   `name: string`: The name of the URL search parameter.
+
+-   `value: string | number | boolean`: The value of the URL search parameter.
+
+Returns the `Fetchtastic` instance.
+
+### `deleteSearchParam(name: string): Fetchtastic`
+
+Deletes a URL parameter from the request.
+
+-   `name: string`: The name of the URL parameter to delete.
+
+Returns the `Fetchtastic` instance.
+
+### `setBody(body: BodyInit | null | unknown): Fetchtastic`
+
+Sets the body of the request.
+
+-   `body: BodyInit | null | unknown`: The body of the request.
+
+Returns the `Fetchtastic` instance.
+
+### `setOptions(options: FetchtasticOptions, replace = false): Fetchtastic`
+
+Sets the options of the request.
+
+-   `options: FetchtasticOptions`: The options to set.
+-   `replace: boolean`: Indicates whether to replace the existing options or merge them with the new options. Default is `false`.
+
+Returns the `Fetchtastic` instance.
+
+### `getOptions(method: HttpMethod): FetchOptions`
+
+Gets the options object for the request.
+
+-   `method: HttpMethod`: The HTTP method of the request.
+
+Returns the options object for the request.

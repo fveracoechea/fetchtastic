@@ -1,5 +1,5 @@
 {
-  "name": "xshield",
+  "name": "fetchtastic",
   "author": "Francisco Veracoechea",
   "version": "0.1.0",
   "type": "module",
@@ -21,15 +21,20 @@
       "require": "./dist/cjs/index.cjs",
       "import": "./dist/esm/index.js"
     },
-    "./operators": {
-      "types": "./dist/types/operators/index.d.ts",
-      "import": "./dist/esm/operators/index.js",
-      "require": "./dist/cjs/operators/index.cjs"
+    "./core": {
+      "types": "./dist/types/core/index.d.ts",
+      "import": "./dist/esm/core/index.js",
+      "require": "./dist/cjs/core/index.cjs"
     },
     "./utils": {
       "types": "./dist/types/utils/index.d.ts",
       "import": "./dist/esm/utils/index.js",
       "require": "./dist/cjs/utils/index.cjs"
+    },
+    "./react": {
+      "types": "./dist/types/react/index.d.ts",
+      "import": "./dist/esm/react/index.js",
+      "require": "./dist/cjs/react/index.cjs"
     }
   },
   "files": [
@@ -42,7 +47,7 @@
   "scripts": {
     "dev": "rollup -c --watch",
     "build": "rimraf dist && rollup -c",
-    "test": "jest --ci --coverage --maxWorkers=2",
+    "test": "jest --ci --maxWorkers=2",
     "lint": "eslint . --ext .ts,.tsx --max-warnings 0",
     "format": "prettier --write .",
     "http-codegen": "ts-node scripts/generateHttpCodes"
