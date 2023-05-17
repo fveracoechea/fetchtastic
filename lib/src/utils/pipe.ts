@@ -7,7 +7,7 @@
  *
  *
  * @example
- * import { pipe } from 'xshield/utils'
+ * import { pipe } from 'fetchtastic/utils'
  *
  * const length = (s: string) => s.length
  * const addOne = (n: number) => n + 1
@@ -257,28 +257,7 @@ export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S>(
   rs: (r: R) => S,
 ): S;
 
-export function pipe<
-  A,
-  B,
-  C,
-  D,
-  E,
-  F,
-  G,
-  H,
-  I,
-  J,
-  K,
-  L,
-  M,
-  N,
-  O,
-  P,
-  Q,
-  R,
-  S,
-  T,
->(
+export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T>(
   a: A,
   ab: (a: A) => B,
   bc: (b: B) => C,
@@ -301,10 +280,7 @@ export function pipe<
   st: (s: S) => T,
 ): T;
 
-export function pipe(
-  a: unknown,
-  ...operators: ((x: unknown) => unknown)[]
-): unknown {
+export function pipe(a: unknown, ...operators: ((x: unknown) => unknown)[]): unknown {
   let value = a;
   if (operators.length > 0) {
     for (const operator of operators) {

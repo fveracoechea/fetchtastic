@@ -1,4 +1,4 @@
 export * from './types';
-export * from './DataGrab';
-export * from './DataGrabError';
-export * from './DataGrabResolver';
+export * from './Fetchtastic';
+export * from './FetchError';
+export * from './FetchResolver';

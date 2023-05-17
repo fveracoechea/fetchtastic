@@ -3249,6 +3249,7 @@ __metadata:
     "@types/react-dom": ^18.0.7
     eslint: 7.32.0
     eslint-config: "*"
+    fetchtastic: "*"
     next: ^13.4.2
     nextra: ^2.5.2
     nextra-theme-docs: ^2.5.2
@@ -3256,7 +3257,6 @@ __metadata:
     react-dom: ^18.2.0
     tsconfig: "*"
     typescript: ^5.0.0
-    xshield: "*"
   languageName: unknown
   linkType: soft
 
@@ -4090,12 +4090,12 @@ __metadata:
     "@types/react-dom": ^18.0.7
     eslint: 7.32.0
     eslint-config: "*"
+    fetchtastic: "*"
     next: ^13.2.4
     react: ^18.2.0
     react-dom: ^18.2.0
     tsconfig: "*"
     typescript: ^5.0.0
-    xshield: "*"
   languageName: unknown
   linkType: soft
 
@@ -4218,6 +4218,48 @@ __metadata:
   checksum: b15a124cef28916fe07b400eb87cbc73ca082c142abf7ca8e8de6af43eca79ca7bd13eb4d4d48240b3bd3136eaac40d16e42d6edf87a8e5d1dd8070626860c78
   languageName: node
   linkType: hard
+
+"fetchtastic-monorepo@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "fetchtastic-monorepo@workspace:."
+  dependencies:
+    "@size-limit/preset-small-lib": ^8.1.2
+    "@typescript-eslint/eslint-plugin": ^5.59.2
+    eslint-config: "*"
+    prettier: latest
+    size-limit: ^8.1.2
+    ts-node: ^10.9.1
+    turbo: latest
+  languageName: unknown
+  linkType: soft
+
+"fetchtastic@*, fetchtastic@workspace:lib":
+  version: 0.0.0-use.local
+  resolution: "fetchtastic@workspace:lib"
+  dependencies:
+    "@jest/globals": ^29.5.0
+    "@rollup/plugin-commonjs": ^24.0.1
+    "@rollup/plugin-json": ^6.0.0
+    "@rollup/plugin-multi-entry": ^6.0.0
+    "@rollup/plugin-node-resolve": ^15.0.1
+    "@rollup/plugin-terser": ^0.4.0
+    "@rollup/plugin-typescript": ^11.0.0
+    "@types/jest": ^29.5.0
+    "@types/node": ^18.15.9
+    eslint: ^8.36.0
+    eslint-config: "*"
+    jest: ^29.5.0
+    prettier: 2.8.7
+    rimraf: ^4.4.1
+    rollup: ^3.20.2
+    rollup-plugin-progress: ^1.1.2
+    ts-jest: ^29.0.5
+    ts-node: ^10.9.1
+    tsconfig: "*"
+    tslib: ^2.5.0
+    typescript: ^5.0.0
+  languageName: unknown
+  linkType: soft
 
 "file-entry-cache@npm:^6.0.1":
   version: 6.0.1
@@ -9697,48 +9739,6 @@ __metadata:
   checksum: 5da60bd4eeeb935eec97ead3df6e28e5917a6bd317478e4a85a5285e8480b8ed96032bbcc6ecd07b236142a24f3ca871c924ec4a6575e623ec1b11bf8c1c253c
   languageName: node
   linkType: hard
-
-"xshield-monorepo@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "xshield-monorepo@workspace:."
-  dependencies:
-    "@size-limit/preset-small-lib": ^8.1.2
-    "@typescript-eslint/eslint-plugin": ^5.59.2
-    eslint-config: "*"
-    prettier: latest
-    size-limit: ^8.1.2
-    ts-node: ^10.9.1
-    turbo: latest
-  languageName: unknown
-  linkType: soft
-
-"xshield@*, xshield@workspace:lib":
-  version: 0.0.0-use.local
-  resolution: "xshield@workspace:lib"
-  dependencies:
-    "@jest/globals": ^29.5.0
-    "@rollup/plugin-commonjs": ^24.0.1
-    "@rollup/plugin-json": ^6.0.0
-    "@rollup/plugin-multi-entry": ^6.0.0
-    "@rollup/plugin-node-resolve": ^15.0.1
-    "@rollup/plugin-terser": ^0.4.0
-    "@rollup/plugin-typescript": ^11.0.0
-    "@types/jest": ^29.5.0
-    "@types/node": ^18.15.9
-    eslint: ^8.36.0
-    eslint-config: "*"
-    jest: ^29.5.0
-    prettier: 2.8.7
-    rimraf: ^4.4.1
-    rollup: ^3.20.2
-    rollup-plugin-progress: ^1.1.2
-    ts-jest: ^29.0.5
-    ts-node: ^10.9.1
-    tsconfig: "*"
-    tslib: ^2.5.0
-    typescript: ^5.0.0
-  languageName: unknown
-  linkType: soft
 
 "y18n@npm:^5.0.5":
   version: 5.0.8

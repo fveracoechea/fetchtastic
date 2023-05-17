@@ -1,4 +1,4 @@
-# XShield
+# fetchtastic
 
 Small wrapper around fetch designed to perform more predictable and strongly typed network requests.
 

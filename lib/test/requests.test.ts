@@ -1,4 +1,4 @@
-import { DataGrab, DataGrabError } from '../src/core';
+import { Fetchtastic, FetchError } from '../src/core';
 
 const fetchMock = jest.fn();
 global.fetch = fetchMock;
@@ -42,8 +42,8 @@ const body = {
   pattern: 'All',
 };
 
-const getConfig = new DataGrab(endpoint).setHeaders(headers);
-const postConfig = DataGrab.clone(getConfig).setBody(body);
+const getConfig = new Fetchtastic(endpoint).setHeaders(headers);
+const postConfig = Fetchtastic.clone(getConfig).setBody(body);
 
 beforeEach(() => {
   fetchMock.mockClear();
@@ -133,7 +133,7 @@ describe('POST Requests', () => {
     );
 
     // checks the response
-    expect(postConfig.post.json()).rejects.toBeInstanceOf(DataGrabError);
+    expect(postConfig.post.json()).rejects.toBeInstanceOf(FetchError);
 
     expect(postConfig.post.json()).rejects.toMatchObject({
       status: 404,
@@ -149,7 +149,7 @@ describe('POST Requests', () => {
     // simulates fetch failure
     fetchMock.mockImplementation(() => Promise.reject(new Error('Failed to fetch')));
     // checks the response
-    expect(postConfig.post.json()).rejects.toBeInstanceOf(DataGrabError);
+    expect(postConfig.post.json()).rejects.toBeInstanceOf(FetchError);
 
     expect(postConfig.post.json()).rejects.toMatchObject({
       status: 0,

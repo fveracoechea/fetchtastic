@@ -1,18 +1,18 @@
-import { DataGrab } from './DataGrab';
-import { DataGrabError } from './DataGrabError';
+import { Fetchtastic } from './Fetchtastic';
+import { FetchError } from './FetchError';
 import { getResponseParser } from '../internals/getResponseParser';
 import { identity } from '../utils/helpers';
 import { HttpMethod, DataAssertionFn } from './types';
 
-export class DataGrabResolver<Method extends HttpMethod> {
-  #config: DataGrab;
+export class FetchResolver<Method extends HttpMethod> {
+  #config: Fetchtastic;
   #method: Method;
 
   get method() {
     return this.#method;
   }
 
-  constructor(config: DataGrab, method: Method) {
+  constructor(config: Fetchtastic, method: Method) {
     this.#config = config;
     this.#method = method;
 
@@ -24,8 +24,8 @@ export class DataGrabResolver<Method extends HttpMethod> {
     this.resolve = this.resolve.bind(this);
   }
 
-  setConfig(updateFn: (config: DataGrab) => void) {
-    updateFn(this.#config);
+  config(updateFn: (config: Fetchtastic) => Fetchtastic) {
+    this.#config = updateFn(this.#config);
     return this;
   }
 
@@ -34,21 +34,21 @@ export class DataGrabResolver<Method extends HttpMethod> {
     try {
       const response = await fetch(this.#config.url, options);
       if (!response.ok) {
-        throw new DataGrabError(this.#config.url, this.method, response);
+        throw new FetchError(this.#config.url, this.method, response);
       }
       return response;
     } catch (error) {
-      if (error instanceof DataGrabError) {
+      if (error instanceof FetchError) {
         throw error;
       } else if (error instanceof Error) {
-        throw new DataGrabError(
+        throw new FetchError(
           this.#config.url,
           this.#method,
           undefined,
           error.message,
         );
       } else {
-        throw new DataGrabError(this.#config.url, this.method);
+        throw new FetchError(this.#config.url, this.method);
       }
     }
   }

@@ -1,8 +1,8 @@
-import { DataGrab } from '../src';
+import { Fetchtastic } from '../src';
 
 describe('Search params operator', () => {
   it('Concats', async () => {
-    const config = new DataGrab()
+    const config = new Fetchtastic()
       .setSearchParams({ offset: 2 })
       .setSearchParams('perPage=12')
       .appendSearchParam('published', true);
@@ -13,7 +13,7 @@ describe('Search params operator', () => {
   });
 
   it('Replaces', async () => {
-    const config = new DataGrab()
+    const config = new Fetchtastic()
       .setSearchParams({ perPage: 12, offset: 2 })
       .appendSearchParam('first', 10)
       .setSearchParams({ published: true }, true);
@@ -26,7 +26,7 @@ describe('Search params operator', () => {
   });
 
   it('Removes', async () => {
-    const config = new DataGrab()
+    const config = new Fetchtastic()
       .setSearchParams({ offset: 2, perPage: 12, published: true })
       .deleteSearchParam('published');
 

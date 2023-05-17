@@ -1,5 +1,5 @@
-import { DataGrab } from 'xshield/core';
-import { suspender } from 'xshield/react';
+import { Fetchtastic } from 'fetchtastic/core';
+import { suspender } from 'fetchtastic/react';
 
 type Post = {
   title: string;
@@ -25,7 +25,7 @@ export function assertPosts(res: unknown) {
   return res;
 }
 
-const api = new DataGrab('https://jsonplaceholder.typicode.com')
+const api = new Fetchtastic('https://jsonplaceholder.typicode.com')
   .setUrl('/posts')
   .appendHeader('Accept', 'application/json')
   .appendHeader('Content-Type', 'application/json');

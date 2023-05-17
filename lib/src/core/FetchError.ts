@@ -1,8 +1,8 @@
 import { StatusCodes } from '../utils';
 import { HttpMethod } from './types';
 
-export class DataGrabError extends Error {
-  static readonly type = Symbol('DataGrabError');
+export class FetchError extends Error {
+  static readonly type = Symbol('FetchError');
 
   status: number;
   method: HttpMethod;
@@ -18,7 +18,7 @@ export class DataGrabError extends Error {
     message?: string,
   ) {
     super();
-    this.name = 'DataGrabError';
+    this.name = 'FetchError';
     this.url = url;
     this.method = method;
     this.status = response?.status || 0;

@@ -13,9 +13,9 @@ const config = {
       <span style={{ marginLeft: '.4em', fontWeight: 800 }}>DataGrab</span>
     </>
   ),
-  docsRepositoryBase: 'https://github.com/fveracoechea/xshield/tree/main/docs',
+  docsRepositoryBase: 'https://github.com/fveracoechea/fetchtastic/tree/main/docs',
   project: {
-    link: 'https://github.com/fveracoechea/xshield',
+    link: 'https://github.com/fveracoechea/fetchtastic',
   },
   useNextSeoProps() {
     return {

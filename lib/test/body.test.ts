@@ -1,4 +1,4 @@
-import { DataGrab } from '../src';
+import { Fetchtastic } from '../src';
 
 describe('Body', () => {
   it('Sends stringified JSON', async () => {
@@ -17,7 +17,7 @@ describe('Body', () => {
       ],
     };
 
-    const config = new DataGrab('https://catfact.ninja').setBody(data);
+    const config = new Fetchtastic('https://catfact.ninja').setBody(data);
 
     expect(config.getOptions('GET').body).toBe(JSON.stringify(data));
   });
@@ -38,7 +38,7 @@ describe('Body', () => {
     </html>
     `;
 
-    const config = new DataGrab('https://catfact.ninja')
+    const config = new Fetchtastic('https://catfact.ninja')
       .appendHeader('Content-Type', 'text/html')
       .setBody(data);
 
@@ -58,7 +58,7 @@ describe('Body', () => {
       },
     });
 
-    const config = new DataGrab('https://catfact.ninja')
+    const config = new Fetchtastic('https://catfact.ninja')
       .appendHeader('Content-Type', 'text/html')
       .setBody(stream);
 
@@ -75,7 +75,7 @@ describe('Body', () => {
       }),
     );
 
-    const config = new DataGrab('https://catfact.ninja')
+    const config = new Fetchtastic('https://catfact.ninja')
       .appendHeader('Content-Type', 'text/html')
       .setBody(data);
 

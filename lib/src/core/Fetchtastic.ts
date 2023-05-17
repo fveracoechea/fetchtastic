@@ -1,4 +1,4 @@
-import { DataGrabResolver } from './DataGrabResolver';
+import { FetchResolver } from './FetchResolver';
 import { getNewSearchParms } from '../internals/getNewSearchParms';
 import { shouldStringify } from '../internals/shouldStringify';
 import {
@@ -9,9 +9,9 @@ import {
   FetchOptions,
 } from './types';
 
-export class DataGrab {
-  static clone(instace: DataGrab) {
-    return new DataGrab(instace.#url.toString())
+export class Fetchtastic {
+  static clone(instace: Fetchtastic) {
+    return new Fetchtastic(instace.#url.toString())
       .setHeaders(new Headers(instace.#headers), true)
       .setBody(structuredClone(instace.#body))
       .setOptions(structuredClone(instace.#options), true);
@@ -46,31 +46,31 @@ export class DataGrab {
   }
 
   get get() {
-    return new DataGrabResolver(DataGrab.clone(this), 'GET');
+    return new FetchResolver(Fetchtastic.clone(this), 'GET');
   }
 
   get post() {
-    return new DataGrabResolver(DataGrab.clone(this), 'POST');
+    return new FetchResolver(Fetchtastic.clone(this), 'POST');
   }
 
   get put() {
-    return new DataGrabResolver(DataGrab.clone(this), 'PUT');
+    return new FetchResolver(Fetchtastic.clone(this), 'PUT');
   }
 
   get delete() {
-    return new DataGrabResolver(DataGrab.clone(this), 'DELETE');
+    return new FetchResolver(Fetchtastic.clone(this), 'DELETE');
   }
 
   get options() {
-    return new DataGrabResolver(DataGrab.clone(this), 'OPTIONS');
+    return new FetchResolver(Fetchtastic.clone(this), 'OPTIONS');
   }
 
   get patch() {
-    return new DataGrabResolver(DataGrab.clone(this), 'PATCH');
+    return new FetchResolver(Fetchtastic.clone(this), 'PATCH');
   }
 
   get head() {
-    return new DataGrabResolver(DataGrab.clone(this), 'HEAD');
+    return new FetchResolver(Fetchtastic.clone(this), 'HEAD');
   }
 
   constructor(baseUrl?: string | URL, controller?: AbortController) {

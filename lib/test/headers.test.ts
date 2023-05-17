@@ -1,8 +1,8 @@
-import { DataGrab } from '../src';
+import { Fetchtastic } from '../src';
 
 describe('Headers operator', () => {
   it('Concats', async () => {
-    const config = new DataGrab()
+    const config = new Fetchtastic()
       .setHeaders({
         'Content-Type': 'application/json',
       })
@@ -19,7 +19,7 @@ describe('Headers operator', () => {
   });
 
   it('Replaces', async () => {
-    const config = new DataGrab()
+    const config = new Fetchtastic()
       .setHeaders({
         'Content-Type': 'application/json',
       })
@@ -37,7 +37,7 @@ describe('Headers operator', () => {
   });
 
   it('Removes', async () => {
-    const config = new DataGrab()
+    const config = new Fetchtastic()
       .setHeaders({
         'Content-Type': 'application/json',
         'Fake-Header': 'test',
