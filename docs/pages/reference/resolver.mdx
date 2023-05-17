@@ -1,6 +1,6 @@
-# DataGrabResolver Class
+# FetchResolver Class
 
-The `DataGrabResolver` class is a generic class that represents a resolver for making HTTP requests with a specific HTTP method. It is used in conjunction with the `DataGrab` class to perform various HTTP operations such as sending requests, handling responses, and parsing response data.
+The `FetchResolver` class is a generic class that represents a resolver for making HTTP requests with a specific HTTP method. It is used in conjunction with the `Fetchtastic` class to perform various HTTP operations such as sending requests, handling responses, and parsing response data.
 
 ## Generic Type
 
@@ -12,22 +12,22 @@ The `DataGrabResolver` class is a generic class that represents a resolver for m
 
 ## Constructor
 
-### `constructor(config: DataGrab, method: Method)`
+### `constructor(config: Fetchtastic, method: Method)`
 
-Creates a new instance of the `DataGrabResolver` class.
+Creates a new instance of the `FetchResolver` class.
 
--   `config: DataGrab`: The `DataGrab` instance representing the request configuration.
+-   `config: Fetchtastic`: The `Fetchtastic` instance representing the request configuration.
 -   `method: Method`: The HTTP method associated with the resolver.
 
 ## Methods
 
-### `setConfig(updateFn: (config: DataGrab) => void): DataGrabResolver<Method>`
+### `config(updateFn: (config: Fetchtastic) => void): FetchResolver<Method>`
 
-Updates the configuration of the associated `DataGrab` instance.
+Updates the configuration of the associated `Fetchtastic` instance.
 
--   `updateFn: (config: DataGrab) => void`: A function that takes the current `DataGrab` instance as a parameter and modifies it.
+-   `updateFn: (config: Fetchtastic) => Fetchtastic`: A function that takes the current `Fetchtastic` instance as a parameter and modifies it.
 
-Returns the `DataGrabResolver` instance.
+Returns the `FetchResolver` instance.
 
 ### `resolve(): Promise<Response>`
 
@@ -66,4 +66,3 @@ Returns a promise that resolves with the parsed `FormData` object.
 Parses the response data as plain text and resolves with the parsed data.
 
 Returns a promise that resolves with the parsed text data.
-

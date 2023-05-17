@@ -1,6 +1,6 @@
-# DataGrabError Class
+# FetchError Class
 
-The `DataGrabError` class extends the built-in `Error` class and represents an error that occurs during an HTTP request made with `DataGrab`. It encapsulates information about the error, including the request URL, HTTP method, response details, and error message.
+The `FetchError` class extends the built-in `Error` class and represents an error that occurs during an HTTP request made with `Fetchtastic`. It encapsulates information about the error, including the request URL, HTTP method, response details, and error message.
 
 ## Properties
 
@@ -15,7 +15,7 @@ The `DataGrabError` class extends the built-in `Error` class and represents an e
 
 ### `constructor(url: string, method: HttpMethod, response?: Response, message?: string)`
 
-Creates a new instance of the `DataGrabError` class.
+Creates a new instance of the `FetchError` class.
 
 -   `url: string`: The URL of the request that resulted in the error.
 -   `method: HttpMethod`: The HTTP method used in the request.
@@ -24,4 +24,4 @@ Creates a new instance of the `DataGrabError` class.
 
 ## Methods
 
-The `DataGrabError` class does not expose any public methods.
+The `FetchError` class does not expose any public methods.

@@ -444,8 +444,8 @@
       "f": {},
       "b": {}
     },
-    "/Users/franciscoveracoechea/Code/fetchtastic/lib/src/core/DataGrab.ts": {
-      "path": "/Users/franciscoveracoechea/Code/fetchtastic/lib/src/core/DataGrab.ts",
+    "/Users/franciscoveracoechea/Code/fetchtastic/lib/src/core/Fetchtastic.ts": {
+      "path": "/Users/franciscoveracoechea/Code/fetchtastic/lib/src/core/Fetchtastic.ts",
       "statementMap": {
         "0": {
           "start": { "line": 1, "column": 0 },
@@ -1593,8 +1593,8 @@
         "27": [12, 3]
       }
     },
-    "/Users/franciscoveracoechea/Code/fetchtastic/lib/src/core/DataGrabResolver.ts": {
-      "path": "/Users/franciscoveracoechea/Code/fetchtastic/lib/src/core/DataGrabResolver.ts",
+    "/Users/franciscoveracoechea/Code/fetchtastic/lib/src/core/FetchResolver.ts": {
+      "path": "/Users/franciscoveracoechea/Code/fetchtastic/lib/src/core/FetchResolver.ts",
       "statementMap": {
         "0": {
           "start": { "line": 2, "column": 0 },
@@ -1966,8 +1966,8 @@
       },
       "b": { "0": [3], "1": [3, 3], "2": [3, 0], "3": [0, 8], "4": [8, 8] }
     },
-    "/Users/franciscoveracoechea/Code/fetchtastic/lib/src/core/DataGrabError.ts": {
-      "path": "/Users/franciscoveracoechea/Code/fetchtastic/lib/src/core/DataGrabError.ts",
+    "/Users/franciscoveracoechea/Code/fetchtastic/lib/src/core/FetchError.ts": {
+      "path": "/Users/franciscoveracoechea/Code/fetchtastic/lib/src/core/FetchError.ts",
       "statementMap": {
         "0": {
           "start": { "line": 1, "column": 0 },
@@ -2091,7 +2091,7 @@
           }
         },
         "1": {
-          "name": "_DataGrabError_parseResponseData",
+          "name": "_FetchError_parseResponseData",
           "decl": {
             "start": { "line": 30, "column": 7 },
             "end": { "line": 30, "column": null }
@@ -2102,7 +2102,7 @@
           }
         },
         "2": {
-          "name": "_DataGrabError_setMessage",
+          "name": "_FetchError_setMessage",
           "decl": {
             "start": { "line": 38, "column": 3 },
             "end": { "line": 38, "column": null }

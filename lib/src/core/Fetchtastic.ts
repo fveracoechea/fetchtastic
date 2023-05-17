@@ -4,7 +4,7 @@ import { shouldStringify } from '../internals/shouldStringify';
 import {
   FetchRequestHeader,
   SearchParamInput,
-  DataGrabOptions,
+  FetchtasticOptions,
   HttpMethod,
   FetchOptions,
 } from './types';
@@ -21,7 +21,7 @@ export class Fetchtastic {
   #headers = new Headers();
   #searchParams = new URLSearchParams();
   #body: BodyInit | null | unknown = null;
-  #options: Omit<DataGrabOptions, 'body' | 'headers'> = {};
+  #options: Omit<FetchtasticOptions, 'body' | 'headers'> = {};
   controller: AbortController;
 
   get url() {
@@ -151,7 +151,7 @@ export class Fetchtastic {
     return this;
   }
 
-  setOptions(options: DataGrabOptions, replace = false) {
+  setOptions(options: FetchtasticOptions, replace = false) {
     const { body, headers, ...otherOptions } = options;
     if (Object.prototype.hasOwnProperty.call(options, 'body')) {
       this.#body = body ?? null;

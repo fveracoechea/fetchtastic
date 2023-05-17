@@ -1,1 +1,7 @@
-
+{
+  "core": "Core",
+  "resolver": "Resolver",
+  "error": "Error",
+  "types": "Types",
+  "utility": "Utility"
+}

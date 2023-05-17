@@ -30,7 +30,7 @@ export type SearchParamInput =
   | [string, string | boolean | number][]
   | Record<string, string | boolean | number>;
 
-export type DataGrabOptions = Omit<RequestInit, 'signal' | 'method'>;
+export type FetchtasticOptions = Omit<RequestInit, 'signal' | 'method'>;
 
 export interface FetchOptions extends RequestInit {
   method: HttpMethod;

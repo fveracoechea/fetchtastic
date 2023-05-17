@@ -101,16 +101,16 @@ const input3: SearchParamInput = [
 const input4: SearchParamInput = { key: 'value', key2: 123 };
 ```
 
-## DataGrabOptions
+## FetchtasticOptions
 
-`DataGrabOptions` is a type alias that represents the options that can be passed to the `fetch` function. It is defined as `Omit<RequestInit, 'signal' | 'method'>`, which means that it includes all of the options from `RequestInit` except for `signal` and `method`.
+`FetchtasticOptions` is a type alias that represents the options that can be passed to the `fetch` function. It is defined as `Omit<RequestInit, 'signal' | 'method'>`, which means that it includes all of the options from `RequestInit` except for `signal` and `method`.
 
 ### Usage
 
 ```typescript
-import { DataGrabOptions } from 'module';
+import { FetchtasticOptions } from 'module';
 
-const options: DataGrabOptions = {
+const options: FetchtasticOptions = {
     headers: {
         'Content-Type': 'application/json',
     },
