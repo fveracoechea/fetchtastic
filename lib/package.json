@@ -1,12 +1,22 @@
 {
   "name": "fetchtastic",
-  "author": "Francisco Veracoechea",
   "version": "0.1.0",
-  "type": "module",
+  "description": "Predictable and strongly typed fetch requests.",
+  "homepage": "https://fetchtastic-docs.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fveracoechea/fetchtastic"
+  },
+  "bugs": {
+    "url": "https://github.com/fveracoechea/fetchtastic/issues"
+  },
+  "author": "Francisco Veracoechea",
   "license": "MIT",
   "main": "./dist/cjs/index.cjs",
   "typings": "./dist/types/index.d.ts",
   "module": "./dist/esm/index.js",
+  "type": "module",
+  "sideEffects": false,
   "typesVersions": {
     "*": {
       "*": [
@@ -75,5 +85,11 @@
     "tsconfig": "*",
     "tslib": "^2.5.0",
     "typescript": "^5.0.0"
-  }
+  },
+  "keywords": [
+    "fetch",
+    "ajax",
+    "request",
+    "type-safe"
+  ]
 }
