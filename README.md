@@ -1,4 +1,4 @@
-# Fetchtastic
+# 🌩️ Fetchtastic
 
 Small wrapper around fetch designed to perform more predictable and strongly typed network requests.
 
@@ -7,7 +7,7 @@ Small wrapper around fetch designed to perform more predictable and strongly typ
 
 <!-- [![npm version](https://img.shields.io/badge/npm%20version-0.1.2-blue)](https://badge.fury.io/js/fetchtastic) -->
 
-[Documentation](https://fetchtastic-docs.vercel.app/)
+📖 [Documentation.](https://fetchtastic-docs.vercel.app/)
 
 ```bash
 npm install fetchtastic
