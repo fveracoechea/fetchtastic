@@ -7,9 +7,9 @@ describe('Search params operator', () => {
       .searchParams('perPage=12')
       .appendSearchParam('published', true);
 
-    expect(config.searchParams).toHaveProperty('perPage', '12');
-    expect(config.searchParams).toHaveProperty('offset', '2');
-    expect(config.searchParams).toHaveProperty('published', 'true');
+    expect(config.jsonSearchParams).toHaveProperty('perPage', '12');
+    expect(config.jsonSearchParams).toHaveProperty('offset', '2');
+    expect(config.jsonSearchParams).toHaveProperty('published', 'true');
   });
 
   it('Replaces', async () => {
@@ -18,11 +18,11 @@ describe('Search params operator', () => {
       .appendSearchParam('first', 10)
       .searchParams({ published: true }, true);
 
-    expect(config.searchParams).not.toHaveProperty('perPage');
-    expect(config.searchParams).not.toHaveProperty('offset');
-    expect(config.searchParams).not.toHaveProperty('first');
+    expect(config.jsonSearchParams).not.toHaveProperty('perPage');
+    expect(config.jsonSearchParams).not.toHaveProperty('offset');
+    expect(config.jsonSearchParams).not.toHaveProperty('first');
 
-    expect(config.searchParams).toHaveProperty('published', 'true');
+    expect(config.jsonSearchParams).toHaveProperty('published', 'true');
   });
 
   it('Removes', async () => {
@@ -30,9 +30,9 @@ describe('Search params operator', () => {
       .searchParams({ offset: 2, perPage: 12, published: true })
       .deleteSearchParam('published');
 
-    expect(config.searchParams).toHaveProperty('perPage', '12');
-    expect(config.searchParams).toHaveProperty('offset', '2');
+    expect(config.jsonSearchParams).toHaveProperty('perPage', '12');
+    expect(config.jsonSearchParams).toHaveProperty('offset', '2');
 
-    expect(config.searchParams).not.toHaveProperty('published');
+    expect(config.jsonSearchParams).not.toHaveProperty('published');
   });
 });
