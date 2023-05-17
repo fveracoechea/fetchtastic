@@ -3,8 +3,8 @@ import { Fetchtastic } from '../src';
 describe('Search params operator', () => {
   it('Concats', async () => {
     const config = new Fetchtastic()
-      .setSearchParams({ offset: 2 })
-      .setSearchParams('perPage=12')
+      .searchParams({ offset: 2 })
+      .searchParams('perPage=12')
       .appendSearchParam('published', true);
 
     expect(config.searchParams).toHaveProperty('perPage', '12');
@@ -14,9 +14,9 @@ describe('Search params operator', () => {
 
   it('Replaces', async () => {
     const config = new Fetchtastic()
-      .setSearchParams({ perPage: 12, offset: 2 })
+      .searchParams({ perPage: 12, offset: 2 })
       .appendSearchParam('first', 10)
-      .setSearchParams({ published: true }, true);
+      .searchParams({ published: true }, true);
 
     expect(config.searchParams).not.toHaveProperty('perPage');
     expect(config.searchParams).not.toHaveProperty('offset');
@@ -27,7 +27,7 @@ describe('Search params operator', () => {
 
   it('Removes', async () => {
     const config = new Fetchtastic()
-      .setSearchParams({ offset: 2, perPage: 12, published: true })
+      .searchParams({ offset: 2, perPage: 12, published: true })
       .deleteSearchParam('published');
 
     expect(config.searchParams).toHaveProperty('perPage', '12');

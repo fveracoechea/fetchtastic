@@ -17,7 +17,7 @@ describe('Body', () => {
       ],
     };
 
-    const config = new Fetchtastic('https://catfact.ninja').setBody(data);
+    const config = new Fetchtastic('https://catfact.ninja').body(data);
 
     expect(config.getOptions('GET').body).toBe(JSON.stringify(data));
   });
@@ -40,7 +40,7 @@ describe('Body', () => {
 
     const config = new Fetchtastic('https://catfact.ninja')
       .appendHeader('Content-Type', 'text/html')
-      .setBody(data);
+      .body(data);
 
     expect(config.getOptions('GET').body).toBe(data);
   });
@@ -60,7 +60,7 @@ describe('Body', () => {
 
     const config = new Fetchtastic('https://catfact.ninja')
       .appendHeader('Content-Type', 'text/html')
-      .setBody(stream);
+      .body(stream);
 
     expect(config.getOptions('GET').body).toBeInstanceOf(ReadableStream);
   });
@@ -77,7 +77,7 @@ describe('Body', () => {
 
     const config = new Fetchtastic('https://catfact.ninja')
       .appendHeader('Content-Type', 'text/html')
-      .setBody(data);
+      .body(data);
 
     expect(config.getOptions('GET').body).toBeInstanceOf(FormData);
   });
