@@ -14,7 +14,7 @@ Returns a new `Fetchtastic` instance with the same configuration as the cloned i
 
 ## Properties
 
--   `url: string`: The URL of the request, including any URL parameters.
+-   `URL: string`: The URL of the request, including any URL parameters.
 -   `searchParams: Record<string, string>`: An object representing the URL parameters of the request.
 -   `headers: Record<string, string>`: An object representing the headers of the request.
 -   `get: FetchResolver<GET>`: A `FetchResolver` instance for performing a GET request.
@@ -36,7 +36,7 @@ Creates a new instance of the `Fetchtastic` class.
 
 ## Methods
 
-### `setHeaders(data?: HeadersInit, replace = false): Fetchtastic`
+### `headers(data?: HeadersInit, replace = false): Fetchtastic`
 
 Sets the headers of the request.
 
@@ -62,7 +62,7 @@ Deletes a header from the request.
 
 Returns the `Fetchtastic` instance.
 
-### `setUrl(url: string | URL, replace = false): Fetchtastic`
+### `url(url: string | URL, replace = false): Fetchtastic`
 
 Sets the URL of the request.
 
@@ -71,7 +71,7 @@ Sets the URL of the request.
 
 Returns the `Fetchtastic` instance.
 
-### `setSearchParams(data?: SearchParamInput, replace = false): Fetchtastic`
+### `searchParams(data?: SearchParamInput, replace = false): Fetchtastic`
 
 Sets the URL parameters of the request.
 
@@ -98,7 +98,7 @@ Deletes a URL parameter from the request.
 
 Returns the `Fetchtastic` instance.
 
-### `setBody(body: BodyInit | null | unknown): Fetchtastic`
+### `body(body: BodyInit | null | unknown): Fetchtastic`
 
 Sets the body of the request.
 
