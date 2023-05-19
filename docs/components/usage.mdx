@@ -1,6 +1,6 @@
 ## Usage
 
-### Get JSON
+### Fetching JSON
 
 ```typescript
 const url = 'https://jsonplaceholder.typicode.com/posts';
@@ -12,6 +12,7 @@ const posts = await new Fetchtastic(url).get.json();
 
 ```typescript
 const url = 'https://jsonplaceholder.typicode.com/posts';
+
 const newPost = {
     title: 'foo',
     body: 'bar',

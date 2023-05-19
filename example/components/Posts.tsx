@@ -1,5 +1,7 @@
-import { Fetchtastic } from 'fetchtastic/core';
+
 import { suspender } from 'fetchtastic/react';
+
+import { Fetchtastic } from 'fetchtastic/core';
 
 type Post = {
   title: string;
