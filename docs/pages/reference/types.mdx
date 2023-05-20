@@ -1,4 +1,4 @@
-# Typescript Documentation
+# Exposed Types
 
 ## HttpMethods
 
@@ -11,8 +11,6 @@
 -   `POST`
 -   `DELETE`
 -   `PATCH`
-
-### Usage
 
 ```typescript
 import { HttpMethods } from 'module';
@@ -32,8 +30,6 @@ for (const method of HttpMethods) {
 
 `HttpMethod` is a type alias that represents a single HTTP method. It is defined as `(typeof HttpMethods)[number]`, which means that it can only be one of the values in the `HttpMethods` array.
 
-### Usage
-
 ```typescript
 import { HttpMethod } from 'module';
 
@@ -49,8 +45,6 @@ const method: HttpMethod = 'GET';
 -   `FormData`
 -   `JSON`
 -   `Text`
-
-### Usage
 
 ```typescript
 import { ResponseParsers } from 'module';
@@ -70,8 +64,6 @@ for (const parser of ResponseParsers) {
 
 `ResponseParser` is a type alias that represents a single response type that can be parsed. It is defined as `(typeof ResponseParsers)[number]`, which means that it can only be one of the values in the `ResponseParsers` array.
 
-### Usage
-
 ```typescript
 import { ResponseParser } from 'module';
 
@@ -86,8 +78,6 @@ const parser: ResponseParser = 'JSON';
 -   `URLSearchParams`
 -   `[string, string | boolean | number][]`
 -   `Record<string, string | boolean | number>`
-
-### Usage
 
 ```typescript
 import { SearchParamInput } from 'module';
@@ -105,8 +95,6 @@ const input4: SearchParamInput = { key: 'value', key2: 123 };
 
 `FetchtasticOptions` is a type alias that represents the options that can be passed to the `fetch` function. It is defined as `Omit<RequestInit, 'signal' | 'method'>`, which means that it includes all of the options from `RequestInit` except for `signal` and `method`.
 
-### Usage
-
 ```typescript
 import { FetchtasticOptions } from 'module';
 
@@ -122,8 +110,6 @@ const options: FetchtasticOptions = {
 ## FetchOptions
 
 `FetchOptions` is a type alias that extends `RequestInit` and includes the `method` property, which specifies the HTTP method to use for the request.
-
-### Usage
 
 ```typescript
 import { FetchOptions } from 'module';
@@ -155,8 +141,6 @@ const options: FetchOptions = {
 -   `Pragma`
 -   `If-Modified-Since`
 
-### Usage
-
 ```typescript
 import { FetchRequestHeader } from 'module';
 
@@ -166,8 +150,6 @@ const header: FetchRequestHeader = 'Accept';
 ## DataAssertionFn
 
 A function type that asserts and transforms data. It takes an `unknown` data parameter and returns a transformed value of type `T`.
-
-### Usage
 
 ```typescript
 import { DataAssertionFn } from 'module';

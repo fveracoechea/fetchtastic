@@ -49,7 +49,7 @@ export class Fetchtastic implements ConfigurableFetch {
    * Gets the search parameters as a JSON object.
    * @preserve
    */
-  get jsonSearchParams() {
+  get searchParamsJSON() {
     const json: Record<string, string> = {};
     this.#searchParams.forEach((value, key) => {
       json[key] = value;
@@ -61,7 +61,7 @@ export class Fetchtastic implements ConfigurableFetch {
    * Gets the headers as a JSON object.
    * @preserve
    */
-  get jsonHeaders() {
+  get headersJSON() {
     const json: Record<string, string> = {};
     this.#headers.forEach((value, key) => {
       json[key] = value;

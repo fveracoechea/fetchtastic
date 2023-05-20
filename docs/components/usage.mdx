@@ -1,6 +1,6 @@
 ## Usage
 
-### Fetching JSON
+### Fetch JSON
 
 ```typescript
 const url = 'https://jsonplaceholder.typicode.com/posts';
@@ -8,7 +8,7 @@ const url = 'https://jsonplaceholder.typicode.com/posts';
 const posts = await new Fetchtastic(url).get.json();
 ```
 
-### Sending a json object
+### Send JSON
 
 ```typescript
 const url = 'https://jsonplaceholder.typicode.com/posts';
@@ -55,4 +55,31 @@ await commentsAPI.post
         postId: 2,
     })
     .resolve();
+```
+
+## Type-safety first!
+
+```typescript
+const api = new Fetchtastic('https://jsonplaceholder.typicode.com');
+
+const PostsSchema = z.array(
+    z.object({
+        title: z.string(),
+        body: z.string(),
+        id: z.number(),
+    }),
+);
+// passing assertion function to json resolver
+// otherwise result is `unknown` type
+const posts = await api.url('/posts').get.json(PostsSchema.parse);
+```
+
+## Aborting a request
+
+```typescript
+const api = new Fetchtastic('https://jsonplaceholder.typicode.com');
+// send request
+api.url('/posts').get.json();
+// abort it!
+api.controller.abort();
 ```
