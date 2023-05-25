@@ -50,7 +50,8 @@ import { Fetchtastic } from 'fetchtastic/core';
 ## Chaining
 
 ```typescript
-const posts = new Fetchtastic('https://jsonplaceholder.typicode.com')
+const api = new Fetchtastic('https://jsonplaceholder.typicode.com');
+const posts = await api
     .url('/posts')
     .header({ Accept: 'application/json', 'Content-Type': 'application/json' })
     .searchParams({ page: 1, first: 12 })
