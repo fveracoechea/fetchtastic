@@ -1,6 +1,4 @@
-## Usage
-
-### Fetch JSON
+## Fetch JSON
 
 ```typescript
 const url = 'https://jsonplaceholder.typicode.com/posts';
@@ -8,7 +6,7 @@ const url = 'https://jsonplaceholder.typicode.com/posts';
 const posts = await new Fetchtastic(url).get.json();
 ```
 
-### Send JSON
+## Send JSON
 
 ```typescript
 const url = 'https://jsonplaceholder.typicode.com/posts';
@@ -25,7 +23,7 @@ await new Fetchtastic(url)
     .post.json();
 ```
 
-### Composable configuration
+## Composable configuration
 
 ```typescript
 // 1. Global config

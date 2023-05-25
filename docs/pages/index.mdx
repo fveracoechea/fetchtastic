@@ -1,6 +1,5 @@
 import { Tab, Tabs } from 'nextra-theme-docs';
 import Features from '../components/features.mdx';
-import Usage from '../components/usage.mdx';
 
 # Fetchtastic
 
@@ -25,4 +24,35 @@ Small wrapper around fetch designed to perform more predictable and strongly typ
 
 </Tabs>
 
-<Usage />
+## Compatibility
+
+`Fetchtastic` runs everywhere fetch is available.
+
+    * Modern browsers
+    * Node.js >= v18
+    * Deno >= 0.41.0 (to be tested)
+
+### Polyfills for Node.js < v18
+
+```typescript
+import fetch, { FormData } from 'node-fetch';
+
+global.fetch = fetch;
+global.FormData = FormData;
+```
+
+## Import
+
+```typescript
+import { Fetchtastic } from 'fetchtastic/core';
+```
+
+## Chaining
+
+```typescript
+const posts = new Fetchtastic('https://jsonplaceholder.typicode.com')
+    .url('/posts')
+    .header({ Accept: 'application/json', 'Content-Type': 'application/json' })
+    .searchParams({ page: 1, first: 12 })
+    .get.json();
+```
