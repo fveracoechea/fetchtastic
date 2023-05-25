@@ -52,21 +52,21 @@ export type FetchRequestHeader =
 
 export type DataAssertionFn<T = unknown> = (data: unknown) => T;
 
-export interface ConfigurableFetch {
-  headers(data?: HeadersInit, replace?: boolean): this;
-  appendHeader(name: FetchRequestHeader, value: string): this;
-  appendHeader(name: string, value: string): this;
-  deleteHeader(name: string): this;
+export interface ConfigurableFetch<T> {
+  headers(data?: HeadersInit, replace?: boolean): T;
+  appendHeader(name: FetchRequestHeader, value: string): T;
+  appendHeader(name: string, value: string): T;
+  deleteHeader(name: string): T;
 
-  url(url: URL): this;
-  url(url: string, replace?: boolean): this;
-  url(url: string, replace?: boolean): this;
+  url(url: URL): T;
+  url(url: string, replace?: boolean): T;
+  url(url: string, replace?: boolean): T;
 
-  searchParams(data?: SearchParamInput, replace?: boolean): this;
-  appendSearchParam(name: string, value: string | number | boolean): this;
-  deleteSearchParam(name: string): this;
+  searchParams(data?: SearchParamInput, replace?: boolean): T;
+  appendSearchParam(name: string, value: string | number | boolean): T;
+  deleteSearchParam(name: string): T;
 
-  body(body: BodyInit | null | unknown): this;
+  body(body: BodyInit | null | unknown): T;
 
-  setOptions(options: FetchtasticOptions, replace?: boolean): this;
+  setOptions(options: FetchtasticOptions, replace?: boolean): T;
 }

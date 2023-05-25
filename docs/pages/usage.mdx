@@ -25,6 +25,8 @@ await new Fetchtastic(url)
 
 ## Composable configuration
 
+You safely can reuse previous instances, since every method returns a new instance and does not modify the previous one.
+
 ```typescript
 // 1. Global config
 
@@ -34,11 +36,9 @@ const config = new Fetchtastic('https://jsonplaceholder.typicode.com')
 
 // 2. Endpoint level config
 
-const postsAPI = Fetchtastic.clone(config)
-    .appendHeader('Cache-Control', 'no-cache')
-    .url('/posts');
+const postsAPI = config.appendHeader('Cache-Control', 'no-cache').url('/posts');
 
-const commentsAPI = Fetchtastic.clone(config)
+const commentsAPI = config
     .appendHeader('Content-Type', 'application/json')
     .url('/comments');
 

@@ -15,20 +15,7 @@ import {
  * Implements the `ConfigurableFetch` interface.
  * @preserve
  */
-export class Fetchtastic implements ConfigurableFetch {
-  /**
-   * Creates a clone of the given Fetchtastic instance.
-   * @param instance - The Fetchtastic instance to clone.
-   * @returns A new Fetchtastic instance with the same properties as the original instance.
-   * @preserve
-   */
-  static clone(instace: Fetchtastic) {
-    return new Fetchtastic(instace.#url.toString())
-      .headers(new Headers(instace.#headers), true)
-      .body(structuredClone(instace.#body))
-      .setOptions(structuredClone(instace.#options), true);
-  }
-
+export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
   #url: URL | string; // Private property for storing the URL
   #headers = new Headers(); // Private property for storing the headers
   #searchParams = new URLSearchParams(); // Private property for storing the search parameters
@@ -70,31 +57,31 @@ export class Fetchtastic implements ConfigurableFetch {
   }
 
   get get() {
-    return new FetchResolver(Fetchtastic.clone(this), 'GET');
+    return new FetchResolver(this.#clone(), 'GET');
   }
 
   get post() {
-    return new FetchResolver(Fetchtastic.clone(this), 'POST');
+    return new FetchResolver(this.#clone(), 'POST');
   }
 
   get put() {
-    return new FetchResolver(Fetchtastic.clone(this), 'PUT');
+    return new FetchResolver(this.#clone(), 'PUT');
   }
 
   get delete() {
-    return new FetchResolver(Fetchtastic.clone(this), 'DELETE');
+    return new FetchResolver(this.#clone(), 'DELETE');
   }
 
   get options() {
-    return new FetchResolver(Fetchtastic.clone(this), 'OPTIONS');
+    return new FetchResolver(this.#clone(), 'OPTIONS');
   }
 
   get patch() {
-    return new FetchResolver(Fetchtastic.clone(this), 'PATCH');
+    return new FetchResolver(this.#clone(), 'PATCH');
   }
 
   get head() {
-    return new FetchResolver(Fetchtastic.clone(this), 'HEAD');
+    return new FetchResolver(this.#clone(), 'HEAD');
   }
 
   /**
@@ -106,6 +93,18 @@ export class Fetchtastic implements ConfigurableFetch {
   constructor(baseUrl?: string | URL, controller?: AbortController) {
     this.#url = baseUrl ?? '';
     this.controller = controller ?? new AbortController();
+  }
+
+  /**
+   * Creates a clone of the current instance.
+   */
+  #clone(): Fetchtastic {
+    const instace = new Fetchtastic(this.#url.toString());
+    instace.#headers = new Headers(this.#headers);
+    instace.#searchParams = new URLSearchParams(this.searchParamsJSON);
+    instace.#options = structuredClone(this.#options);
+    instace.#body = structuredClone(this.#body);
+    return instace;
   }
 
   /**
@@ -124,7 +123,7 @@ export class Fetchtastic implements ConfigurableFetch {
       });
     }
     this.#headers = newHeaders;
-    return this;
+    return this.#clone();
   }
 
   /**
@@ -137,7 +136,7 @@ export class Fetchtastic implements ConfigurableFetch {
   appendHeader(name: string, value: string): this;
   appendHeader(name: string, value: string) {
     this.#headers.append(name, value);
-    return this;
+    return this.#clone();
   }
 
   /**
@@ -149,7 +148,7 @@ export class Fetchtastic implements ConfigurableFetch {
     if (this.#headers.has(name)) {
       this.#headers.delete(name);
     }
-    return this;
+    return this.#clone();
   }
 
   /**
@@ -168,7 +167,7 @@ export class Fetchtastic implements ConfigurableFetch {
       const split = oldURL.split('?');
       this.#url = split.length > 1 ? split[0] + url + '?' + split[1] : oldURL + url;
     }
-    return this;
+    return this.#clone();
   }
 
   /**
@@ -190,7 +189,7 @@ export class Fetchtastic implements ConfigurableFetch {
       });
     }
     this.#searchParams = newSearchParams;
-    return this;
+    return this.#clone();
   }
 
   /**
@@ -201,7 +200,7 @@ export class Fetchtastic implements ConfigurableFetch {
    */
   appendSearchParam(name: string, value: string | number | boolean) {
     this.#searchParams.append(name, String(value));
-    return this;
+    return this.#clone();
   }
 
   /**
@@ -213,7 +212,7 @@ export class Fetchtastic implements ConfigurableFetch {
     if (this.#searchParams.has(name)) {
       this.#searchParams.delete(name);
     }
-    return this;
+    return this.#clone();
   }
 
   /**
@@ -223,7 +222,7 @@ export class Fetchtastic implements ConfigurableFetch {
    */
   body(body: BodyInit | null | unknown) {
     this.#body = body;
-    return this;
+    return this.#clone();
   }
 
   /**
@@ -241,7 +240,7 @@ export class Fetchtastic implements ConfigurableFetch {
       this.headers(headers, replace);
     }
     this.#options = replace ? otherOptions : { ...this.#options, ...otherOptions };
-    return this;
+    return this.#clone();
   }
 
   /**
