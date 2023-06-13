@@ -43,7 +43,7 @@ const body = {
 };
 
 const getConfig = new Fetchtastic(endpoint).headers(headers);
-const postConfig = Fetchtastic.clone(getConfig).body(body);
+const postConfig = getConfig.body(body);
 
 beforeEach(() => {
   fetchMock.mockClear();

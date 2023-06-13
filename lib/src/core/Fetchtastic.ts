@@ -1,6 +1,6 @@
 import { FetchResolver } from './FetchResolver';
 import { getNewSearchParms } from '../internals/getNewSearchParms';
-import { shouldStringify } from '../internals/shouldStringify';
+import { isJsonBody, shouldStringify } from '../internals/shouldStringify';
 import {
   FetchRequestHeader,
   SearchParamInput,
@@ -103,7 +103,7 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
     instace.#headers = new Headers(this.#headers);
     instace.#searchParams = new URLSearchParams(this.searchParamsJSON);
     instace.#options = structuredClone(this.#options);
-    instace.#body = structuredClone(this.#body);
+    instace.#body = isJsonBody(this.#body) ? structuredClone(this.#body) : this.#body;
     return instace;
   }
 
