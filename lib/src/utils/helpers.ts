@@ -1,4 +1,4 @@
-import { HttpMethod, HttpMethods } from '../core';
+import { HttpMethod, HttpMethods } from '../core/types';
 
 /**
  * Identity, function that returns the same argument passed to it

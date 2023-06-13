@@ -1,4 +1,4 @@
-import { StatusCodes } from '../utils';
+import { StatusCodes } from '../utils/statusCodes';
 import { HttpMethod } from './types';
 
 /**
