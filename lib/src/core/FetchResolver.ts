@@ -15,7 +15,9 @@ import {
  * Represents a resolver that performs fetch requests with a specific HTTP method.
  * @preserve
  */
-export class FetchResolver<Method extends HttpMethod> implements ConfigurableFetch {
+export class FetchResolver<Method extends HttpMethod>
+  implements ConfigurableFetch<FetchResolver<HttpMethod>>
+{
   #config: Fetchtastic;
   #method: Method;
 
@@ -54,9 +56,9 @@ export class FetchResolver<Method extends HttpMethod> implements ConfigurableFet
   url(url: string, replace?: boolean): this;
   url(url: string | URL, replace = false) {
     if (typeof url === 'string') {
-      this.#config = Fetchtastic.clone(this.#config).url(url, replace);
+      this.#config = this.#config.url(url, replace);
     } else {
-      this.#config = Fetchtastic.clone(this.#config).url(url);
+      this.#config = this.#config.url(url);
     }
     return this;
   }
@@ -68,7 +70,7 @@ export class FetchResolver<Method extends HttpMethod> implements ConfigurableFet
    * @preserve
    */
   headers(data?: HeadersInit, replace?: boolean) {
-    this.#config = Fetchtastic.clone(this.#config).headers(data, replace);
+    this.#config = this.#config.headers(data, replace);
     return this;
   }
 
@@ -80,7 +82,7 @@ export class FetchResolver<Method extends HttpMethod> implements ConfigurableFet
    */
   appendHeader(name: FetchRequestHeader, value: string): this;
   appendHeader(name: string, value: string) {
-    this.#config = Fetchtastic.clone(this.#config).appendHeader(name, value);
+    this.#config = this.#config.appendHeader(name, value);
     return this;
   }
 
@@ -90,7 +92,7 @@ export class FetchResolver<Method extends HttpMethod> implements ConfigurableFet
    * @preserve
    */
   deleteHeader(name: string) {
-    this.#config = Fetchtastic.clone(this.#config).deleteHeader(name);
+    this.#config = this.#config.deleteHeader(name);
     return this;
   }
 
@@ -101,7 +103,7 @@ export class FetchResolver<Method extends HttpMethod> implements ConfigurableFet
    * @preserve
    */
   searchParams(data?: SearchParamInput, replace?: boolean) {
-    this.#config = Fetchtastic.clone(this.#config).searchParams(data, replace);
+    this.#config = this.#config.searchParams(data, replace);
     return this;
   }
 
@@ -112,7 +114,7 @@ export class FetchResolver<Method extends HttpMethod> implements ConfigurableFet
    * @preserve
    */
   appendSearchParam(name: string, value: string | number | boolean): this {
-    this.#config = Fetchtastic.clone(this.#config).appendSearchParam(name, value);
+    this.#config = this.#config.appendSearchParam(name, value);
     return this;
   }
   /**
@@ -122,7 +124,7 @@ export class FetchResolver<Method extends HttpMethod> implements ConfigurableFet
    * @preserve
    */
   deleteSearchParam(name: string): this {
-    this.#config = Fetchtastic.clone(this.#config).deleteSearchParam(name);
+    this.#config = this.#config.deleteSearchParam(name);
     return this;
   }
 
@@ -132,7 +134,7 @@ export class FetchResolver<Method extends HttpMethod> implements ConfigurableFet
    * @preserve
    */
   body(body: unknown) {
-    this.#config = Fetchtastic.clone(this.#config).body(body);
+    this.#config = this.#config.body(body);
     return this;
   }
 
@@ -143,7 +145,7 @@ export class FetchResolver<Method extends HttpMethod> implements ConfigurableFet
    * @preserve
    */
   setOptions(options: FetchtasticOptions, replace?: boolean) {
-    this.#config = Fetchtastic.clone(this.#config).setOptions(options, replace);
+    this.#config = this.#config.setOptions(options, replace);
     return this;
   }
 
