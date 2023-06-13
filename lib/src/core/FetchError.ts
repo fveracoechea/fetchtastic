@@ -1,6 +1,14 @@
 import { StatusCodes } from '../utils';
 import { HttpMethod } from './types';
 
+/**
+ * Represents an error that occurs during an HTTP request made with Fetchtastic.
+ * It encapsulates information about the error,
+ * including the request URL, HTTP method, response details, and error message.
+ *
+ * @extends Error
+ * @preserve
+ */
 export class FetchError extends Error {
   static readonly type = Symbol('FetchError');
 
