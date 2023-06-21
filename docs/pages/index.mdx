@@ -47,13 +47,16 @@ global.FormData = FormData;
 import { Fetchtastic } from 'fetchtastic/core';
 ```
 
-## Chaining
+## Fluid interface (Chaining)
+
+Simplifies code structure, enhances readability, and improves the overall developer experience by enabling a more natural and concise way of expressing complex operations.
 
 ```typescript
-const api = new Fetchtastic('https://jsonplaceholder.typicode.com');
-const posts = await api
-    .url('/posts')
+const config = new Fetchtastic('https://jsonplaceholder.typicode.com');
+
+const posts = await config
     .header({ Accept: 'application/json', 'Content-Type': 'application/json' })
     .searchParams({ page: 1, first: 12 })
-    .get.json();
+    .get('/posts')
+    .json();
 ```

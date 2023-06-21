@@ -1,4 +1,4 @@
 export * from './types';
 export * from './Fetchtastic';
-export * from './FetchError';
+export * from './HttpError';
 export * from './FetchResolver';

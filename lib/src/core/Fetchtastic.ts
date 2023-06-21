@@ -21,7 +21,7 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
   #searchParams = new URLSearchParams(); // Private property for storing the search parameters
   #body: BodyInit | null | unknown = null; // Private property for storing the request body
   #options: Omit<FetchtasticOptions, 'body' | 'headers'> = {}; // Private property for storing additional options
-  controller: AbortController; // Public property for storing the AbortController
+  #controller?: AbortController; // Private property for storing the AbortController
 
   /**
    * Gets the URL with search parameters.
@@ -56,34 +56,6 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
     return json;
   }
 
-  get get() {
-    return new FetchResolver(this.#clone(), 'GET');
-  }
-
-  get post() {
-    return new FetchResolver(this.#clone(), 'POST');
-  }
-
-  get put() {
-    return new FetchResolver(this.#clone(), 'PUT');
-  }
-
-  get delete() {
-    return new FetchResolver(this.#clone(), 'DELETE');
-  }
-
-  get options() {
-    return new FetchResolver(this.#clone(), 'OPTIONS');
-  }
-
-  get patch() {
-    return new FetchResolver(this.#clone(), 'PATCH');
-  }
-
-  get head() {
-    return new FetchResolver(this.#clone(), 'HEAD');
-  }
-
   /**
    * Creates a new instance of Fetchtastic.
    * @param baseUrl - The base URL for the requests.
@@ -92,19 +64,48 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
    */
   constructor(baseUrl?: string | URL, controller?: AbortController) {
     this.#url = baseUrl ?? '';
-    this.controller = controller ?? new AbortController();
+    if (controller) this.#controller = controller;
+  }
+
+  #cloneSearchParams() {
+    const search = new URLSearchParams();
+    this.#searchParams.forEach((value, name) => {
+      search.append(name, value);
+    });
+    return search;
   }
 
   /**
    * Creates a clone of the current instance.
    */
   #clone(): Fetchtastic {
-    const instace = new Fetchtastic(this.#url.toString());
+    const instace = new Fetchtastic(this.#url.toString(), this.#controller);
     instace.#headers = new Headers(this.#headers);
-    instace.#searchParams = new URLSearchParams(this.searchParamsJSON);
+    instace.#searchParams = this.#cloneSearchParams();
     instace.#options = structuredClone(this.#options);
     instace.#body = isJsonBody(this.#body) ? structuredClone(this.#body) : this.#body;
     return instace;
+  }
+
+  #getResolver<Method extends HttpMethod>(
+    method: Method,
+    url?: string,
+    body?: BodyInit | null | unknown,
+  ) {
+    const instance = url ? this.url(url) : this.#clone();
+    if (body !== undefined) instance.#body = body;
+    return new FetchResolver(instance, method);
+  }
+
+  /**
+   * Adds an abort controller, in order to cancel the request if needed.
+   * @param abortController - an `AbortController` instance
+   * @preserve
+   */
+  controller(abortController: AbortController) {
+    const instance = this.#clone();
+    instance.#controller = abortController;
+    return instance;
   }
 
   /**
@@ -114,16 +115,17 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
    * @preserve
    */
   headers(data?: HeadersInit, replace = false) {
+    const instance = this.#clone();
     const newHeaders = new Headers(data);
     if (!replace) {
-      this.#headers.forEach((value, key) => {
+      instance.#headers.forEach((value, key) => {
         if (!newHeaders.has(key)) {
           newHeaders.set(key, value);
         }
       });
     }
-    this.#headers = newHeaders;
-    return this.#clone();
+    instance.#headers = newHeaders;
+    return instance;
   }
 
   /**
@@ -135,8 +137,9 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
   appendHeader(name: FetchRequestHeader, value: string): this;
   appendHeader(name: string, value: string): this;
   appendHeader(name: string, value: string) {
-    this.#headers.append(name, value);
-    return this.#clone();
+    const instace = this.#clone();
+    instace.#headers.append(name, value);
+    return instace;
   }
 
   /**
@@ -145,10 +148,11 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
    * @preserve
    */
   deleteHeader(name: string) {
-    if (this.#headers.has(name)) {
-      this.#headers.delete(name);
+    const instace = this.#clone();
+    if (instace.#headers.has(name)) {
+      instace.#headers.delete(name);
     }
-    return this.#clone();
+    return instace;
   }
 
   /**
@@ -160,14 +164,16 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
   url(url: URL): this;
   url(url: string, replace?: boolean): this;
   url(url: string | URL, replace = false) {
+    const instace = this.#clone();
     if (replace || url instanceof URL) {
-      this.#url = url;
+      instace.#url = url;
     } else {
-      const oldURL = this.#url.toString();
+      const oldURL = instace.#url.toString();
       const split = oldURL.split('?');
-      this.#url = split.length > 1 ? split[0] + url + '?' + split[1] : oldURL + url;
+      instace.#url =
+        split.length > 1 ? split[0] + url + '?' + split[1] : oldURL + url;
     }
-    return this.#clone();
+    return instace;
   }
 
   /**
@@ -177,19 +183,20 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
    * @preserve
    */
   searchParams(data?: SearchParamInput, replace = false) {
+    const instance = this.#clone();
     let newSearchParams = new URLSearchParams();
     if (data) {
       newSearchParams = getNewSearchParms(data);
     }
     if (!replace) {
-      this.#searchParams.forEach((value, key) => {
+      instance.#searchParams.forEach((value, key) => {
         if (!newSearchParams.has(key)) {
           newSearchParams.set(key, value);
         }
       });
     }
-    this.#searchParams = newSearchParams;
-    return this.#clone();
+    instance.#searchParams = newSearchParams;
+    return instance;
   }
 
   /**
@@ -199,8 +206,9 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
    * @preserve
    */
   appendSearchParam(name: string, value: string | number | boolean) {
-    this.#searchParams.append(name, String(value));
-    return this.#clone();
+    const instance = this.#clone();
+    instance.#searchParams.append(name, String(value));
+    return instance;
   }
 
   /**
@@ -209,10 +217,11 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
    * @preserve
    */
   deleteSearchParam(name: string) {
-    if (this.#searchParams.has(name)) {
-      this.#searchParams.delete(name);
+    const instance = this.#clone();
+    if (instance.#searchParams.has(name)) {
+      instance.#searchParams.delete(name);
     }
-    return this.#clone();
+    return instance;
   }
 
   /**
@@ -221,8 +230,9 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
    * @preserve
    */
   body(body: BodyInit | null | unknown) {
-    this.#body = body;
-    return this.#clone();
+    const instance = this.#clone();
+    instance.#body = body;
+    return instance;
   }
 
   /**
@@ -233,14 +243,17 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
    */
   setOptions(options: FetchtasticOptions, replace = false) {
     const { body, headers, ...otherOptions } = options;
+    const instance = this.#clone();
     if (Object.prototype.hasOwnProperty.call(options, 'body')) {
-      this.#body = body ?? null;
+      instance.#body = body ?? null;
     }
     if (Object.prototype.hasOwnProperty.call(options, 'headers')) {
-      this.headers(headers, replace);
+      instance.headers(headers, replace);
     }
-    this.#options = replace ? otherOptions : { ...this.#options, ...otherOptions };
-    return this.#clone();
+    instance.#options = replace
+      ? otherOptions
+      : { ...instance.#options, ...otherOptions };
+    return instance;
   }
 
   /**
@@ -256,12 +269,43 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
       body = (this.#body ?? null) as BodyInit | null;
     }
 
-    return {
+    const options: FetchOptions = {
       ...this.#options,
       method,
-      signal: this.controller.signal,
       headers: this.#headers,
       body,
     };
+
+    if (this.#controller) options.signal = this.#controller.signal;
+
+    return options;
+  }
+
+  get(url?: string) {
+    return this.#getResolver('GET', url);
+  }
+
+  post(url?: string, body?: BodyInit | null | unknown) {
+    return this.#getResolver('POST', url, body);
+  }
+
+  put(url?: string, body?: BodyInit | null | unknown) {
+    return this.#getResolver('PUT', url, body);
+  }
+
+  delete(url?: string, body?: BodyInit | null | unknown) {
+    return this.#getResolver('DELETE', url, body);
+  }
+
+  options(url?: string, body?: BodyInit | null | unknown) {
+    return this.#getResolver('OPTIONS', url, body);
+  }
+
+  patch(url?: string, body?: BodyInit | null | unknown) {
+    return this.#getResolver('PATCH', url, body);
+  }
+
+  head(url?: string) {
+    return this.#getResolver('HEAD', url);
   }
 }

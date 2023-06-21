@@ -1,5 +1,5 @@
 import { Fetchtastic } from './Fetchtastic';
-import { FetchError } from './FetchError';
+import { ErrorCatcher, HttpError } from './HttpError';
 import { getResponseParser } from '../internals/getResponseParser';
 import { identity } from '../utils/helpers';
 import {
@@ -20,6 +20,7 @@ export class FetchResolver<Method extends HttpMethod>
 {
   #config: Fetchtastic;
   #method: Method;
+  #catchers: Map<number | string, Set<ErrorCatcher>>;
 
   /**
    * Gets the HTTP method associated with this resolver.
@@ -44,6 +45,7 @@ export class FetchResolver<Method extends HttpMethod>
     this.formData = this.formData.bind(this);
     this.text = this.text.bind(this);
     this.resolve = this.resolve.bind(this);
+    this.#catchers = new Map();
   }
 
   /**
@@ -157,26 +159,17 @@ export class FetchResolver<Method extends HttpMethod>
    */
   async resolve() {
     const options = this.#config.getOptions(this.method);
-    try {
-      const response = await fetch(this.#config.URL, options);
-      if (!response.ok) {
-        throw new FetchError(this.#config.URL, this.method, response);
+    const response = await fetch(this.#config.URL, options);
+    if (!response.ok) {
+      const catchers = this.#catchers.get(response.status);
+      if (!catchers) {
+        throw new HttpError(this.#config.URL, this.method, response.clone());
       }
-      return response;
-    } catch (error) {
-      if (error instanceof FetchError) {
-        throw error;
-      } else if (error instanceof Error) {
-        throw new FetchError(
-          this.#config.URL,
-          this.#method,
-          undefined,
-          error.message,
-        );
-      } else {
-        throw new FetchError(this.#config.URL, this.method);
-      }
+      catchers.forEach(fn =>
+        fn(new HttpError(this.#config.URL, this.method, response.clone())),
+      );
     }
+    return response;
   }
 
   /**
@@ -224,5 +217,63 @@ export class FetchResolver<Method extends HttpMethod>
    */
   text(): Promise<string> {
     return this.resolve().then(getResponseParser('Text'));
+  }
+
+  onError(status: number, catcher: ErrorCatcher) {
+    const handlers = this.#catchers.get(status);
+    if (handlers && handlers.size > 0) {
+      handlers.add(catcher);
+    } else {
+      this.#catchers.set(status, new Set([catcher]));
+    }
+    return this;
+  }
+
+  /**
+   * Handles 400 bad-request HTTP responses
+   * @preserve
+   */
+  badRequest(catcher: ErrorCatcher) {
+    return this.onError(400, catcher);
+  }
+
+  /**
+   * Handles 401 unauthorized HTTP responses
+   * @preserve
+   */
+  unauthorized(catcher: ErrorCatcher) {
+    return this.onError(401, catcher);
+  }
+
+  /**
+   * Handles 403 forbidden HTTP responses
+   * @preserve
+   */
+  forbidden(catcher: ErrorCatcher) {
+    return this.onError(403, catcher);
+  }
+
+  /**
+   * Handles 404 not-found HTTP responses
+   * @preserve
+   */
+  notFound(catcher: ErrorCatcher) {
+    return this.onError(404, catcher);
+  }
+
+  /**
+   * Handles 408 request-timeout HTTP responses
+   * @preserve
+   */
+  timeout(catcher: ErrorCatcher) {
+    return this.onError(408, catcher);
+  }
+
+  /**
+   * Handles 500 internal-server-error HTTP responses
+   * @preserve
+   */
+  serverError(catcher: ErrorCatcher) {
+    return this.onError(500, catcher);
   }
 }

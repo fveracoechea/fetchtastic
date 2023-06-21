@@ -7,13 +7,6 @@ The `Fetchtastic` class represents an HTTP request configuration. It provides me
 -   `URL` - The URL of the request, including any URL parameters.
 -   `searchParamsJSON` - An object representing the URL parameters of the request.
 -   `headersJSON` - An object representing the headers of the request.
--   `get` - Resolver instance for performing a GET request.
--   `post` - Resolver instance for performing a POST request.
--   `put` - Resolver instance for performing a PUT request.
--   `delete` - Resolver instance for performing a DELETE request.
--   `options` - Resolver instance for performing an OPTIONS request.
--   `patch` - Resolver instance for performing a PATCH request.
--   `head` - Resolver instance for performing a HEAD request.
 
 ## Constructor
 
@@ -27,6 +20,58 @@ Creates a new instance of the `Fetchtastic` class.
 -   `controller`: An `AbortController` instance for aborting the request. Optional.
 
 ## Methods
+
+### HTTP methods:
+
+These functions, when called return a `Resolver` instance for performing a fetch request with the respective HTTP method. Likewise, you can pass `url` and `body` arguments to these methods if needed.
+
+`get`
+
+```typescript
+get(url?: string): FetchResolver<"GET">
+```
+
+`post`
+
+```typescript
+post(url?: string, body?: BodyInit | null | unknown): FetchResolver<"POST">
+```
+
+`put`
+
+```typescript
+put(url?: string, body?: BodyInit | null | unknown): FetchResolver<"PUT">
+```
+
+`delete`
+
+```typescript
+delete(url?: string, body?: BodyInit | null | unknown): FetchResolver<"DELETE">
+```
+
+`options`
+
+```typescript
+options(url?: string, body?: BodyInit | null | unknown): FetchResolver<"OPTIONS">
+```
+
+`options`
+
+```typescript
+options(url?: string, body?: BodyInit | null | unknown): FetchResolver<"OPTIONS">
+```
+
+`patch`
+
+```typescript
+patch(url?: string, body?: BodyInit | null | unknown): FetchResolver<"PATCH">
+```
+
+`head`
+
+```typescript
+head(url?: string): FetchResolver<"HEAD">
+```
 
 ### `headers`
 
