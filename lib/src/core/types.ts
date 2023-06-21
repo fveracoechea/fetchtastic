@@ -1,5 +1,3 @@
-// * HttpMethods
-
 export const HttpMethods = [
   'OPTIONS',
   'GET',
@@ -11,8 +9,6 @@ export const HttpMethods = [
 ] as const;
 
 export type HttpMethod = (typeof HttpMethods)[number];
-
-// * ResponseParsers
 
 export const ResponseParsers = [
   'ArrayBuffer',

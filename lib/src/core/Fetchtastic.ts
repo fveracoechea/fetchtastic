@@ -16,16 +16,15 @@ import {
  * @preserve
  */
 export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
-  #url: URL | string; // Private property for storing the URL
-  #headers = new Headers(); // Private property for storing the headers
-  #searchParams = new URLSearchParams(); // Private property for storing the search parameters
-  #body: BodyInit | null | unknown = null; // Private property for storing the request body
-  #options: Omit<FetchtasticOptions, 'body' | 'headers'> = {}; // Private property for storing additional options
-  #controller?: AbortController; // Private property for storing the AbortController
+  #url: URL | string;
+  #headers = new Headers();
+  #searchParams = new URLSearchParams();
+  #body: BodyInit | null | unknown = null;
+  #options: Omit<FetchtasticOptions, 'body' | 'headers'> = {};
+  #controller?: AbortController;
 
   /**
    * Gets the URL with search parameters.
-   * @preserve
    */
   get URL() {
     const search = this.#searchParams.toString();
@@ -34,7 +33,6 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
 
   /**
    * Gets the search parameters as a JSON object.
-   * @preserve
    */
   get searchParamsJSON() {
     const json: Record<string, string> = {};
@@ -46,7 +44,6 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
 
   /**
    * Gets the headers as a JSON object.
-   * @preserve
    */
   get headersJSON() {
     const json: Record<string, string> = {};
@@ -60,7 +57,6 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
    * Creates a new instance of Fetchtastic.
    * @param baseUrl - The base URL for the requests.
    * @param controller - An optional AbortController to control the request cancellation.
-   * @preserve
    */
   constructor(baseUrl?: string | URL, controller?: AbortController) {
     this.#url = baseUrl ?? '';
@@ -75,9 +71,6 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
     return search;
   }
 
-  /**
-   * Creates a clone of the current instance.
-   */
   #clone(): Fetchtastic {
     const instace = new Fetchtastic(this.#url.toString(), this.#controller);
     instace.#headers = new Headers(this.#headers);
@@ -100,7 +93,6 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
   /**
    * Adds an abort controller, in order to cancel the request if needed.
    * @param abortController - an `AbortController` instance
-   * @preserve
    */
   controller(abortController: AbortController) {
     const instance = this.#clone();
@@ -112,7 +104,6 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
    * Sets the headers for the request.
    * @param data - The headers data.
    * @param replace - Specifies whether to replace the existing headers (default: false).
-   * @preserve
    */
   headers(data?: HeadersInit, replace = false) {
     const instance = this.#clone();
@@ -132,7 +123,6 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
    * Appends a header to the request.
    * @param name - The name of the header.
    * @param value - The value of the header.
-   * @preserve
    */
   appendHeader(name: FetchRequestHeader, value: string): this;
   appendHeader(name: string, value: string): this;
@@ -145,7 +135,6 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
   /**
    * Deletes a header from the request.
    * @param name - The name of the header to delete.
-   * @preserve
    */
   deleteHeader(name: string) {
     const instace = this.#clone();
@@ -159,7 +148,6 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
    * Sets the URL for the request.
    * @param url - The URL for the request.
    * @param replace - Specifies whether to replace the existing URL (default: false).
-   * @preserve
    */
   url(url: URL): this;
   url(url: string, replace?: boolean): this;
@@ -180,7 +168,6 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
    * Sets the search parameters for the request.
    * @param data - The search parameters data.
    * @param replace - Specifies whether to replace the existing search parameters (default: false).
-   * @preserve
    */
   searchParams(data?: SearchParamInput, replace = false) {
     const instance = this.#clone();
@@ -203,7 +190,6 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
    * Appends a search parameter to the request.
    * @param name - The name of the search parameter.
    * @param value - The value of the search parameter.
-   * @preserve
    */
   appendSearchParam(name: string, value: string | number | boolean) {
     const instance = this.#clone();
@@ -214,7 +200,6 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
   /**
    * Deletes a search parameter from the request.
    * @param name - The name of the search parameter to delete.
-   * @preserve
    */
   deleteSearchParam(name: string) {
     const instance = this.#clone();
@@ -227,7 +212,6 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
   /**
    * Sets the body for the request.
    * @param body - The body data.
-   * @preserve
    */
   body(body: BodyInit | null | unknown) {
     const instance = this.#clone();
@@ -239,7 +223,6 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
    * Sets the options for the request.
    * @param options - The options for the request.
    * @param replace - Specifies whether to replace the existing options (default: false).
-   * @preserve
    */
   setOptions(options: FetchtasticOptions, replace = false) {
     const { body, headers, ...otherOptions } = options;
@@ -259,7 +242,6 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
   /**
    * Gets the options for the request.
    * @param method - The HTTP method for the request.
-   * @preserve
    */
   getOptions(method: HttpMethod): FetchOptions {
     let body: BodyInit | null;
