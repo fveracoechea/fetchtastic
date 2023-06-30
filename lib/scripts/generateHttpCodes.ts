@@ -10,10 +10,6 @@ for (const code in STATUS_CODES) {
 fs.writeFileSync(
   'src/utils/status-codes.ts',
   `
-  export const StatusCodes = new Map<number, string>(${JSON.stringify(
-    entries,
-    null,
-    2,
-  )})
+  export const StatusCodes = new Map<number, string>(${JSON.stringify(entries, null, 2)})
 `,
 );

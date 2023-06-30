@@ -1,13 +1,15 @@
-import { FetchResolver } from './FetchResolver';
 import { getNewSearchParms } from '../internals/getNewSearchParms';
+import { getResponseParser } from '../internals/getResponseParser';
 import { isJsonBody, shouldStringify } from '../internals/shouldStringify';
+import { identity } from '../utils';
+import { ErrorCatcher, HttpError } from './HttpError';
 import {
+  DataAssertionFn,
+  FetchOptions,
   FetchRequestHeader,
-  SearchParamInput,
   FetchtasticOptions,
   HttpMethod,
-  FetchOptions,
-  ConfigurableFetch,
+  SearchParamInput,
 } from './types';
 
 /**
@@ -15,13 +17,15 @@ import {
  * Implements the `ConfigurableFetch` interface.
  * @preserve
  */
-export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
+export class Fetchtastic {
   #url: URL | string;
   #headers = new Headers();
-  #searchParams = new URLSearchParams();
-  #body: BodyInit | null | unknown = null;
-  #options: Omit<FetchtasticOptions, 'body' | 'headers'> = {};
+  #method: HttpMethod;
   #controller?: AbortController;
+  #searchParams: URLSearchParams;
+  #body: BodyInit | null | unknown;
+  #catchers: Map<number | string, Set<ErrorCatcher>>;
+  #options: Omit<FetchtasticOptions, 'body' | 'headers'>;
 
   /**
    * Gets the URL with search parameters.
@@ -54,13 +58,31 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
   }
 
   /**
+   * Gets the HTTP method associated with this resolver.
+   */
+  get method() {
+    return this.#method;
+  }
+
+  /**
    * Creates a new instance of Fetchtastic.
    * @param baseUrl - The base URL for the requests.
    * @param controller - An optional AbortController to control the request cancellation.
    */
   constructor(baseUrl?: string | URL, controller?: AbortController) {
+    this.#body = null;
+    this.#options = {};
+    this.#method = 'GET';
     this.#url = baseUrl ?? '';
+    this.#catchers = new Map();
+    this.#searchParams = new URLSearchParams();
     if (controller) this.#controller = controller;
+    this.json = this.json.bind(this);
+    this.arrayBuffer = this.arrayBuffer.bind(this);
+    this.blob = this.blob.bind(this);
+    this.formData = this.formData.bind(this);
+    this.text = this.text.bind(this);
+    this.resolve = this.resolve.bind(this);
   }
 
   #cloneSearchParams() {
@@ -71,7 +93,7 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
     return search;
   }
 
-  #clone(): Fetchtastic {
+  #clone() {
     const instace = new Fetchtastic(this.#url.toString(), this.#controller);
     instace.#headers = new Headers(this.#headers);
     instace.#searchParams = this.#cloneSearchParams();
@@ -86,8 +108,9 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
     body?: BodyInit | null | unknown,
   ) {
     const instance = url ? this.url(url) : this.#clone();
+    instance.#method = method;
     if (body !== undefined) instance.#body = body;
-    return new FetchResolver(instance, method);
+    return instance;
   }
 
   /**
@@ -158,8 +181,7 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
     } else {
       const oldURL = instace.#url.toString();
       const split = oldURL.split('?');
-      instace.#url =
-        split.length > 1 ? split[0] + url + '?' + split[1] : oldURL + url;
+      instace.#url = split.length > 1 ? split[0] + url + '?' + split[1] : oldURL + url;
     }
     return instace;
   }
@@ -233,9 +255,7 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
     if (Object.prototype.hasOwnProperty.call(options, 'headers')) {
       instance.headers(headers, replace);
     }
-    instance.#options = replace
-      ? otherOptions
-      : { ...instance.#options, ...otherOptions };
+    instance.#options = replace ? otherOptions : { ...instance.#options, ...otherOptions };
     return instance;
   }
 
@@ -289,5 +309,122 @@ export class Fetchtastic implements ConfigurableFetch<Fetchtastic> {
 
   head(url?: string) {
     return this.#getResolver('HEAD', url);
+  }
+
+  /**
+   * Resolves the fetch request and returns the response.
+   * @returns A Promise that resolves to the fetch response.
+   * @throws FetchError if the fetch request fails.
+   */
+  async resolve() {
+    const options = this.getOptions(this.method);
+    const response = await fetch(this.URL, options);
+    if (!response.ok) {
+      const catchers = this.#catchers.get(response.status);
+      if (!catchers) {
+        throw new HttpError(this.URL, this.method, response.clone());
+      }
+      catchers.forEach(fn => fn(new HttpError(this.URL, this.method, response.clone())));
+    }
+    return response;
+  }
+
+  /**
+   * Send the fetch request and returns the response as JSON.
+   * @param assertData Optional. A function to assert and transform the response data.
+   * @returns A Promise that resolves to the JSON response.
+   */
+  json<T = unknown>(assertData?: DataAssertionFn<T>): Promise<T> {
+    const assertFn = (assertData ?? identity) as DataAssertionFn<T>;
+    return this.resolve().then(getResponseParser('JSON')).then(assertFn);
+  }
+
+  /**
+   * Send the fetch request and returns the response as an ArrayBuffer.
+   * @returns A Promise that resolves to the ArrayBuffer response.
+   */
+  arrayBuffer(): Promise<ArrayBuffer> {
+    return this.resolve().then(getResponseParser('ArrayBuffer'));
+  }
+
+  /**
+   * Resolves the fetch request and returns the response as a Blob.
+   * @returns A Promise that resolves to the Blob response.
+   */
+  blob(): Promise<Blob> {
+    return this.resolve().then(getResponseParser('Blob'));
+  }
+
+  /**
+   * Resolves the fetch request and returns the response as a FormData.
+   * @returns A Promise that resolves to the FormData response.
+   */
+  formData(): Promise<FormData> {
+    return this.resolve().then(getResponseParser('FormData'));
+  }
+
+  /**
+   * Send the fetch request and resolve the response as plain text.
+   * @returns A promise that resolves to the text response.
+   */
+  text(): Promise<string> {
+    return this.resolve().then(getResponseParser('Text'));
+  }
+
+  /**
+   * Registers an given error handler for a specific status code.
+   * @param status HTTP status code
+   * @param catcher on-error callback function
+   */
+  onError(status: number, catcher: ErrorCatcher) {
+    const handlers = this.#catchers.get(status);
+    if (handlers && handlers.size > 0) {
+      handlers.add(catcher);
+    } else {
+      this.#catchers.set(status, new Set([catcher]));
+    }
+    return this;
+  }
+
+  /**
+   * Handles 400 bad-request HTTP responses
+   */
+  badRequest(catcher: ErrorCatcher) {
+    return this.onError(400, catcher);
+  }
+
+  /**
+   * Handles 401 unauthorized HTTP responses
+   */
+  unauthorized(catcher: ErrorCatcher) {
+    return this.onError(401, catcher);
+  }
+
+  /**
+   * Handles 403 forbidden HTTP responses
+   */
+  forbidden(catcher: ErrorCatcher) {
+    return this.onError(403, catcher);
+  }
+
+  /**
+   * Handles 404 not-found HTTP responses
+   */
+  notFound(catcher: ErrorCatcher) {
+    return this.onError(404, catcher);
+  }
+
+  /**
+   * Handles 408 request-timeout HTTP responses
+   */
+  timeout(catcher: ErrorCatcher) {
+    return this.onError(408, catcher);
+  }
+
+  /**
+   * Handles 500 internal-server-error HTTP responses
+   */
+  serverError(catcher: ErrorCatcher) {
+    return this.onError(500, catcher);
   }
 }

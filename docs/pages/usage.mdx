@@ -19,10 +19,7 @@ const body = {
     userId: 1,
 };
 
-await api
-    .post('/posts', body)
-    .appendHeader('Content-Type', 'application/json')
-    .resolve();
+await api.post('/posts', body).appendHeader('Content-Type', 'application/json').resolve();
 ```
 
 ## Composable configuration
@@ -40,13 +37,9 @@ const config = new Fetchtastic('https://jsonplaceholder.typicode.com')
 2. Endpoint level config
 
 ```typescript
-const postsAPI = config
-    .searchParams({ page: 1, first: 12, sortBy: 'id' })
-    .url('/api/v1');
+const postsAPI = config.searchParams({ page: 1, first: 12, sortBy: 'id' }).url('/api/v1');
 
-const commentsAPI = config
-    .appendHeader('Content-Type', 'application/json')
-    .url('/api/v2');
+const commentsAPI = config.appendHeader('Content-Type', 'application/json').url('/api/v2');
 ```
 
 3. Send Requests

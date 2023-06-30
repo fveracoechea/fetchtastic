@@ -1,4 +1,4 @@
-import { pipe, identity, noop } from '../src/utils';
+import { identity, noop, pipe } from '../src/utils';
 
 describe('Utility functions', () => {
   test('Pipe', () => {

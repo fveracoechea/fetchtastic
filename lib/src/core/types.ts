@@ -1,22 +1,8 @@
-export const HttpMethods = [
-  'OPTIONS',
-  'GET',
-  'HEAD',
-  'PUT',
-  'POST',
-  'DELETE',
-  'PATCH',
-] as const;
+export const HttpMethods = ['OPTIONS', 'GET', 'HEAD', 'PUT', 'POST', 'DELETE', 'PATCH'] as const;
 
 export type HttpMethod = (typeof HttpMethods)[number];
 
-export const ResponseParsers = [
-  'ArrayBuffer',
-  'Blob',
-  'FormData',
-  'JSON',
-  'Text',
-] as const;
+export const ResponseParsers = ['ArrayBuffer', 'Blob', 'FormData', 'JSON', 'Text'] as const;
 
 export type ResponseParser = (typeof ResponseParsers)[number];
 

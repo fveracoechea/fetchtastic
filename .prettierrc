@@ -1,7 +1,10 @@
 {
-  "printWidth": 86,
+  "printWidth": 100,
   "trailingComma": "all",
   "semi": true,
   "singleQuote": true,
-  "arrowParens": "avoid"
+  "arrowParens": "avoid",
+  "importOrder": ["^react(.*)$", "<THIRD_PARTY_MODULES>", "^[../]", "^[./]"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
 }

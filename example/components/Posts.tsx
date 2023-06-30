@@ -29,10 +29,16 @@ const api = new Fetchtastic('https://jsonplaceholder.typicode.com')
   .appendHeader('Content-Type', 'application/json');
 
 export default function Posts() {
-  const posts = suspender(() => api.get('/posts').json(assertPosts));
+  const posts = suspender(() =>
+    api
+      .get('/postss')
+      .notFound(() => console.log('not found!'))
+      .json(assertPosts)
+      .catch(() => []),
+  );
 
   function addPost() {
-    api.post('/posts', { title: 'test', body: 'test' }).json();
+    api.post('/posts', { title: 'test', body: 'test' }).resolve();
   }
 
   return (
@@ -40,10 +46,7 @@ export default function Posts() {
       <h2>Posts</h2>
       <button onClick={addPost}>Add new post</button>
       {posts.map(post => (
-        <article
-          key={post.id}
-          style={{ padding: 16, background: '#f2f2f2', marginBottom: 16 }}
-        >
+        <article key={post.id} style={{ padding: 16, background: '#f2f2f2', marginBottom: 16 }}>
           <h3>{post.title}</h3>
           <p>{post.body}</p>
         </article>
