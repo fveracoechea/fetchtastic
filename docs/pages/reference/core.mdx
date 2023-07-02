@@ -7,6 +7,7 @@ The `Fetchtastic` class represents an HTTP request configuration. It provides me
 -   `URL` - The URL of the request, including any URL parameters.
 -   `searchParamsJSON` - An object representing the URL parameters of the request.
 -   `headersJSON` - An object representing the headers of the request.
+-   `method`: The HTTP method associated with the request (`GET`, `POST`, `PUT`, etc.).
 
 ## Constructor
 
@@ -23,55 +24,112 @@ Creates a new instance of the `Fetchtastic` class.
 
 ### HTTP methods:
 
-These functions, when called return a `Resolver` instance for performing a fetch request with the respective HTTP method. Likewise, you can pass `url` and `body` arguments to these methods if needed.
+These functions when called, set a specific HTTP method for the request.
+Likewise, you can pass optional `url` and `body` arguments to these methods if needed.
 
 `get`
 
 ```typescript
-get(url?: string): FetchResolver<"GET">
+get(url?: string): Fetchtastic
 ```
 
 `post`
 
 ```typescript
-post(url?: string, body?: BodyInit | null | unknown): FetchResolver<"POST">
+post(url?: string, body?: BodyInit | null | unknown): Fetchtastic
 ```
 
 `put`
 
 ```typescript
-put(url?: string, body?: BodyInit | null | unknown): FetchResolver<"PUT">
+put(url?: string, body?: BodyInit | null | unknown): Fetchtastic
 ```
 
 `delete`
 
 ```typescript
-delete(url?: string, body?: BodyInit | null | unknown): FetchResolver<"DELETE">
+delete(url?: string, body?: BodyInit | null | unknown): Fetchtastic
 ```
 
 `options`
 
 ```typescript
-options(url?: string, body?: BodyInit | null | unknown): FetchResolver<"OPTIONS">
+options(url?: string, body?: BodyInit | null | unknown): Fetchtastic
 ```
 
 `options`
 
 ```typescript
-options(url?: string, body?: BodyInit | null | unknown): FetchResolver<"OPTIONS">
+options(url?: string, body?: BodyInit | null | unknown): Fetchtastic
 ```
 
 `patch`
 
 ```typescript
-patch(url?: string, body?: BodyInit | null | unknown): FetchResolver<"PATCH">
+patch(url?: string, body?: BodyInit | null | unknown): Fetchtastic
 ```
 
 `head`
 
 ```typescript
-head(url?: string): FetchResolver<"HEAD">
+head(url?: string): Fetchtastic
 ```
+
+### Response methods
+
+These functions when called, execute the HTTP request and return a promise with its response.
+
+The primary objectives of these functions involve initiating the HTTP request with the existing configuration, with a focus on managing responses, and parsing the resulting data.
+
+`resolve`
+
+```typescript
+resolve(): Promise<Response>
+```
+
+Sends the HTTP request and resolves with the [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response) object representing the response.
+
+`json`
+
+```typescript
+json<T = unknown>(assertData?: DataAssertionFn<T>): Promise<T>
+```
+
+Returns a promise that resolves with the result of parsing the response body text as [JSON](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON).
+
+-   `assertData`: An (optional) assertion function to validate the parsed JSON data. If provided, the parsed data is passed to this function for validation.
+
+`arrayBuffer`
+
+```typescript
+arrayBuffer(): Promise<ArrayBuffer>
+```
+
+Returns a promise that resolves with an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) representation of the response body.
+
+`blob`
+
+```typescript
+blob(): Promise<Blob>
+```
+
+Returns a promise that resolves with an [Blob](/)
+
+`formData`
+
+```typescript
+formData(): Promise<FormData>
+```
+
+Returns a promise that resolves with the parsed [FormData](/) object.
+
+`text`
+
+```typescript
+text(): Promise<string>
+```
+
+Returns a promise that resolves with the response data as plain text.
 
 ### `headers`
 

@@ -58,7 +58,7 @@ export class Fetchtastic {
   }
 
   /**
-   * Gets the HTTP method associated with this resolver.
+   * Gets the HTTP method associated with this request.
    */
   get method() {
     return this.#method;
@@ -76,13 +76,13 @@ export class Fetchtastic {
     this.#url = baseUrl ?? '';
     this.#catchers = new Map();
     this.#searchParams = new URLSearchParams();
-    if (controller) this.#controller = controller;
     this.json = this.json.bind(this);
     this.arrayBuffer = this.arrayBuffer.bind(this);
     this.blob = this.blob.bind(this);
     this.formData = this.formData.bind(this);
     this.text = this.text.bind(this);
     this.resolve = this.resolve.bind(this);
+    if (controller) this.#controller = controller;
   }
 
   #cloneSearchParams() {
