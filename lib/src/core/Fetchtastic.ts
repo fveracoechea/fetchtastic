@@ -395,7 +395,6 @@ export class Fetchtastic {
     const handlers = this.#catchers.get(status);
     if (handlers && handlers.size > 0) {
       handlers.add(catcher);
-      // this.#catchers.set(status, handlers);
     } else {
       this.#catchers.set(status, new Set([catcher]));
     }

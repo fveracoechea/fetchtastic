@@ -12,27 +12,22 @@ export interface ErrorCatcher {
  * including the request URL, HTTP method, response details, and error message.
  *
  * @extends Error
- * @preserve
  */
 export class HttpError extends Error {
   /**
    * HTTP status code associated with the error.
-   * @preserve
    */
   status: number;
   /**
    * Indicates the HTTP method used in the failed request.
-   * @preserve
    */
   method: HttpMethod;
   /**
    * Refers to the `Response` object received from the failed request.
-   * @preserve
    */
   response: Response;
   /**
    * Stores the URL of the failed request.
-   * @preserve
    */
   url: string;
 
