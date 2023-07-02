@@ -10,22 +10,14 @@ beforeEach(() => {
 });
 
 // VARS
-const endpoint = 'https://catfact.ninja/breeds';
-
-const headers = { accept: 'application/json' };
-
 const data = {
   breed: 'American Bobtail',
   country: 'United States',
 };
 
-// const body = {
-//   origin: 'Mutation',
-//   coat: 'Short/Long',
-//   pattern: 'All',
-// };
-
-const config = new Fetchtastic(endpoint).headers(headers);
+const config = new Fetchtastic('https://catfact.ninja/breeds').headers({
+  Accept: 'application/json',
+});
 
 test('Catchers are NOT called when response is OK', async () => {
   fetchMock.mockImplementation(() =>
@@ -83,7 +75,7 @@ test('Catchers are called when response is not OK', async () => {
 test('Catcher args are correct', done => {
   fetchMock.mockImplementation(() =>
     Promise.resolve(
-      new Response(JSON.stringify({ detail: 'Bad Request' }), {
+      new Response(JSON.stringify({ message: 'Bad Request' }), {
         status: 400,
       }),
     ),
@@ -103,7 +95,7 @@ test('Catcher args are correct', done => {
 test('Bad Request', async () => {
   fetchMock.mockImplementation(() =>
     Promise.resolve(
-      new Response(JSON.stringify({ detail: 'Bad Request' }), {
+      new Response(JSON.stringify({ message: 'Bad Request' }), {
         status: 400,
       }),
     ),
@@ -117,7 +109,7 @@ test('Bad Request', async () => {
 test('Unauthorized', async () => {
   fetchMock.mockImplementation(() =>
     Promise.resolve(
-      new Response(JSON.stringify({ detail: 'Unauthorized' }), {
+      new Response(JSON.stringify({ message: 'Unauthorized' }), {
         status: 401,
       }),
     ),
@@ -131,7 +123,7 @@ test('Unauthorized', async () => {
 test('Forbidden', async () => {
   fetchMock.mockImplementation(() =>
     Promise.resolve(
-      new Response(JSON.stringify({ detail: 'Forbidden' }), {
+      new Response(JSON.stringify({ message: 'Forbidden' }), {
         status: 403,
       }),
     ),
@@ -145,7 +137,7 @@ test('Forbidden', async () => {
 test('Not Found', async () => {
   fetchMock.mockImplementation(() =>
     Promise.resolve(
-      new Response(JSON.stringify({ detail: 'Not Found' }), {
+      new Response(JSON.stringify({ message: 'Not Found' }), {
         status: 404,
       }),
     ),
@@ -159,7 +151,7 @@ test('Not Found', async () => {
 test('Server Error', async () => {
   fetchMock.mockImplementation(() =>
     Promise.resolve(
-      new Response(JSON.stringify({ detail: 'Server Error' }), {
+      new Response('', {
         status: 500,
       }),
     ),
@@ -168,4 +160,40 @@ test('Server Error', async () => {
   const catcher = jest.fn();
   await config.serverError(catcher).post().resolve();
   expect(catcher).toBeCalled();
+});
+
+test('New Response Modifier', async () => {
+  fetchMock
+    .mockImplementationOnce(
+      async () =>
+        new Response(JSON.stringify({ message: 'Unauthorized' }), {
+          status: 401,
+        }),
+    )
+    .mockImplementationOnce(
+      async () =>
+        new Response(JSON.stringify({ message: 'Bad Request' }), {
+          status: 400,
+        }),
+    )
+    .mockImplementationOnce(
+      async () =>
+        new Response(JSON.stringify(data), {
+          status: 200,
+        }),
+    );
+
+  const onUnauthorized = jest.fn((_, req: Fetchtastic) => req.resolve());
+  const onBadRequest = jest.fn((_, req: Fetchtastic) => req.resolve());
+
+  const response = await config
+    .unauthorized(onUnauthorized)
+    .badRequest(onBadRequest)
+    .post()
+    .resolve();
+
+  expect(response.status).toBe(200);
+  expect(onUnauthorized).toBeCalled();
+  expect(onBadRequest).toBeCalled();
+  expect(await response.json()).toMatchObject(data);
 });
