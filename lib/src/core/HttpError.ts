@@ -1,8 +1,9 @@
 import { StatusCodes } from '../utils/statusCodes';
+import { Fetchtastic } from './Fetchtastic';
 import { HttpMethod } from './types';
 
 export interface ErrorCatcher {
-  (error: HttpError): void;
+  (error: HttpError, config: Fetchtastic): void | Promise<void> | Promise<Response>;
 }
 
 /**

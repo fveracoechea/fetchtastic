@@ -95,6 +95,7 @@ export class Fetchtastic {
 
   #clone() {
     const instace = new Fetchtastic(this.#url.toString(), this.#controller);
+    instace.#catchers = this.#catchers;
     instace.#headers = new Headers(this.#headers);
     instace.#searchParams = this.#cloneSearchParams();
     instace.#options = structuredClone(this.#options);
@@ -102,7 +103,7 @@ export class Fetchtastic {
     return instace;
   }
 
-  #getResolver<Method extends HttpMethod>(
+  #setMethod<Method extends HttpMethod>(
     method: Method,
     url?: string,
     body?: BodyInit | null | unknown,
@@ -111,6 +112,23 @@ export class Fetchtastic {
     instance.#method = method;
     if (body !== undefined) instance.#body = body;
     return instance;
+  }
+
+  async #handleError(response: Response) {
+    const promises: Promise<Response | void>[] = [];
+    const catchers = this.#catchers.get(response.status);
+
+    if (!catchers) {
+      throw new HttpError(this.URL, this.method, response.clone());
+    }
+
+    for (const catcherFn of catchers) {
+      const result = catcherFn(new HttpError(this.URL, this.method, response.clone()), this);
+      if (result && result instanceof Promise) promises.push(result);
+    }
+
+    const results = await Promise.all(promises);
+    return results.find(res => res instanceof Response);
   }
 
   /**
@@ -284,31 +302,31 @@ export class Fetchtastic {
   }
 
   get(url?: string) {
-    return this.#getResolver('GET', url);
+    return this.#setMethod('GET', url);
   }
 
   post(url?: string, body?: BodyInit | null | unknown) {
-    return this.#getResolver('POST', url, body);
+    return this.#setMethod('POST', url, body);
   }
 
   put(url?: string, body?: BodyInit | null | unknown) {
-    return this.#getResolver('PUT', url, body);
+    return this.#setMethod('PUT', url, body);
   }
 
   delete(url?: string, body?: BodyInit | null | unknown) {
-    return this.#getResolver('DELETE', url, body);
+    return this.#setMethod('DELETE', url, body);
   }
 
   options(url?: string, body?: BodyInit | null | unknown) {
-    return this.#getResolver('OPTIONS', url, body);
+    return this.#setMethod('OPTIONS', url, body);
   }
 
   patch(url?: string, body?: BodyInit | null | unknown) {
-    return this.#getResolver('PATCH', url, body);
+    return this.#setMethod('PATCH', url, body);
   }
 
   head(url?: string) {
-    return this.#getResolver('HEAD', url);
+    return this.#setMethod('HEAD', url);
   }
 
   /**
@@ -320,11 +338,8 @@ export class Fetchtastic {
     const options = this.getOptions(this.method);
     const response = await fetch(this.URL, options);
     if (!response.ok) {
-      const catchers = this.#catchers.get(response.status);
-      if (!catchers) {
-        throw new HttpError(this.URL, this.method, response.clone());
-      }
-      catchers.forEach(fn => fn(new HttpError(this.URL, this.method, response.clone())));
+      const newResponse = await this.#handleError(response);
+      if (newResponse) return newResponse;
     }
     return response;
   }
@@ -380,6 +395,7 @@ export class Fetchtastic {
     const handlers = this.#catchers.get(status);
     if (handlers && handlers.size > 0) {
       handlers.add(catcher);
+      // this.#catchers.set(status, handlers);
     } else {
       this.#catchers.set(status, new Set([catcher]));
     }
