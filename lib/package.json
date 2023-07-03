@@ -1,6 +1,6 @@
 {
   "name": "fetchtastic",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "Predictable and strongly typed fetch requests.",
   "homepage": "https://fetchtastic-docs.vercel.app",
   "repository": {
@@ -40,11 +40,6 @@
       "types": "./dist/types/utils/index.d.ts",
       "import": "./dist/esm/utils/index.js",
       "require": "./dist/cjs/utils/index.cjs"
-    },
-    "./react": {
-      "types": "./dist/types/react/index.d.ts",
-      "import": "./dist/esm/react/index.js",
-      "require": "./dist/cjs/react/index.cjs"
     }
   },
   "files": [

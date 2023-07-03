@@ -1,0 +1,34 @@
+# HttpError
+
+The `HttpError` class extends the built-in [Error](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error) class and represents an error that occurs during an HTTP request made with `Fetchtastic`.
+It encapsulates information about the error, including the request URL, HTTP method, response details, and error message.
+
+```typescript
+import { HttpError } from 'fetchtastic/core';
+```
+
+## Properties
+
+- `status`: HTTP status code associated with the error.
+- `method`: Indicates the HTTP method used in the failed request.
+- `response`: Refers to the [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response) object received from the failed request.
+- `url`: The URL of the request that resulted in the error.
+
+## Constructor
+
+### `constructor`
+
+```typescript
+constructor(url: string, method: HttpMethod, response: Response, message?: string)
+```
+
+Creates a new instance of the `HttpError` class.
+
+- `url`: The URL of the request that resulted in the error.
+- `method`: The HTTP method used in the request.
+- `response`: The `Response` object representing the error response.
+- `message`: A custom error message **(optional)**.
+
+## Methods
+
+The `HttpError` does not expose any public methods.

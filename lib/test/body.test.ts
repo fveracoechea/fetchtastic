@@ -17,9 +17,9 @@ describe('Body', () => {
       ],
     };
 
-    const config = new Fetchtastic('https://catfact.ninja').body(data);
+    const config = new Fetchtastic('https://catfact.ninja').post('/', data);
 
-    expect(config.getOptions('GET').body).toBe(JSON.stringify(data));
+    expect(config.getOptions('POST').body).toBe(JSON.stringify(data));
   });
 
   it('Sends HTML', async () => {
@@ -42,7 +42,7 @@ describe('Body', () => {
       .appendHeader('Content-Type', 'text/html')
       .body(data);
 
-    expect(config.getOptions('GET').body).toBe(data);
+    expect(config.getOptions('POST').body).toBe(data);
   });
 
   it('Sends ReadableStream', async () => {
@@ -60,9 +60,9 @@ describe('Body', () => {
 
     const config = new Fetchtastic('https://catfact.ninja')
       .appendHeader('Content-Type', 'text/html')
-      .body(stream);
+      .put('', stream);
 
-    expect(config.getOptions('GET').body).toBeInstanceOf(ReadableStream);
+    expect(config.getOptions('POST').body).toBeInstanceOf(ReadableStream);
   });
 
   it('Sends FormData', async () => {
@@ -79,6 +79,6 @@ describe('Body', () => {
       .appendHeader('Content-Type', 'text/html')
       .body(data);
 
-    expect(config.getOptions('GET').body).toBeInstanceOf(FormData);
+    expect(config.getOptions('PUT').body).toBeInstanceOf(FormData);
   });
 });

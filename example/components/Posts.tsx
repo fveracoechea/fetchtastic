@@ -1,5 +1,6 @@
-import { Fetchtastic } from 'fetchtastic/core';
-import { suspender } from 'fetchtastic/react';
+import { cache } from 'react';
+
+import { Fetchtastic } from '../../lib/src';
 
 type Post = {
   title: string;
@@ -7,40 +8,44 @@ type Post = {
   id: number;
 };
 
-function isPost(v: unknown): v is Post {
+function isPost(data: unknown): data is Post {
   return (
-    v != null &&
-    typeof v === 'object' &&
-    'title' in v &&
-    typeof v.title === 'string' &&
-    'body' in v &&
-    typeof v.body === 'string'
+    data != null &&
+    typeof data === 'object' &&
+    'title' in data &&
+    typeof data.title === 'string' &&
+    'body' in data &&
+    typeof data.body === 'string'
   );
 }
 
-export function assertPosts(res: unknown) {
-  if (!(res != null && Array.isArray(res) && res.every(isPost))) {
-    throw new Error('Invalid data format');
+function assertPosts(data: unknown) {
+  if (data && Array.isArray(data) && data.every(isPost)) {
+    return data;
   }
-  return res;
+  throw new Error('Invalid data format');
 }
 
 const api = new Fetchtastic('https://jsonplaceholder.typicode.com')
-  .url('/posts')
   .appendHeader('Accept', 'application/json')
   .appendHeader('Content-Type', 'application/json');
 
-export default function Posts() {
-  const posts = suspender(() => api.get.json(assertPosts));
+const fetPosts = cache(() =>
+  api
+    .get('/posts')
+    .notFound(() => console.log('not found!'))
+    .json(assertPosts)
+    .catch(() => [] as Post[]),
+);
+
+export default async function Posts() {
+  const posts = await fetPosts();
 
   return (
     <main>
       <h2>Posts</h2>
       {posts.map(post => (
-        <article
-          key={post.id}
-          style={{ padding: 16, background: '#f2f2f2', marginBottom: 16 }}
-        >
+        <article key={post.id} style={{ padding: 16, background: '#f2f2f2', marginBottom: 16 }}>
           <h3>{post.title}</h3>
           <p>{post.body}</p>
         </article>

@@ -1,164 +1,124 @@
-# Exposed Types
+# Exposed types
 
-## HttpMethods
+The following types can be imported from `fetchtastic/core`
 
-`HttpMethods` is an array of strings that represents the HTTP methods available for making requests. It includes the following methods:
+### HttpMethod
 
--   `OPTIONS`
--   `GET`
--   `HEAD`
--   `PUT`
--   `POST`
--   `DELETE`
--   `PATCH`
+`HttpMethod` is a type alias that represents a single HTTP method, It includes the following methods:
 
-```typescript
-import { HttpMethods } from 'module';
-
-// Access individual HTTP methods
-const optionsMethod = HttpMethods[0]; // 'OPTIONS'
-const getMethod = HttpMethods[1]; // 'GET'
-// ...
-
-// Iterate over all HTTP methods
-for (const method of HttpMethods) {
-    console.log(method);
-}
-```
-
-## HttpMethod
-
-`HttpMethod` is a type alias that represents a single HTTP method. It is defined as `(typeof HttpMethods)[number]`, which means that it can only be one of the values in the `HttpMethods` array.
+- `OPTIONS`
+- `GET`
+- `HEAD`
+- `PUT`
+- `POST`
+- `DELETE`
+- `PATCH`
 
 ```typescript
-import { HttpMethod } from 'module';
+import { HttpMethod } from 'fetchtastic/core';
 
 const method: HttpMethod = 'GET';
 ```
 
-## ResponseParsers
+### ResponseParser
 
-`ResponseParsers` is an array of strings that represents the possible response types that can be parsed. It includes the following parsers:
+`ResponseParser` is a type alias that represents a single response type, It includes the following parsers:
 
--   `ArrayBuffer`
--   `Blob`
--   `FormData`
--   `JSON`
--   `Text`
-
-```typescript
-import { ResponseParsers } from 'module';
-
-// Access individual response parsers
-const arrayBufferParser = ResponseParsers[0]; // 'ArrayBuffer'
-const blobParser = ResponseParsers[1]; // 'Blob'
-// ...
-
-// Iterate over all response parsers
-for (const parser of ResponseParsers) {
-    console.log(parser);
-}
-```
-
-## ResponseParser
-
-`ResponseParser` is a type alias that represents a single response type that can be parsed. It is defined as `(typeof ResponseParsers)[number]`, which means that it can only be one of the values in the `ResponseParsers` array.
+- `ArrayBuffer`
+- `Blob`
+- `FormData`
+- `JSON`
+- `Text`
 
 ```typescript
-import { ResponseParser } from 'module';
+import { ResponseParser } from 'fetchtastic/core';
 
 const parser: ResponseParser = 'JSON';
 ```
 
-## SearchParamInput
+### SearchParamInput
 
 `SearchParamInput` is a type alias that represents the different types of inputs that can be used for a search parameter. It can be one of the following types:
 
--   `string`
--   `URLSearchParams`
--   `[string, string | boolean | number][]`
--   `Record<string, string | boolean | number>`
+- `string`
+- `URLSearchParams`
+- `[string, string | boolean | number][]`
+- `Record<string, string | boolean | number>`
 
 ```typescript
-import { SearchParamInput } from 'module';
+import { SearchParamInput } from 'fetchtastic/core';
 
 const input1: SearchParamInput = 'key=value';
 const input2: SearchParamInput = new URLSearchParams('key1=value1&key2=value2');
 const input3: SearchParamInput = [
-    ['key', 'value'],
-    ['key2', true],
+  ['key', 'value'],
+  ['key2', true],
 ];
 const input4: SearchParamInput = { key: 'value', key2: 123 };
 ```
 
-## FetchtasticOptions
+### FetchtasticOptions
 
-`FetchtasticOptions` is a type alias that represents the options that can be passed to the `fetch` function. It is defined as `Omit<RequestInit, 'signal' | 'method'>`, which means that it includes all of the options from `RequestInit` except for `signal` and `method`.
+`FetchtasticOptions` is a type alias that represents the options that can be passed to the `fetch` function. It is defined as:
 
 ```typescript
-import { FetchtasticOptions } from 'module';
-
-const options: FetchtasticOptions = {
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    credentials: 'include',
-    // ...
-};
+type FetchtasticOptions = Omit<RequestInit, 'signal' | 'method'>;
 ```
 
-## FetchOptions
+That means it includes all of the options from `RequestInit` except for `signal` and `method`
+
+### FetchOptions
 
 `FetchOptions` is a type alias that extends `RequestInit` and includes the `method` property, which specifies the HTTP method to use for the request.
 
 ```typescript
-import { FetchOptions } from 'module';
+import { FetchOptions } from 'fetchtastic/core';
 
 const options: FetchOptions = {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ key: 'value' }),
-    // ...
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ key: 'value' }),
+  // ...
 };
 ```
 
-## FetchRequestHeader
+### FetchRequestHeader
 
 `FetchRequestHeader` is a type alias that represents the different types of headers that are most commonly included in a `fetch` request. It includes the following headers:
 
--   `Accept`
--   `Content-Type`
--   `Authorization`
--   `User-Agent`
--   `Referer`
--   `Cache-Control`
--   `Accept-Encoding`
--   `Origin`
--   `Connection`
--   `Cookie`
--   `Pragma`
--   `If-Modified-Since`
+- `Accept`
+- `Content-Type`
+- `Authorization`
+- `User-Agent`
+- `Referer`
+- `Cache-Control`
+- `Accept-Encoding`
+- `Origin`
+- `Connection`
+- `Cookie`
+- `Pragma`
+- `If-Modified-Since`
 
 ```typescript
-import { FetchRequestHeader } from 'module';
+import { FetchRequestHeader } from 'fetchtastic/core';
 
 const header: FetchRequestHeader = 'Accept';
 ```
 
-## DataAssertionFn
+### DataAssertionFn
 
 A function type that asserts and transforms data. It takes an `unknown` data parameter and returns a transformed value of type `T`.
 
 ```typescript
-import { DataAssertionFn } from 'module';
+import { DataAssertionFn } from 'fetchtastic/core';
 
 const assertData: DataAssertionFn<number> = data => {
-    if (typeof data === 'number') {
-        return data * 2;
-    }
-    return 0;
+  if (typeof data === 'number') {
+    return data * 2;
+  }
+  return 0;
 };
 ```
 

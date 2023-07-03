@@ -1,4 +1,4 @@
-import { Fetchtastic, FetchError } from '../src/core';
+import { Fetchtastic, HttpError } from '../src/core';
 
 const fetchMock = jest.fn();
 global.fetch = fetchMock;
@@ -53,54 +53,49 @@ describe('GET Requests', () => {
   test('Fulfilling', () => {
     // simulates a successful server response
     fetchMock.mockImplementationOnce(() =>
-      Promise.resolve({
-        status: 200,
-        ok: true,
-        json: () => Promise.resolve(data),
-      }),
+      Promise.resolve(
+        new Response(JSON.stringify(data), {
+          status: 200,
+        }),
+      ),
     );
 
     // checks the response
-    expect(getConfig.get.json()).resolves.toMatchObject(data);
+    expect(getConfig.get().json()).resolves.toMatchObject(data);
 
     expect(fetchMock).toHaveBeenCalledWith(endpoint, getConfig.getOptions('GET'));
   });
 
-  it('Rejects 404', () => {
+  it('Rejects 404', async () => {
     // simulates a 404 server response
-    fetchMock.mockImplementationOnce(() =>
-      Promise.resolve({
-        status: 404,
-        ok: false,
-        json: () => Promise.resolve(null),
-      }),
+    fetchMock.mockImplementation(() =>
+      Promise.resolve(
+        new Response(JSON.stringify({}), {
+          status: 404,
+        }),
+      ),
     );
     // checks the response
-    expect(getConfig.get.json()).rejects.toMatchObject({
-      status: 404,
-      method: 'GET',
-      url: endpoint,
-      message: 'Not Found',
-    });
+    expect(getConfig.get().json()).rejects.toBeInstanceOf(HttpError);
+
+    await getConfig
+      .get()
+      .json()
+      .catch((error: HttpError) => {
+        expect(error.method).toBe('GET');
+        expect(error.status).toBe(404);
+        expect(error.url).toBe(endpoint);
+        expect(error.message).toBe('Not Found');
+      });
 
     expect(fetchMock).toHaveBeenCalledWith(endpoint, getConfig.getOptions('GET'));
   });
 
   test('Fetch Error', () => {
     // simulates fetch failure
-    fetchMock.mockImplementationOnce(() =>
-      Promise.reject(new Error('Failed to fetch')),
-    );
-
+    fetchMock.mockImplementationOnce(() => Promise.reject(new Error('Failed to fetch')));
     // checks the response
-    expect(getConfig.get.json()).rejects.toMatchObject({
-      status: 0,
-      method: 'GET',
-      url: endpoint,
-      message: 'Failed to fetch',
-      response: undefined,
-    });
-
+    expect(getConfig.get().json()).rejects.toBeInstanceOf(Error);
     expect(fetchMock).toHaveBeenCalledWith(endpoint, getConfig.getOptions('GET'));
   });
 });
@@ -108,56 +103,57 @@ describe('GET Requests', () => {
 describe('POST Requests', () => {
   test('Fulfilling', () => {
     // simulates a successful server response
-    fetchMock.mockImplementationOnce(() =>
-      Promise.resolve({
-        status: 200,
-        ok: true,
-        json: () => Promise.resolve(data),
-      }),
+    fetchMock.mockImplementation(() =>
+      Promise.resolve(
+        new Response(JSON.stringify(data), {
+          status: 200,
+        }),
+      ),
     );
 
     // checks the response
-    expect(postConfig.post.json()).resolves.toMatchObject(data);
-
+    expect(postConfig.post().json()).resolves.toMatchObject(data);
     expect(fetchMock).toHaveBeenCalledWith(endpoint, postConfig.getOptions('POST'));
   });
 
-  test('Rejecting with 404', () => {
+  test('Rejecting with 404', async () => {
     // simulates a 404 server response
     fetchMock.mockImplementation(() =>
-      Promise.resolve({
-        status: 404,
-        ok: false,
-        json: () => Promise.resolve(null),
-      }),
+      Promise.resolve(
+        new Response(null, {
+          status: 404,
+        }),
+      ),
     );
 
     // checks the response
-    expect(postConfig.post.json()).rejects.toBeInstanceOf(FetchError);
+    expect(postConfig.post().json()).rejects.toBeInstanceOf(HttpError);
 
-    expect(postConfig.post.json()).rejects.toMatchObject({
-      status: 404,
-      method: 'POST',
-      url: endpoint,
-      message: 'Not Found',
-    });
+    await postConfig
+      .post()
+      .json()
+      .catch((error: HttpError) => {
+        expect(error.method).toBe('POST');
+        expect(error.status).toBe(404);
+        expect(error.url).toBe(endpoint);
+        expect(error.message).toBe('Not Found');
+      });
 
     expect(fetchMock).toHaveBeenCalledWith(endpoint, postConfig.getOptions('POST'));
   });
 
-  test('Fetch Error', () => {
+  test('Fetch Error', async () => {
     // simulates fetch failure
     fetchMock.mockImplementation(() => Promise.reject(new Error('Failed to fetch')));
     // checks the response
-    expect(postConfig.post.json()).rejects.toBeInstanceOf(FetchError);
+    expect(postConfig.post().json()).rejects.toBeInstanceOf(Error);
 
-    expect(postConfig.post.json()).rejects.toMatchObject({
-      status: 0,
-      method: 'POST',
-      url: endpoint,
-      message: 'Failed to fetch',
-      response: undefined,
-    });
+    await postConfig
+      .post()
+      .json()
+      .catch((error: Error) => {
+        expect(error.message).toBe('Failed to fetch');
+      });
 
     expect(fetchMock).toHaveBeenCalledWith(endpoint, postConfig.getOptions('POST'));
   });
