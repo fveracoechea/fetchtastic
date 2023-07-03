@@ -1,3 +1,5 @@
+import { Steps } from 'nextra-theme-docs';
+
 ## Minimal example
 
 ### GET
@@ -14,9 +16,9 @@ const posts = await api.get('/posts').json();
 const api = new Fetchtastic('https://jsonplaceholder.typicode.com');
 
 const body = {
-    title: 'foo',
-    body: 'bar',
-    userId: 1,
+  title: 'foo',
+  body: 'bar',
+  userId: 1,
 };
 
 await api.post('/posts', body).appendHeader('Content-Type', 'application/json').resolve();
@@ -26,15 +28,17 @@ await api.post('/posts', body).appendHeader('Content-Type', 'application/json').
 
 You safely can reuse previous instances, since every method returns a new instance and does not modify the previous one.
 
-1. Global config
+<Steps>
+
+### Global config
 
 ```typescript
 const config = new Fetchtastic('https://jsonplaceholder.typicode.com')
-    .appendHeader('Accept', 'application/json')
-    .setOptions({ credentials: 'include', mode: 'cors' });
+  .appendHeader('Accept', 'application/json')
+  .setOptions({ credentials: 'include', mode: 'cors' });
 ```
 
-2. Endpoint level config
+### Endpoint level config
 
 ```typescript
 const postsAPI = config.searchParams({ page: 1, first: 12, sortBy: 'id' }).url('/api/v1');
@@ -42,19 +46,21 @@ const postsAPI = config.searchParams({ page: 1, first: 12, sortBy: 'id' }).url('
 const commentsAPI = config.appendHeader('Content-Type', 'application/json').url('/api/v2');
 ```
 
-3. Send Requests
+### Send Requests
 
 ```typescript
 const blogPost = await postsAPI.get('/posts/1').json();
 
 await commentsAPI
-    .post('/posts/1/comments', {
-        text: 'Lorem ipsum dolor sit amet',
-        userId: 1,
-        postId: 2,
-    })
-    .json();
+  .post('/posts/1/comments', {
+    text: 'Lorem ipsum dolor sit amet',
+    userId: 1,
+    postId: 2,
+  })
+  .json();
 ```
+
+</Steps>
 
 ## Aborting a request
 
@@ -65,14 +71,15 @@ Compatible with browsers that support [AbortController](https://developer.mozill
 const controller = new AbortController();
 const api = new Fetchtastic('https://jsonplaceholder.typicode.com');
 
-api.controller(controller)
-    .get('/posts/1/comments')
-    .json()
-    .then(data => storeData(data)) // should never be called
-    .catch((e: Error) => {
-        console.log(e.name); // AbortError
-        console.log(e.message); // The user aborted a request.
-    });
+api
+  .controller(controller)
+  .get('/posts/1/comments')
+  .json()
+  .then(data => storeData(data)) // should never be called
+  .catch((e: Error) => {
+    console.log(e.name); // AbortError
+    console.log(e.message); // The user aborted a request.
+  });
 // Abort it!
 controller.abort();
 ```
@@ -98,27 +105,27 @@ For example, you can do that by using:
 
 ```typescript
 type Post = {
-    id: number;
-    title: string;
-    body: string;
+  id: number;
+  title: string;
+  body: string;
 };
 
 function isPost(data: unknown): data is Post {
-    return (
-        data != null &&
-        typeof data === 'object' &&
-        'title' in data &&
-        typeof data.title === 'string' &&
-        'body' in data &&
-        typeof data.body === 'string'
-    );
+  return (
+    data != null &&
+    typeof data === 'object' &&
+    'title' in data &&
+    typeof data.title === 'string' &&
+    'body' in data &&
+    typeof data.body === 'string'
+  );
 }
 
 export function assertPosts(data: unknown) {
-    if (data && Array.isArray(data) && data.every(isPost)) {
-        return data;
-    }
-    throw new Error('Invalid data format');
+  if (data && Array.isArray(data) && data.every(isPost)) {
+    return data;
+  }
+  throw new Error('Invalid data format');
 }
 
 const api = new Fetchtastic('https://jsonplaceholder.typicode.com');
@@ -132,9 +139,9 @@ const posts = await api.get('/posts').json(assertPosts);
 import { z } from 'zod';
 
 const PostSchema = z.object({
-    id: z.number(),
-    title: z.string(),
-    body: z.string(),
+  id: z.number(),
+  title: z.string(),
+  body: z.string(),
 });
 
 const PostListSchema = z.array(PostSchema);

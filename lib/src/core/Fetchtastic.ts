@@ -2,7 +2,7 @@ import { getNewSearchParms } from '../internals/getNewSearchParms';
 import { getResponseParser } from '../internals/getResponseParser';
 import { isJsonBody, shouldStringify } from '../internals/shouldStringify';
 import { identity } from '../utils';
-import { ErrorCatcher, HttpError } from './HttpError';
+import { HttpError } from './HttpError';
 import {
   DataAssertionFn,
   FetchOptions,
@@ -11,6 +11,11 @@ import {
   HttpMethod,
   SearchParamInput,
 } from './types';
+
+export type ErrorCatcher = (
+  error: HttpError,
+  config: Fetchtastic,
+) => void | Promise<Response | void>;
 
 /**
  * Represents a configurable Fetchtastic instance that can be used to make HTTP requests.
@@ -128,11 +133,11 @@ export class Fetchtastic {
     }
 
     const results = await Promise.all(promises);
-    return results.find(res => res instanceof Response);
+    return results.findLast(res => res instanceof Response);
   }
 
   /**
-   * Adds an abort controller, in order to cancel the request if needed.
+   * Registers an abort controller, in order to cancel the request if needed.
    * @param abortController - an `AbortController` instance
    */
   controller(abortController: AbortController) {

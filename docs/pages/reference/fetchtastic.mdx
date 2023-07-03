@@ -1,0 +1,302 @@
+# Fetchtastic
+
+Represents an HTTP request configuration. It provides methods for setting headers, URL parameters, request body, and other options. It also provides convenience methods for performing common HTTP methods such as GET, POST, PUT, DELETE, OPTIONS, PATCH, and HEAD.
+
+## Properties
+
+- `URL` - The URL of the request, including any URL parameters.
+- `searchParamsJSON` - An object representing the URL parameters of the request.
+- `headersJSON` - An object representing the headers of the request.
+- `method`: The HTTP method associated with the request (`GET`, `POST`, `PUT`, etc.).
+
+## Constructor
+
+Creates a new instance of the `Fetchtastic` class.
+
+- `baseUrl`: The base URL of the request. Optional.
+- `controller`: An `AbortController` instance for aborting the request. Optional.
+
+```typescript
+constructor(baseUrl?: string | URL, controller?: AbortController);
+```
+
+## HTTP methods:
+
+These functions when called, set a specific HTTP method to the request configuration.
+Likewise, you can pass optional `url` and `body` arguments to these methods if needed.
+
+### get
+
+```typescript
+get(url?: string): Fetchtastic
+```
+
+### post
+
+```typescript
+post(url?: string, body?: BodyInit | null | unknown): Fetchtastic
+```
+
+### put
+
+```typescript
+put(url?: string, body?: BodyInit | null | unknown): Fetchtastic
+```
+
+### delete
+
+```typescript
+delete(url?: string, body?: BodyInit | null | unknown): Fetchtastic
+```
+
+### options
+
+```typescript
+options(url?: string, body?: BodyInit | null | unknown): Fetchtastic
+```
+
+### patch
+
+```typescript
+patch(url?: string, body?: BodyInit | null | unknown): Fetchtastic
+```
+
+### head
+
+```typescript
+head(url?: string): Fetchtastic
+```
+
+## Response methods
+
+These functions when called, execute the HTTP request and return a promise with its response.
+
+The primary objectives of these functions involve initiating the HTTP request with the existing configuration, with a focus on managing responses, and parsing the resulting data.
+
+### resolve
+
+Sends the HTTP request and resolves with the [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response) object representing the response.
+
+```typescript
+resolve(): Promise<Response>
+```
+
+### json
+
+Returns a promise that resolves with the result of parsing the response body text as `JSON`.
+
+- `assertData`: An (optional) assertion function to validate the parsed `JSON` data. If provided, the parsed data is passed to this function for validation.
+
+```typescript
+json<T = unknown>(assertData?: DataAssertionFn<T>): Promise<T>
+```
+
+### arrayBuffer
+
+Returns a promise that resolves with an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) representation of the response body.
+
+```typescript
+arrayBuffer(): Promise<ArrayBuffer>
+```
+
+### blob
+
+Returns a promise that resolves with a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob) representation of the response body.
+
+```typescript
+blob(): Promise<Blob>
+```
+
+### formData
+
+Returns a promise that resolves with a [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) representation of the response body.
+
+```typescript
+formData(): Promise<FormData>
+```
+
+### text
+
+Returns a promise that resolves with the response data as plain text.
+
+```typescript
+text(): Promise<string>
+```
+
+## Error Catchers
+
+Error catchers are in charge of handling [Not-OK](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) responses,
+by default `Fetchtastic` will throw an error (for HTTP error codes) unless a catcher has been provided to handle it.
+
+```typescript
+type ErrorCatcher = (error: HttpError, config: Fetchtastic) => void | Promise<Response | void>;
+```
+
+You can add as many **catchers** as you need for a given error code, they all will be executed if an error is caught.
+
+### onError
+
+Sets an error-catcher function to be executed in the case of a HTTP error code response.
+
+- `status`: HTTP status code of the error to be handled.
+- `catcher`: on-error callback function executed in case of error.
+
+```typescript
+onError(status: number, catcher: ErrorCatcher): Fetchtastic
+```
+
+### badRequest - 400
+
+```typescript
+badRequest(catcher: ErrorCatcher): Fetchtastic
+```
+
+### unauthorized - 401
+
+```typescript
+unauthorized(catcher: ErrorCatcher): Fetchtastic
+```
+
+### forbidden - 403
+
+```typescript
+forbidden(catcher: ErrorCatcher): Fetchtastic
+```
+
+### notFound - 404
+
+```typescript
+notFound(catcher: ErrorCatcher): Fetchtastic
+```
+
+### timeout - 408
+
+```typescript
+timeout(catcher: ErrorCatcher): Fetchtastic
+```
+
+### serverError - 500
+
+```typescript
+serverError(catcher: ErrorCatcher): Fetchtastic
+```
+
+## Request configuration:
+
+### controller
+
+Registers an abort controller, in order to cancel the request if needed.
+
+- `abortController`: A instance of [`AbortController`](https://developer.mozilla.org/en-US/docs/Web/API/AbortController)
+
+```typescript
+controller(abortController: AbortController): Fetchtastic
+```
+
+### headers
+
+Sets the headers of the request, it uses [`Headers.set`](https://developer.mozilla.org/en-US/docs/Web/API/Headers/set) behind the scenes.
+
+- `data`: The headers to set.
+- `replace`: Indicates whether to replace the existing headers or append to them. Default is `false`.
+
+```typescript
+headers(data?: HeadersInit, replace = false): Fetchtastic
+```
+
+### appendHeader
+
+Appends a header to the request, it uses [`Headers.append`](https://developer.mozilla.org/en-US/docs/Web/API/Headers/append) behind the scenes.
+
+- `name`: The name of the header.
+- `value`: The value of the header.
+
+```typescript
+appendHeader(name: string, value: string): Fetchtastic
+```
+
+### deleteHeader
+
+Deletes a header from the request.
+
+- `name`: The name of the header to delete.
+
+```typescript
+deleteHeader(name: string): Fetchtastic
+```
+
+### url
+
+Sets the URL of the request.
+
+- `url`: The URL to set.
+- `replace`: Indicates whether to replace the existing URL or append to it. Default is `false`.
+
+```typescript
+url(url: string | URL, replace = false): Fetchtastic
+```
+
+### searchParams
+
+Sets the URL parameters of the request.
+
+- `data`: The URL parameters to set.
+- `replace`: Indicates whether to replace the existing URL parameters or append to them. Default is `false`.
+
+```typescript
+searchParams(data?: SearchParamInput, replace = false): Fetchtastic
+```
+
+### appendSearchParam
+
+Appends a URL parameter to the request.
+
+- `name`: The name of the URL search parameter.
+- `value`: The value of the URL search parameter.
+
+```typescript
+appendSearchParam(name: string, value: string | number | boolean): Fetchtastic
+```
+
+### deleteSearchParam
+
+Deletes a URL parameter from the request.
+
+- `name`: The name of the URL parameter to delete.
+
+```typescript
+deleteSearchParam(name: string): Fetchtastic
+```
+
+### `body`
+
+Sets the body of the request.
+
+- `body`: The body of the request.
+
+```typescript
+body(body: BodyInit | null | unknown): Fetchtastic
+```
+
+### setOptions
+
+Sets the options of the request.
+
+- `options`: The options to set.
+- `replace`: Indicates whether to replace the existing options or merge them with the new options. Default is `false`.
+
+```typescript
+setOptions(options: FetchtasticOptions, replace = false): Fetchtastic
+```
+
+### getOptions
+
+Gets the options object for the request.
+
+- `method`: The HTTP method of the request.
+
+Returns the options object for the request.
+
+```typescript
+getOptions(method: HttpMethod): FetchOptions
+```

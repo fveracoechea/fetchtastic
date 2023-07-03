@@ -11,5 +11,5 @@ indent_style = space
 indent_size = 2
 max_line_length = 100
 
-[*.{css,scss,sass,graphql,gql,md,mdx}]
+[*.{css,scss,sass,graphql,gql}]
 indent_size = 4

@@ -1,7 +1,6 @@
 {
-  "core": "Core",
-  "resolver": "Resolver",
-  "error": "Error",
+  "fetchtastic": "Fetchtastic",
+  "http-error": "HttpError",
   "types": "Types",
-  "utility": "Utility"
+  "utilities": "Utilities"
 }

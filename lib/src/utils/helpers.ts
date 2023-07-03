@@ -1,4 +1,7 @@
-import { HttpMethod, HttpMethods } from '../core/types';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+import { HttpMethod } from '../core/types';
+import { HttpMethods } from '../internals/constants';
 
 /**
  * Identity, function that returns the same argument passed to it
@@ -8,7 +11,6 @@ export const identity: <T = unknown>(data: T) => T = x => x;
 /**
  * No operation
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const noop = (..._any: unknown[]) => void null;
 
 /**

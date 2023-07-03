@@ -1,14 +1,12 @@
 # Utility functions
 
-This functions can be imported from `'fetchtastic/utils'`.
+The following functions can be imported from `fetchtastic/utils`
 
 ## pipe
 
 Pipes the value of an expression into a pipeline of functions.
 
 Performs left-to-right function composition, where the first argument is a value, and the remaining arguments must be unary functions.
-
-### Signature
 
 ```typescript
 export function pipe<A>(a: A): A;
@@ -47,85 +45,61 @@ Note: The TypeScript type parameter letters (`A`, `B`, `C`, etc.) are used to re
 
 A function that returns the same argument passed to it.
 
-### Signature
-
 ```typescript
 export const identity: <T = unknown>(data: T) => T = x => x;
 ```
 
-### Usage
+The `identity` function is a simple utility that takes an argument and returns it unchanged. It is useful in scenarios where you need to pass a function as an argument but want a no-op function that doesn't modify the input.
 
 ```typescript
 const result = identity('Hello, World!');
 console.log(result); // Output: 'Hello, World!'
 ```
 
-### Description
-
-The `identity` function is a simple utility that takes an argument and returns it unchanged. It is useful in scenarios where you need to pass a function as an argument but want a no-op function that doesn't modify the input.
-
 ## noop
 
 A no-operation function.
-
-### Signature
 
 ```typescript
 export const noop = (..._any: unknown[]) => void null;
 ```
 
-### Usage
+The `noop` function is a utility that does nothing. It is commonly used as a placeholder or a default function when no action is required.
 
 ```typescript
 noop(); // Does nothing
 ```
 
-### Description
-
-The `noop` function is a utility that does nothing. It is commonly used as a placeholder or a default function when no action is required.
-
 ## isHttpMethod
 
 Returns `true` if the given value is a valid `HttpMethod`.
-
-### Signature
 
 ```typescript
 export function isHttpMethod(value: unknown): value is HttpMethod;
 ```
 
-### Usage
+The `isHttpMethod` function checks whether the provided value is a valid `HttpMethod`. It validates that the value is a string and matches one of the predefined `HttpMethods`.
 
 ```typescript
 const result1 = isHttpMethod('GET'); // true
 const result2 = isHttpMethod('INVALID'); // false
 ```
 
-### Description
-
-The `isHttpMethod` function checks whether the provided value is a valid `HttpMethod`. It validates that the value is a string and matches one of the predefined `HttpMethods`.
-
 ## StatusCodes
 
 A map of HTTP status codes and their corresponding descriptions.
 
-### Signature
-
 ```typescript
 export const StatusCodes = new Map<number, string>([
-    [100, 'Continue'],
-    [101, 'Switching Protocols'],
-    // ...
+  [100, 'Continue'],
+  [101, 'Switching Protocols'],
+  // ...
 ]);
 ```
 
-### Usage
+The `StatusCodes` map provides a mapping of HTTP status codes to their descriptive phrases. It can be used to retrieve the description for a given status code.
 
 ```typescript
 const description = StatusCodes.get(200); // 'OK'
 console.log(description); // Output: 'OK'
 ```
-
-### Description
-
-The `StatusCodes` map provides a mapping of HTTP status codes to their descriptive phrases. It can be used to retrieve the description for a given status code.

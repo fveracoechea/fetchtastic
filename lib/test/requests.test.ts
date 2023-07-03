@@ -1,4 +1,4 @@
-import { HttpError, Fetchtastic } from '../src/core';
+import { Fetchtastic, HttpError } from '../src/core';
 
 const fetchMock = jest.fn();
 global.fetch = fetchMock;

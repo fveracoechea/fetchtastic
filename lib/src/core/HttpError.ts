@@ -1,15 +1,10 @@
 import { StatusCodes } from '../utils/statusCodes';
-import { Fetchtastic } from './Fetchtastic';
 import { HttpMethod } from './types';
-
-export interface ErrorCatcher {
-  (error: HttpError, config: Fetchtastic): void | Promise<void> | Promise<Response>;
-}
 
 /**
  * Represents an error that occurs during an HTTP request made with Fetchtastic.
  * It encapsulates information about the error,
- * including the request URL, HTTP method, response details, and error message.
+ * including the request URL, status code, response details, and error message.
  *
  * @extends Error
  */
@@ -33,7 +28,7 @@ export class HttpError extends Error {
 
   constructor(url: string, method: HttpMethod, response: Response, message?: string) {
     super();
-    this.name = 'FetchError';
+    this.name = 'HttpError';
     this.url = url;
     this.method = method;
     this.status = response.status || 0;

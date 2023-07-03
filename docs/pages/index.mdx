@@ -56,8 +56,8 @@ Simplifies code structure, enhances readability, and improves the overall develo
 const config = new Fetchtastic('https://jsonplaceholder.typicode.com');
 
 const posts = await config
-    .header({ Accept: 'application/json', 'Content-Type': 'application/json' })
-    .searchParams({ page: 1, first: 12 })
-    .get('/posts')
-    .json();
+  .header({ Accept: 'application/json', 'Content-Type': 'application/json' })
+  .searchParams({ page: 1, first: 12 })
+  .get('/posts')
+  .json();
 ```
