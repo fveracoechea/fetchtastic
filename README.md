@@ -3,9 +3,9 @@
 Small wrapper around fetch designed to perform more predictable and strongly typed network requests.
 
 [![MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/fveracoechea/fetchtastic/blob/main/LICENSE)
-![GitHub issues](https://img.shields.io/github/issues-raw/fveracoechea/fetchtastic)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/fveracoechea/fetchtastic)
-![npm](https://img.shields.io/npm/v/fetchtastic?color=blue)
+[![GitHub issues](https://img.shields.io/github/issues-raw/fveracoechea/fetchtastic)](https://github.com/fveracoechea/fetchtastic/issues)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/fveracoechea/fetchtastic)](https://github.com/fveracoechea/fetchtastic/pulse)
+[![npm](https://img.shields.io/npm/v/fetchtastic?color=blue)](https://www.npmjs.com/package/fetchtastic)
 
 📖 [Documentation.](https://fetchtastic-docs.vercel.app/)
 
