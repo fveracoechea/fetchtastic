@@ -1,7 +1,3 @@
-import { Suspense } from 'react';
-
-import dynamic from 'next/dynamic';
-
 import Posts from '../components/Posts';
 
 export default function Docs() {
@@ -9,7 +5,6 @@ export default function Docs() {
     <div>
       <h1>Example</h1>
       <br />
-
       <Posts />
     </div>
   );

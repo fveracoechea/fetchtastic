@@ -1,4 +1,6 @@
-import { Fetchtastic, suspender } from '../../lib/src';
+import { cache } from 'react';
+
+import { Fetchtastic } from '../../lib/src';
 
 type Post = {
   title: string;
@@ -17,7 +19,7 @@ function isPost(data: unknown): data is Post {
   );
 }
 
-export function assertPosts(data: unknown) {
+function assertPosts(data: unknown) {
   if (data && Array.isArray(data) && data.every(isPost)) {
     return data;
   }
@@ -28,23 +30,20 @@ const api = new Fetchtastic('https://jsonplaceholder.typicode.com')
   .appendHeader('Accept', 'application/json')
   .appendHeader('Content-Type', 'application/json');
 
-export default function Posts() {
-  const posts = suspender(() =>
-    api
-      .get('/postss')
-      .notFound(() => console.log('not found!'))
-      .json(assertPosts)
-      .catch(() => []),
-  );
+const fetPosts = cache(() =>
+  api
+    .get('/posts')
+    .notFound(() => console.log('not found!'))
+    .json(assertPosts)
+    .catch(() => [] as Post[]),
+);
 
-  function addPost() {
-    api.post('/posts', { title: 'test', body: 'test' }).resolve();
-  }
+export default async function Posts() {
+  const posts = await fetPosts();
 
   return (
     <main>
       <h2>Posts</h2>
-      <button onClick={addPost}>Add new post</button>
       {posts.map(post => (
         <article key={post.id} style={{ padding: 16, background: '#f2f2f2', marginBottom: 16 }}>
           <h3>{post.title}</h3>
