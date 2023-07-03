@@ -9,9 +9,6 @@ export function isJsonBody(body: unknown) {
   );
 }
 
-/**
- * Returns `true` if the given body should be JSON.stringify
- */
 export function shouldStringify(body: unknown, headers: Headers): boolean {
   const isContentTypeJson =
     headers.get('Content-Type') === 'application/json' ||
