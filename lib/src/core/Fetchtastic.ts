@@ -105,6 +105,7 @@ export class Fetchtastic {
     instace.#searchParams = this.#cloneSearchParams();
     instace.#options = structuredClone(this.#options);
     instace.#body = isJsonBody(this.#body) ? structuredClone(this.#body) : this.#body;
+    instace.#method = this.#method;
     return instace;
   }
 
