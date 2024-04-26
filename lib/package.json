@@ -48,10 +48,11 @@
     "README.md"
   ],
   "engines": {
-    "node": ">=10"
+    "node": ">=18"
   },
   "scripts": {
     "dev": "rollup -c --watch",
+    "type-check": "tsc src/index.ts",
     "build": "rimraf dist && rollup -c",
     "test": "jest --ci --maxWorkers=2",
     "lint": "eslint . --ext .ts,.tsx --max-warnings 0",

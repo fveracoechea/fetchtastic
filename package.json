@@ -24,6 +24,7 @@
   "scripts": {
     "build": "turbo run build",
     "test": "turbo run test",
+    "type-check": "turbo run type-check",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "size": "size-limit",
