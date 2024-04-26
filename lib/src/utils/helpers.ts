@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { HttpMethod } from '../core/types';
-import { HttpMethods } from '../internals/constants';
+import { HttpMethod } from '../core/types.ts';
+import { HttpMethods } from '../internals/constants.ts';
 
 /**
  * Identity, function that returns the same argument passed to it

@@ -1,4 +1,4 @@
-import { Fetchtastic, HttpError } from '../src';
+import { Fetchtastic, HttpError } from '../src/index.ts';
 
 // SET UP
 

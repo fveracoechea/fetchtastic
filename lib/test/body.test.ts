@@ -1,4 +1,4 @@
-import { Fetchtastic } from '../src';
+import { Fetchtastic } from '../src/index.ts';
 
 describe('Body', () => {
   it('Sends stringified JSON', async () => {

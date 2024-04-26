@@ -1,4 +1,4 @@
-import { ResponseParser } from '../core';
+import { ResponseParser } from '../core/types.ts';
 
 export const getResponseParser = (parser: ResponseParser) => (response: Response) => {
   const cases = {

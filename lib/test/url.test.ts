@@ -1,4 +1,4 @@
-import { Fetchtastic } from '../src';
+import { Fetchtastic } from '../src/index.ts';
 
 describe('Url operator', () => {
   it('Concats', () => {
