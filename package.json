@@ -44,7 +44,8 @@
     "size-limit": "^11.1.2",
     "ts-node": "^10.9.2",
     "tsup": "^8.0.2",
-    "turbo": "^1.13.3"
+    "turbo": "^1.13.3",
+    "typescript": "^5.4.5"
   },
   "engines": {
     "node": ">=18.0.0"

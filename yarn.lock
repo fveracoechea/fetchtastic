@@ -6142,6 +6142,7 @@ __metadata:
     ts-node: "npm:^10.9.2"
     tsup: "npm:^8.0.2"
     turbo: "npm:^1.13.3"
+    typescript: "npm:^5.4.5"
   languageName: unknown
   linkType: soft
 
@@ -6169,6 +6170,7 @@ __metadata:
     ts-node: "npm:^10.9.2"
     tsconfig: "npm:*"
     tslib: "npm:^2.6.2"
+    tsup: "npm:^8.0.2"
     typescript: "npm:^5.4.5"
   languageName: unknown
   linkType: soft
