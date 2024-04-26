@@ -10,7 +10,10 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Enable Corepack
+      - name: enable corepack
+        run: corepack enable
+
+      - name: enable corepack
         run: corepack enable
 
       - name: Use Node 20

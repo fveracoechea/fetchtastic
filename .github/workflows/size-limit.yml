@@ -11,6 +11,10 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+
+      - name: enable corepack
+        run: corepack enable
+
       - name: Runs size-limit
         uses: andresz1/size-limit-action@v1.7.0
         with:
