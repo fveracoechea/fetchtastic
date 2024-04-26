@@ -8,16 +8,16 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.56.0",
-    "@typescript-eslint/parser": "^5.56.0",
-    "eslint": "^8.36.0",
-    "eslint-config-next": "13.4.6",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-config-turbo": "latest",
-    "eslint-plugin-react": "7.31.8"
+    "@typescript-eslint/eslint-plugin": "^7.7.1",
+    "@typescript-eslint/parser": "^7.7.1",
+    "eslint": "^9.1.1",
+    "eslint-config-next": "14.2.3",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-turbo": "^1.13.3",
+    "eslint-plugin-react": "7.34.1"
   },
   "devDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.4.5"
   },
   "publishConfig": {
     "access": "public"
