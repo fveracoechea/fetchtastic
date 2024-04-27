@@ -4,7 +4,6 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "../lib/src/index.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": [
