@@ -20,7 +20,7 @@
     "type-check": "turbo run type-check",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "size": "size-limit",
+    "size": "size-limit --json",
     "prettier-check": "prettier '**/*.{js,ts,jsx,tsx,json,md,mdx}' --check",
     "prettier-format": "prettier --write \"**/*.{js,ts,jsx,tsx,json,md,mdx}\""
   },

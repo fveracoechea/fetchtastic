@@ -30,3 +30,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           package_manager: pnpm
           build_script: --filter fetchtastic build
+          script: pnpm size
