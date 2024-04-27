@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { HttpMethod } from '../core/types.ts';
 import { HttpMethods } from '../internals/constants.ts';
 

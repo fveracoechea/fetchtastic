@@ -26,10 +26,7 @@ const config = {
     <>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta property="og:title" content="Fetchtastic" />
-      <meta
-        property="og:description"
-        content="Convenience methods for performing HTTP request"
-      />
+      <meta property="og:description" content="Convenience methods for performing HTTP request" />
     </>
   ),
 };
