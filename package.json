@@ -11,13 +11,13 @@
   "size-limit": [
     {
       "name": "CommonJS",
-      "path": "lib/dist/cjs/core/index.cjs",
-      "limit": "8 KB"
+      "path": "lib/dist/index.cjs",
+      "limit": "6 KB"
     },
     {
       "name": "ES Modules",
-      "path": "lib/dist/esm/core/index.js",
-      "limit": "8 KB"
+      "path": "lib/dist/index.js",
+      "limit": "6 KB"
     }
   ],
   "scripts": {
@@ -37,7 +37,6 @@
     "@size-limit/preset-small-lib": "^11.1.2",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "prettier": "^3.2.5",
-    "rollup-plugin-dts": "^6.1.0",
     "size-limit": "^11.1.2",
     "turbo": "^1.13.3"
   },
