@@ -6347,6 +6347,7 @@ __metadata:
     prettier: "npm:^3.2.5"
     size-limit: "npm:^11.1.2"
     turbo: "npm:^1.13.3"
+    typescript: "npm:^5.4.5"
   languageName: unknown
   linkType: soft
 

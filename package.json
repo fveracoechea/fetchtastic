@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "private": true,
   "workspaces": [
-    "shared/*",
     "docs",
     "example",
     "lib"
@@ -39,7 +38,8 @@
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "prettier": "^3.2.5",
     "size-limit": "^11.1.2",
-    "turbo": "^1.13.3"
+    "turbo": "^1.13.3",
+    "typescript": "^5.4.5"
   },
   "engines": {
     "node": ">=18.0.0"
