@@ -2,7 +2,7 @@ name: CI
 on: [push]
 jobs:
   build:
-    name: Build, lint, and test on Node 20
+    name: ESLint, Prettier, Type-check, Test and Build.
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -26,6 +26,16 @@ jobs:
         uses: borales/actions-yarn@v4
         with:
           cmd: lint
+
+      - name: Formatting
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: prettier-check
+
+      - name: type-check
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: type-check
 
       - name: Test
         uses: borales/actions-yarn@v4
