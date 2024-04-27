@@ -2,11 +2,6 @@
   "name": "fetchtastic-monorepo",
   "version": "0.0.0",
   "private": true,
-  "workspaces": [
-    "docs",
-    "example",
-    "lib"
-  ],
   "size-limit": [
     {
       "name": "CommonJS",
@@ -31,7 +26,7 @@
   },
   "volta": {
     "node": "20.12.2",
-    "yarn": "4.1.1"
+    "pnpm": "9.0.6"
   },
   "devDependencies": {
     "@size-limit/preset-small-lib": "^11.1.2",
@@ -42,9 +37,10 @@
     "typescript": "^5.4.5"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=18.0.0",
+    "pnpm": ">=6"
   },
-  "packageManager": "yarn@4.1.1",
+  "packageManager": "pnpm@9.0.6",
   "dependencies": {
     "@changesets/cli": "^2.27.1"
   }

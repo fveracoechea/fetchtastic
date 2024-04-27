@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "packageManager": "pnpm@9.0.6",
   "dependencies": {
     "fetchtastic": "*",
     "next": "^14.2.3",

@@ -33,7 +33,7 @@
     "lint": "eslint --max-warnings 0",
     "format": "prettier --write ."
   },
-  "packageManager": "yarn@4.1.1",
+  "packageManager": "pnpm@9.0.6",
   "devDependencies": {
     "@jest/globals": "^29.7.0",
     "@types/jest": "^29.5.12",
