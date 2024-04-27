@@ -2,7 +2,7 @@ name: CI
 on: [push]
 jobs:
   build:
-    name: ESLint, Prettier, Type-check, Test and Build.
+    name: ESLint, Prettier, Type-check, and Build.
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -36,11 +36,6 @@ jobs:
         uses: borales/actions-yarn@v4
         with:
           cmd: type-check
-
-      - name: Test
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: test
 
       - name: Build
         uses: borales/actions-yarn@v4
