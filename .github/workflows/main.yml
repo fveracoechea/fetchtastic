@@ -35,4 +35,4 @@ jobs:
       - name: Build
         uses: borales/actions-yarn@v4
         with:
-          cmd: Build
+          cmd: build
