@@ -10,7 +10,7 @@
   },
   "packageManager": "pnpm@9.0.6",
   "dependencies": {
-    "fetchtastic": "*",
+    "fetchtastic": "workspace:*",
     "next": "^14.2.3",
     "nextra": "^2.13.4",
     "nextra-theme-docs": "^2.13.4",

@@ -34,8 +34,8 @@ importers:
   docs:
     dependencies:
       fetchtastic:
-        specifier: '*'
-        version: 0.2.2
+        specifier: workspace:*
+        version: link:../lib
       next:
         specifier: ^14.2.3
         version: 14.2.3(@babel/core@7.24.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -77,8 +77,8 @@ importers:
   example:
     dependencies:
       fetchtastic:
-        specifier: '*'
-        version: 0.2.2
+        specifier: workspace:*
+        version: link:../lib
       next:
         specifier: ^14.2.3
         version: 14.2.3(@babel/core@7.24.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2470,10 +2470,6 @@ packages:
 
   fb-watchman@2.0.2:
     resolution: {integrity: sha512-p5161BqbuCaSnB8jIbzQHOlpgsPmK5rJVDfDKO91Axs5NC1uu3HRQm6wt9cd9/+GtQQIO53JdGXXoyDpTAsgYA==}
-
-  fetchtastic@0.2.2:
-    resolution: {integrity: sha512-OQpKrHx5DJKFP0pkLz0r8CS7WmIc6JjfiyJS3/eXbcqXSt054VGn5ga1eOA5WZdxcfm9fBars5eP/LkR+dZxhw==}
-    engines: {node: '>=10'}
 
   figures@1.7.0:
     resolution: {integrity: sha512-UxKlfCRuCBxSXU4C6t9scbDyWZ4VlaFFdojKtzJuSkuOBQ5CNFum+zZXFwHjo+CxBC1t6zlYPgHIgFjL8ggoEQ==}
@@ -7801,8 +7797,6 @@ snapshots:
   fb-watchman@2.0.2:
     dependencies:
       bser: 2.1.1
-
-  fetchtastic@0.2.2: {}
 
   figures@1.7.0:
     dependencies:
