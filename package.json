@@ -2,23 +2,16 @@
   "name": "fetchtastic-monorepo",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
-  "workspaces": [
-    "shared/*",
-    "docs",
-    "example",
-    "lib"
-  ],
   "size-limit": [
     {
       "name": "CommonJS",
-      "path": "lib/dist/cjs/core/index.cjs",
-      "limit": "8 KB"
+      "path": "lib/dist/index.cjs",
+      "limit": "6 KB"
     },
     {
       "name": "ES Modules",
-      "path": "lib/dist/esm/core/index.js",
-      "limit": "8 KB"
+      "path": "lib/dist/index.js",
+      "limit": "6 KB"
     }
   ],
   "scripts": {
@@ -27,30 +20,30 @@
     "type-check": "turbo run type-check",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "size": "size-limit",
-    "format": "prettier --write \"**/*.{ts,tsx,md,mdx}\""
+    "size": "size-limit --json",
+    "prettier-check": "prettier '**/*.{js,ts,jsx,tsx,json,md,mdx}' --check",
+    "prettier-format": "prettier '**/*.{js,ts,jsx,tsx,json,md,mdx}' --write",
+    "release:build": "pnpm --filter fetchtastic build",
+    "release:check": "pnpm --filter fetchtastic type-check",
+    "release:publish": "changeset publish",
+    "release": "pnpm release:check && pnpm release:build && pnpm release:publis"
   },
   "volta": {
     "node": "20.12.2",
-    "yarn": "4.1.1"
+    "pnpm": "9.0.6"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.1",
     "@size-limit/preset-small-lib": "^11.1.2",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
-    "@typescript-eslint/eslint-plugin": "^7.7.1",
-    "eslint-config": "*",
     "prettier": "^3.2.5",
-    "rollup-plugin-dts": "^6.1.0",
     "size-limit": "^11.1.2",
-    "ts-node": "^10.9.2",
-    "tsup": "^8.0.2",
-    "turbo": "^1.13.3"
+    "turbo": "^1.13.3",
+    "typescript": "^5.4.5"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=18.0.0",
+    "pnpm": ">=6"
   },
-  "packageManager": "yarn@4.1.1",
-  "dependencies": {
-    "@changesets/cli": "^2.27.1"
-  }
+  "packageManager": "pnpm@9.0.6"
 }

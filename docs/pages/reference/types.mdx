@@ -15,7 +15,7 @@ The following types can be imported from `fetchtastic/core`
 - `PATCH`
 
 ```typescript
-import { HttpMethod } from 'fetchtastic/core';
+import { HttpMethod } from 'fetchtastic';
 
 const method: HttpMethod = 'GET';
 ```
@@ -31,7 +31,7 @@ const method: HttpMethod = 'GET';
 - `Text`
 
 ```typescript
-import { ResponseParser } from 'fetchtastic/core';
+import { ResponseParser } from 'fetchtastic';
 
 const parser: ResponseParser = 'JSON';
 ```
@@ -46,7 +46,7 @@ const parser: ResponseParser = 'JSON';
 - `Record<string, string | boolean | number>`
 
 ```typescript
-import { SearchParamInput } from 'fetchtastic/core';
+import { SearchParamInput } from 'fetchtastic';
 
 const input1: SearchParamInput = 'key=value';
 const input2: SearchParamInput = new URLSearchParams('key1=value1&key2=value2');
@@ -72,7 +72,7 @@ That means it includes all of the options from `RequestInit` except for `signal`
 `FetchOptions` is a type alias that extends `RequestInit` and includes the `method` property, which specifies the HTTP method to use for the request.
 
 ```typescript
-import { FetchOptions } from 'fetchtastic/core';
+import { FetchOptions } from 'fetchtastic';
 
 const options: FetchOptions = {
   method: 'POST',
@@ -102,7 +102,7 @@ const options: FetchOptions = {
 - `If-Modified-Since`
 
 ```typescript
-import { FetchRequestHeader } from 'fetchtastic/core';
+import { FetchRequestHeader } from 'fetchtastic';
 
 const header: FetchRequestHeader = 'Accept';
 ```
@@ -112,7 +112,7 @@ const header: FetchRequestHeader = 'Accept';
 A function type that asserts and transforms data. It takes an `unknown` data parameter and returns a transformed value of type `T`.
 
 ```typescript
-import { DataAssertionFn } from 'fetchtastic/core';
+import { DataAssertionFn } from 'fetchtastic';
 
 const assertData: DataAssertionFn<number> = data => {
   if (typeof data === 'number') {

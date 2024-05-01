@@ -1,6 +1,6 @@
 import { cache } from 'react';
 
-import { Fetchtastic } from '../../lib/src';
+import { Fetchtastic } from 'fetchtastic';
 
 type Post = {
   title: string;

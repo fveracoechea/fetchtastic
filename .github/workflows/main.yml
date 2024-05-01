@@ -2,34 +2,32 @@ name: CI
 on: [push]
 jobs:
   build:
-    name: Build, lint, and test on Node 20
+    name: ESLint, Prettier, Type-check, and Build.
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      - name: Enable corepack
+        run: corepack enable
+
       - name: Use Node 20
         uses: actions/setup-node@v3
         with:
           node-version: 20.x
-          cache: 'yarn'
+          cache: 'pnpm'
 
       - name: Run install
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: install
+        run: pnpm install
 
-      - name: Lint
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: lint
+      - name: ESLint
+        run: pnpm lint
 
-      - name: Test
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: test
+      - name: Prettier
+        run: pnpm prettier-check
+
+      - name: Type-check
+        run: pnpm type-check
 
       - name: Build
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: Build
+        run: pnpm build

@@ -1,8 +1,29 @@
 {
-  "extends": "tsconfig/library.json",
-  "include": ["src"],
   "compilerOptions": {
-    "rootDir": "./src"
+    "allowImportingTsExtensions": true,
+    "composite": false,
+    "noEmit": true,
+    "lib": ["dom", "esnext"],
+    "target": "ES2018",
+    "moduleResolution": "NodeNext",
+    "importHelpers": true,
+    "module": "NodeNext",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
+    /* Type Checking */
+    "sourceMap": true,
+    "strict": true,
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "skipLibCheck": true
   },
   "exclude": ["node_modules", "dist"]
 }

@@ -7,7 +7,7 @@
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
     "lint": {
-      "outputs": []
+      "cache": false
     },
     "test": {
       "inputs": ["*.test.ts"],

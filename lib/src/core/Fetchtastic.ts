@@ -1,8 +1,8 @@
-import { getNewSearchParms } from '../internals/getNewSearchParms';
-import { getResponseParser } from '../internals/getResponseParser';
-import { isJsonBody, shouldStringify } from '../internals/shouldStringify';
-import { identity } from '../utils';
-import { HttpError } from './HttpError';
+import { getNewSearchParms } from '../internals/getNewSearchParms.ts';
+import { getResponseParser } from '../internals/getResponseParser.ts';
+import { shouldStringify } from '../internals/shouldStringify.ts';
+import { identity } from '../utils/helpers.ts';
+import { HttpError } from './HttpError.ts';
 import {
   DataAssertionFn,
   FetchOptions,
@@ -10,7 +10,7 @@ import {
   FetchtasticOptions,
   HttpMethod,
   SearchParamInput,
-} from './types';
+} from './types.ts';
 
 export type ErrorCatcher = (
   error: HttpError,
@@ -103,8 +103,8 @@ export class Fetchtastic {
     instace.#catchers = this.#catchers;
     instace.#headers = new Headers(this.#headers);
     instace.#searchParams = this.#cloneSearchParams();
-    instace.#options = structuredClone(this.#options);
-    instace.#body = isJsonBody(this.#body) ? structuredClone(this.#body) : this.#body;
+    instace.#options = this.#options;
+    instace.#body = this.#body;
     instace.#method = this.#method;
     return instace;
   }

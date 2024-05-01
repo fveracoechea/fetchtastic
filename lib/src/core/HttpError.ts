@@ -1,5 +1,5 @@
-import { StatusCodes } from '../utils/statusCodes';
-import { HttpMethod } from './types';
+import { StatusCodes } from '../utils/statusCodes.ts';
+import { HttpMethod } from './types.ts';
 
 /**
  * Represents an error that occurs during an HTTP request made with Fetchtastic.

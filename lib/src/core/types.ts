@@ -1,4 +1,4 @@
-import { HttpMethods, ResponseParsers } from '../internals/constants';
+import { HttpMethods, ResponseParsers } from '../internals/constants.ts';
 
 export type HttpMethod = (typeof HttpMethods)[number];
 

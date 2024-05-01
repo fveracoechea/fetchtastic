@@ -1,4 +1,4 @@
-import { SearchParamInput } from '../core';
+import { SearchParamInput } from '../core/types.ts';
 
 export function getNewSearchParms(data: SearchParamInput) {
   let result: string | string[][] | URLSearchParams;
