@@ -1,5 +1,11 @@
 # fetchtastic
 
+## 0.3.1
+
+### Patch Changes
+
+- 4c24b78: Testing releases
+
 ## 0.3.0
 
 ### Minor Changes

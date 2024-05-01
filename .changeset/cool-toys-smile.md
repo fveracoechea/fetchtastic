@@ -1,5 +1,0 @@
----
-"fetchtastic": patch
----
-
-Testing releases
