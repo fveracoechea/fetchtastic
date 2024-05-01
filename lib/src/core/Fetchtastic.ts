@@ -1,8 +1,6 @@
-import { getNewSearchParms } from '../internals/getNewSearchParms.ts';
-import { getResponseParser } from '../internals/getResponseParser.ts';
-import { shouldStringify } from '../internals/shouldStringify.ts';
 import { identity } from '../utils/helpers.ts';
 import { HttpError } from './HttpError.ts';
+import { getNewSearchParms, getResponseParser, shouldStringify } from './internals.ts';
 import {
   DataAssertionFn,
   FetchOptions,

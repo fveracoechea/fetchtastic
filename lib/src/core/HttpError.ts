@@ -1,4 +1,4 @@
-import { StatusCodes } from '../utils/statusCodes.ts';
+import { StatusCodes, isStatusCode } from '../utils/statusCodes.ts';
 import { HttpMethod } from './types.ts';
 
 /**
@@ -39,7 +39,7 @@ export class HttpError extends Error {
 
   #setMessage() {
     this.message = 'Fetch Error';
-    const statusText = StatusCodes.get(this.status);
+    const statusText = isStatusCode(this.status) && StatusCodes[this.status];
     if (this.status > 0 && statusText) {
       this.message = statusText;
     } else if (this.response.type === 'opaque') {

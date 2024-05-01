@@ -1,4 +1,4 @@
-import { Fetchtastic } from '../src/index.ts';
+import { Fetchtastic } from '../mod.ts';
 
 describe('Search params operator', () => {
   it('Concats', async () => {
