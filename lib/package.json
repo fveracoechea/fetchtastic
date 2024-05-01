@@ -1,6 +1,6 @@
 {
   "name": "fetchtastic",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "Predictable and strongly typed fetch requests.",
   "homepage": "https://fetchtastic-docs.vercel.app",
   "repository": {
