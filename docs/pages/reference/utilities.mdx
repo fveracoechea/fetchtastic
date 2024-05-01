@@ -90,16 +90,16 @@ const result2 = isHttpMethod('INVALID'); // false
 A map of HTTP status codes and their corresponding descriptions.
 
 ```typescript
-export const StatusCodes = new Map<number, string>([
-  [100, 'Continue'],
-  [101, 'Switching Protocols'],
+const StatusCodes = {
+  100: 'Continue',
+  101: 'Switching Protocols',
   // ...
-]);
+};
 ```
 
 The `StatusCodes` map provides a mapping of HTTP status codes to their descriptive phrases. It can be used to retrieve the description for a given status code.
 
 ```typescript
-const description = StatusCodes.get(200); // 'OK'
+const description = StatusCodes[200];
 console.log(description); // Output: 'OK'
 ```
