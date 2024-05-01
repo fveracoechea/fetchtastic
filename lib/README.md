@@ -25,19 +25,19 @@ Visit [fetchtastic-docs.vercel.app](https://fetchtastic-docs.vercel.app/) to vie
 
 npm
 
-```bash
+```sh
 npm install fetchtastic
 ```
 
 pnpm
 
-```bash
+```sh
 pnpm add fetchtastic
 ```
 
 yarn
 
-```bash
+```sh
 yarn add fetchtastic
 ```
 
