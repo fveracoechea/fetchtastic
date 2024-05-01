@@ -4,6 +4,13 @@
 
 ### Patch Changes
 
+- Updated dependencies [d0686f4]
+  - fetchtastic@0.3.3
+
+## null
+
+### Patch Changes
+
 - Updated dependencies [976dbc1]
 - Updated dependencies [976dbc1]
 - Updated dependencies [0b25f6c]
