@@ -1,8 +1,12 @@
 # Contributing to Fetchtastic
 
-Thank you for your interest in contributing to Fetchtastic!
+Welcome, and thanks for your interest in contributing! Please take a moment to review the following:
 
-We welcome your contributions to make this project even better. Before you get started, please take a moment to review the following guidelines:
+## Style Guide
+
+- **Commits** follow the ["Conventional Commits" specification](https://www.conventionalcommits.org/en/v1.0.0/). This allows for changelogs to be generated automatically upon release.
+- **Code** is formatted via [Prettier](https://prettier.io/) and statically analyzed by [ESLint](https://eslint.org/)
+- **JavaScript** is written as [TypeScript](https://www.typescriptlang.org/) where possible.
 
 ## Issues
 
@@ -17,8 +21,19 @@ When contributing with new `features` or `bug-fixes`, please follow these steps:
 
 1. Fork the repository.
 2. Create a new branch from the main branch for example `feature/some-new-feature` or `bugfix/some-bugfix`.
-3. Ensure your code follows the project's coding style.
-4. Write clear and concise commit messages.
-5. Consider including tests and documentation changes if applicable.
-6. Submit your pull request, providing a description of the changes made and any additional context.
-7. We will review your pull request as soon as possible.
+3. In the repo, prior to any other installation steps, run:
+   ```sh
+   corepack enable
+   ```
+4. Install dependencies:
+   ```sh
+   pnpm i
+   ```
+5. Ensure your code follows the project's coding style.
+6. Write clear and concise commit messages.
+7. Consider including tests and documentation changes if applicable.
+8. Add a [changeset](https://www.npmjs.com/package/@changesets/cli) by running:
+   ```sh
+   pnpm changeset
+   ```
+9. Submit your pull request, providing a description of the changes made and any additional context.
