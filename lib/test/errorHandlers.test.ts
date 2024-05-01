@@ -1,4 +1,4 @@
-import { Fetchtastic, HttpError } from '../src/index.ts';
+import { Fetchtastic, HttpError } from '../mod.ts';
 
 // SET UP
 

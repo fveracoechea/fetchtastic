@@ -1,4 +1,4 @@
-import { Fetchtastic } from '../src/index.ts';
+import { Fetchtastic } from '../mod.ts';
 
 describe('Headers operator', () => {
   it('Concats', async () => {

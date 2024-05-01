@@ -1,5 +1,4 @@
-import { identity, noop } from '../src/utils/helpers.ts';
-import { pipe } from '../src/utils/pipe.ts';
+import { identity, noop, pipe } from '../mod.ts';
 
 describe('Utility functions', () => {
   test('Pipe', () => {
