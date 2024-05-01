@@ -8,8 +8,6 @@ Small wrapper around fetch designed to perform more predictable and type-safe ne
 [![npm](https://img.shields.io/npm/v/fetchtastic?color=blue)](https://www.npmjs.com/package/fetchtastic)
 [![npm](https://img.shields.io/npm/dm/fetchtastic.svg?color=blue)](https://www.npmjs.com/package/fetchtastic)
 
-### 📖 [Documentation.](https://fetchtastic-docs.vercel.app/)
-
 | ✨  | Features    |                                                         |
 | --- | ----------- | ------------------------------------------------------- |
 | 🪶  | Lightweight | Less than 3KB gzipped                                   |
@@ -18,6 +16,38 @@ Small wrapper around fetch designed to perform more predictable and type-safe ne
 | 🛡️  | Type safe   | Strongly typed, written in TypeScript                   |
 | 🛠️  | Isomorphic  | Compatible with modern `browsers`, `Node.js` and `Deno` |
 | ✅  | Well Tested | Covered by unit tests                                   |
+
+## 📖 Documentation
+
+Visit [fetchtastic-docs.vercel.app](https://fetchtastic-docs.vercel.app/) to view the full documentation.
+
+## Getting Started
+
+npm
+
+```bash
+npm install fetchtastic
+```
+
+pnpm
+
+```bash
+pnpm add fetchtastic
+```
+
+yarn
+
+```bash
+yarn add fetchtastic
+```
+
+deno
+
+```typescript
+import { fetchtastic } from 'https://deno.land/x/fetchtastic/lib/mod.ts';
+```
+
+## Basic usage
 
 ```typescript
 const api = new Fetchtastic('https://jsonplaceholder.typicode.com')
@@ -35,26 +65,6 @@ const blogData = await api
 await api.post('/albums', { title: 'My New Album' }).resolve();
 ```
 
-npm
+## Contributing
 
-```sh
-npm install fetchtastic
-```
-
-pnpm
-
-```sh
-pnpm add fetchtastic
-```
-
-yarn
-
-```sh
-yarn add fetchtastic
-```
-
-deno
-
-```typescript
-import { Fetchtastic } from 'https://deno.land/x/fetchtastic/lib/mod.ts';
-```
+Contributions are welcome and highly appreciated. However, before you jump right into it, we would like you to review our [Contribution Guidelines](https://github.com/fveracoechea/fetchtastic/blob/main/CONTRIBUTING.md) to make sure you have a smooth experience.
