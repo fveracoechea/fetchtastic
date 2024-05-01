@@ -1,5 +1,11 @@
 # fetchtastic
 
+## 0.3.4
+
+### Patch Changes
+
+- 2f06a34: Update readme
+
 ## 0.3.3
 
 ### Patch Changes
