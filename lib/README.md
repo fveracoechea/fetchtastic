@@ -15,11 +15,11 @@ npm install fetchtastic
 yarn add fetchtastic
 ```
 
-| 🚀 Features |                                                                          |
-| ----------- | ------------------------------------------------------------------------ |
-| Small       | ![ Less than 3KB gzipped ](https://fetchtastic-docs.vercel.app/size.png) |
-| Composable  | Safely reuse previous configurations                                     |
-| Intuitive   | Clean and easy to use API                                                |
-| Type safe   | Strongly typed, written in TypeScript                                    |
-| Isomorphic  | Compatible with modern browsers, Node.js and Deno                        |
-| Well Tested | Covered by unit tests                                                    |
+| 🚀 Features |                                                   |
+| ----------- | ------------------------------------------------- |
+| Small       | Less than 3KB gzipped                             |
+| Composable  | Safely reuse previous configurations              |
+| Intuitive   | Clean and easy to use API                         |
+| Type safe   | Strongly typed, written in TypeScript             |
+| Isomorphic  | Compatible with modern browsers, Node.js and Deno |
+| Well Tested | Covered by unit tests                             |
