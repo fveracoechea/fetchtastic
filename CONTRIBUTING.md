@@ -7,7 +7,6 @@ Welcome, and thanks for your interest in contributing! Please take a moment to r
 - **Commits** follow the ["Conventional Commits" specification](https://www.conventionalcommits.org/en/v1.0.0/). This allows for changelogs to be generated automatically upon release.
 - **Code** is formatted via [Prettier](https://prettier.io/) and statically analyzed by [ESLint](https://eslint.org/)
 - **JavaScript** is written as [TypeScript](https://www.typescriptlang.org/) where possible.
--
 
 ## Issues
 
