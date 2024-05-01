@@ -1,0 +1,5 @@
+---
+"fetchtastic": patch
+---
+
+Simplify internals

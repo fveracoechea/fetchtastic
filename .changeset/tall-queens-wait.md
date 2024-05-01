@@ -1,0 +1,5 @@
+---
+"fetchtastic": patch
+---
+
+Improve jsdocs
