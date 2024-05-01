@@ -1,6 +1,5 @@
 {
   "name": "docs",
-  "version": "0.0.2",
   "private": true,
   "scripts": {
     "dev": "next dev --port 3000",
