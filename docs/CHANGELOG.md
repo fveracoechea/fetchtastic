@@ -1,5 +1,14 @@
 # docs
 
+## null
+
+### Patch Changes
+
+- Updated dependencies [976dbc1]
+- Updated dependencies [976dbc1]
+- Updated dependencies [0b25f6c]
+  - fetchtastic@0.3.2
+
 ## 0.0.2
 
 ### Patch Changes
