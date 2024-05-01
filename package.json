@@ -22,13 +22,18 @@
     "lint": "turbo run lint",
     "size": "size-limit --json",
     "prettier-check": "prettier '**/*.{js,ts,jsx,tsx,json,md,mdx}' --check",
-    "prettier-format": "prettier --write \"**/*.{js,ts,jsx,tsx,json,md,mdx}\""
+    "prettier-format": "prettier --write \"**/*.{js,ts,jsx,tsx,json,md,mdx}\"",
+    "release:build": "pnpm --filter fetchtastic build",
+    "release:check": "pnpm --filter fetchtastic type-check",
+    "release:publish": "changeset publish",
+    "release": "pnpm release:check && pnpm release:build && pnpm release:publis"
   },
   "volta": {
     "node": "20.12.2",
     "pnpm": "9.0.6"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.1",
     "@size-limit/preset-small-lib": "^11.1.2",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "prettier": "^3.2.5",
