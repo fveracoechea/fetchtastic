@@ -47,7 +47,7 @@ deno
 import { fetchtastic } from 'https://deno.land/x/fetchtastic/lib/mod.ts';
 ```
 
-## Basic usage
+### Basic usage
 
 ```typescript
 const api = new Fetchtastic('https://jsonplaceholder.typicode.com')
