@@ -26,7 +26,7 @@
     "release:build": "pnpm --filter fetchtastic build",
     "release:check": "pnpm --filter fetchtastic type-check",
     "release:publish": "changeset publish",
-    "release": "pnpm release:check && pnpm release:build && pnpm release:publis"
+    "release": "pnpm release:check && pnpm release:build && pnpm release:publish"
   },
   "volta": {
     "node": "20.12.2",
