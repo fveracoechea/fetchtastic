@@ -1,5 +1,13 @@
 # fetchtastic
 
+## 0.3.2
+
+### Patch Changes
+
+- 976dbc1: Simplify internals
+- 976dbc1: Improve jsdocs
+- 0b25f6c: Transform StatusCodes into a regular object
+
 ## 0.3.1
 
 ### Patch Changes
