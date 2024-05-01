@@ -22,7 +22,7 @@
     "lint": "turbo run lint",
     "size": "size-limit --json",
     "prettier-check": "prettier '**/*.{js,ts,jsx,tsx,json,md,mdx}' --check",
-    "prettier-format": "prettier --write \"**/*.{js,ts,jsx,tsx,json,md,mdx}\"",
+    "prettier-format": "prettier '**/*.{js,ts,jsx,tsx,json,md,mdx}' --write",
     "release:build": "pnpm --filter fetchtastic build",
     "release:check": "pnpm --filter fetchtastic type-check",
     "release:publish": "changeset publish",
