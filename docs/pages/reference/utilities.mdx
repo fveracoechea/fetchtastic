@@ -20,7 +20,7 @@ export function pipe<A, B, C>(a: A, ab: (a: A) => B, bc: (b: B) => C): C;
 The `pipe` function allows you to apply a sequence of functions to a value, passing the result of each function as the argument to the next one. This provides a concise and readable way to perform a series of transformations on a value.
 
 ```typescript
-import { pipe } from 'fetchtastic/utils';
+import { pipe } from 'fetchtastic';
 
 const length = (s: string) => s.length;
 const addOne = (n: number) => n + 1;

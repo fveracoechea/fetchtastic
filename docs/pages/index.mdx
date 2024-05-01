@@ -6,22 +6,30 @@ import Features from '../components/features.mdx';
 
 Small wrapper around fetch designed to perform more predictable and strongly typed network requests.
 
-<Tabs items={['yarn', 'pnpm', 'npm']}>
-    <Tab>
-        ```sh
-        yarn add fetchtastic
-        ```
-    </Tab>
-    <Tab>
-        ```sh
-        pnpm add fetchtastic
-        ```
-    </Tab>
-    <Tab>
-        ```sh
-        npm install fetchtastic
-        ```
-    </Tab>
+<Tabs items={['yarn', 'pnpm', 'npm', 'deno']}>
+  <Tab>
+    ```sh
+    yarn add fetchtastic
+    ```
+  </Tab>
+  <Tab>
+    ```sh
+    pnpm add fetchtastic
+    ```
+  </Tab>
+  <Tab>
+    ```sh
+    npm install fetchtastic
+    ```
+  </Tab>
+  <Tab>
+    ```typescript
+    // remote import
+    import { Fetchtastic } from "https://deno.land/x/fetchtastic@v0.3.0/lib/mod.ts";
+    // npm specifier
+    import { Fetchtastic } from "npm:fetchtastic";
+    ```
+  </Tab>
 
 </Tabs>
 
@@ -45,7 +53,7 @@ global.FormData = FormData;
 ## Import
 
 ```typescript
-import { Fetchtastic } from 'fetchtastic/core';
+import { Fetchtastic } from 'fetchtastic';
 ```
 
 ## Fluid interface (Chaining)
