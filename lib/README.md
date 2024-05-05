@@ -2,15 +2,15 @@
 
 Small wrapper around fetch designed to perform more predictable and type-safe network requests.
 
-[![MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/fveracoechea/fetchtastic/blob/main/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues-raw/fveracoechea/fetchtastic)](https://github.com/fveracoechea/fetchtastic/issues)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/fveracoechea/fetchtastic)](https://github.com/fveracoechea/fetchtastic/pulse)
+[![bundle.js](https://deno.bundlejs.com/?q=fetchtastic&badge=detailed)](https://bundlejs.com/?q=fetchtastic)
 [![npm](https://img.shields.io/npm/v/fetchtastic?color=blue)](https://www.npmjs.com/package/fetchtastic)
 [![npm](https://img.shields.io/npm/dm/fetchtastic.svg?color=blue)](https://www.npmjs.com/package/fetchtastic)
 
 | ✨  | Features    |                                                         |
 | --- | ----------- | ------------------------------------------------------- |
-| 🪶  | Lightweight | Less than 3KB gzipped                                   |
+| 🪶  | Lightweight | 3kB gzipped                                             |
 | 🧩  | Composable  | Safely reuse previous configurations                    |
 | ⚡  | Intuitive   | Clean and easy to use API                               |
 | 🛡️  | Type safe   | Strongly typed, written in TypeScript                   |
