@@ -44,6 +44,5 @@
     "node": ">=18.0.0",
     "pnpm": ">=6"
   },
-  "packageManager": "pnpm@9.0.6",
-  "version": "0.0.1"
+  "packageManager": "pnpm@9.0.6"
 }
