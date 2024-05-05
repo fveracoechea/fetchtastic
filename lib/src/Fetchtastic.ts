@@ -60,6 +60,13 @@ export class Fetchtastic {
   }
 
   /**
+   * An object containing custom settings applied to the request.
+   * */
+  get requestOptions() {
+    return this.#options;
+  }
+
+  /**
    * Creates a new instance of Fetchtastic.
    * @param baseUrl - The base `URL` for the requests.
    * @param controller - An optional `AbortController` instance for aborting the request.
@@ -80,19 +87,11 @@ export class Fetchtastic {
     if (controller) this.#controller = controller;
   }
 
-  #cloneSearchParams() {
-    const search = new URLSearchParams();
-    for (const [key, value] of this.#searchParams) {
-      search.append(key, value);
-    }
-    return search;
-  }
-
   #clone() {
     const instace = new Fetchtastic(this.#url.toString(), this.#controller);
     instace.#catchers = new Map(this.#catchers);
     instace.#headers = new Headers(this.#headers);
-    instace.#searchParams = this.#cloneSearchParams();
+    instace.#searchParams = new URLSearchParams(this.#searchParams.toString());
     instace.#options = Object.assign({}, this.#options);
     instace.#body = this.#body;
     instace.#method = this.#method;
@@ -108,6 +107,25 @@ export class Fetchtastic {
     instance.#method = method;
     if (body !== undefined) instance.#body = body;
     return instance;
+  }
+
+  #getFinalRequestOptions(method: HttpMethod): FetchOptions {
+    let body: BodyInit | null;
+    if (this.#body && shouldStringify(this.#body, this.#headers)) {
+      body = JSON.stringify(this.#body);
+    } else {
+      body = (this.#body ?? null) as BodyInit | null;
+    }
+
+    const options: FetchOptions = {
+      ...this.#options,
+      method,
+      headers: this.#headers,
+      body,
+    };
+
+    if (this.#controller) options.signal = this.#controller.signal;
+    return options;
   }
 
   async #handleError(response: Response) {
@@ -130,6 +148,7 @@ export class Fetchtastic {
   /**
    * Registers an abort controller, in order to cancel the request if needed.
    * @param abortController - an `AbortController` instance
+   * @link https://developer.mozilla.org/en-US/docs/Web/API/AbortController
    */
   controller(abortController: AbortController) {
     const instance = this.#clone();
@@ -138,9 +157,10 @@ export class Fetchtastic {
   }
 
   /**
-   * Sets the headers for the request.
+   * Sets the headers of the request, it uses `Headers.set` behind the scenes.
    * @param data - The headers data.
    * @param replace - Specifies whether to replace the existing headers (default: false).
+   * @link https://developer.mozilla.org/en-US/docs/Web/API/Headers/set
    */
   setHeaders(data?: HeadersInit, replace = false) {
     const instance = this.#clone();
@@ -157,7 +177,7 @@ export class Fetchtastic {
   }
 
   /**
-   * Appends a header to the request.
+   * Appends a header to the request, it uses `Headers.append` under the hood.
    * @param name - The name of the header.
    * @param value - The value of the header.
    */
@@ -207,17 +227,19 @@ export class Fetchtastic {
    */
   setSearchParams(data?: SearchParamInput, replace = false) {
     const instance = this.#clone();
-    let newSearchParams = new URLSearchParams();
-    if (data) {
-      newSearchParams = getNewSearchParms(data);
-    }
+    const newSearchParams = data ? getNewSearchParms(data) : new URLSearchParams();
+
     if (!replace) {
-      instance.#searchParams.forEach((value, key) => {
+      for (const [key] of instance.#searchParams) {
         if (!newSearchParams.has(key)) {
-          newSearchParams.set(key, value);
+          const values = instance.#searchParams.getAll(key);
+          for (const value of values) {
+            newSearchParams.append(key, value);
+          }
         }
-      });
+      }
     }
+
     instance.#searchParams = newSearchParams;
     return instance;
   }
@@ -256,7 +278,7 @@ export class Fetchtastic {
   }
 
   /**
-   * Sets the options for the request.
+   * Sets any custom settings that you want to apply to the request.
    * @param options - The options for the request.
    * @param replace - Specifies whether to replace the existing options (default: false).
    */
@@ -264,30 +286,6 @@ export class Fetchtastic {
     const instance = this.#clone();
     instance.#options = replace ? options : { ...instance.#options, ...options };
     return instance;
-  }
-
-  /**
-   * Gets the options for the request.
-   * @param method - The HTTP method for the request.
-   */
-  getOptions(method: HttpMethod): FetchOptions {
-    let body: BodyInit | null;
-    if (this.#body && shouldStringify(this.#body, this.#headers)) {
-      body = JSON.stringify(this.#body);
-    } else {
-      body = (this.#body ?? null) as BodyInit | null;
-    }
-
-    const options: FetchOptions = {
-      ...this.#options,
-      method,
-      headers: this.#headers,
-      body,
-    };
-
-    if (this.#controller) options.signal = this.#controller.signal;
-
-    return options;
   }
 
   get(url?: string) {
@@ -324,7 +322,7 @@ export class Fetchtastic {
    * @throws FetchError if the fetch request fails.
    */
   async resolve() {
-    const options = this.getOptions(this.method);
+    const options = this.#getFinalRequestOptions(this.method);
     const response = await fetch(this.URL, options);
     if (!response.ok) {
       const newResponse = await this.#handleError(response);
