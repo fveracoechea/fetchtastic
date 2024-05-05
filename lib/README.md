@@ -2,9 +2,9 @@
 
 Small wrapper around fetch designed to perform more predictable and type-safe network requests.
 
-[![GitHub issues](https://img.shields.io/github/issues-raw/fveracoechea/fetchtastic)](https://github.com/fveracoechea/fetchtastic/issues)
+[![GitHub issues](https://img.shields.io/github/issues-raw/fveracoechea/fetchtastic?color=blue)](https://github.com/fveracoechea/fetchtastic/issues)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/fveracoechea/fetchtastic)](https://github.com/fveracoechea/fetchtastic/pulse)
-[![bundle.js](https://deno.bundlejs.com/?q=fetchtastic&badge=detailed)](https://bundlejs.com/?q=fetchtastic)
+[![bundle.js](https://deno.bundlejs.com/?q=fetchtastic&badge)](https://bundlejs.com/?q=fetchtastic)
 [![npm](https://img.shields.io/npm/v/fetchtastic?color=blue)](https://www.npmjs.com/package/fetchtastic)
 [![npm](https://img.shields.io/npm/dm/fetchtastic.svg?color=blue)](https://www.npmjs.com/package/fetchtastic)
 
