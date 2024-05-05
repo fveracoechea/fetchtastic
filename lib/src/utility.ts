@@ -1,3 +1,12 @@
+import { HttpMethod, HttpMethods } from './types.ts';
+
+/**
+ * Type guard function, returns `true` if the given value is a valid `HttpMethod`
+ */
+export function isHttpMethod(value: unknown): value is HttpMethod {
+  return typeof value === 'string' && HttpMethods.some(m => m === value.toUpperCase());
+}
+
 /**
  * HTTP status codes and their corresponding descriptions.
  * This object maps HTTP status code numbers to their standard textual descriptions.

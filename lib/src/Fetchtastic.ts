@@ -1,4 +1,3 @@
-import { identity } from '../utils/helpers.ts';
 import { HttpError } from './HttpError.ts';
 import { getNewSearchParms, getResponseParser, shouldStringify } from './internals.ts';
 import {
@@ -16,9 +15,10 @@ export type ErrorCatcher = (
 ) => void | Promise<Response | void>;
 
 /**
- * Represents a configurable Fetchtastic instance that can be used to make HTTP requests.
- * Implements the `ConfigurableFetch` interface.
- * @preserve
+ * Represents an HTTP request configuration.
+ * It provides methods for setting headers, URL parameters, request body, and other options.
+ * It also provides convenience methods for performing common HTTP methods such as:
+ * GET, POST, PUT, DELETE, OPTIONS, PATCH, and HEAD.
  */
 export class Fetchtastic {
   #url: URL | string;
@@ -28,10 +28,10 @@ export class Fetchtastic {
   #searchParams: URLSearchParams;
   #body: BodyInit | null | unknown;
   #catchers: Map<number | string, Set<ErrorCatcher>>;
-  #options: Omit<FetchtasticOptions, 'body' | 'headers'>;
+  #options: FetchtasticOptions;
 
   /**
-   * Gets the URL with search parameters.
+   * URL of the request, including any URL parameters.
    */
   get URL() {
     const search = this.#searchParams.toString();
@@ -39,29 +39,21 @@ export class Fetchtastic {
   }
 
   /**
-   * Gets the search parameters as a JSON object.
+   * Gets the URL search parameters.
    */
-  get searchParamsJSON() {
-    const json: Record<string, string> = {};
-    this.#searchParams.forEach((value, key) => {
-      json[key] = value;
-    });
-    return json;
+  get searchParams() {
+    return this.#searchParams;
   }
 
   /**
-   * Gets the headers as a JSON object.
+   * Gets the request headers.
    */
-  get headersJSON() {
-    const json: Record<string, string> = {};
-    this.#headers.forEach((value, key) => {
-      json[key] = value;
-    });
-    return json;
+  get headers() {
+    return this.#headers;
   }
 
   /**
-   * Gets the HTTP method associated with this request.
+   * HTTP method associated with the request.
    */
   get method() {
     return this.#method;
@@ -69,8 +61,8 @@ export class Fetchtastic {
 
   /**
    * Creates a new instance of Fetchtastic.
-   * @param baseUrl - The base URL for the requests.
-   * @param controller - An optional AbortController to control the request cancellation.
+   * @param baseUrl - The base `URL` for the requests.
+   * @param controller - An optional `AbortController` instance for aborting the request.
    */
   constructor(baseUrl?: string | URL, controller?: AbortController) {
     this.#body = null;
@@ -90,18 +82,18 @@ export class Fetchtastic {
 
   #cloneSearchParams() {
     const search = new URLSearchParams();
-    this.#searchParams.forEach((value, name) => {
-      search.append(name, value);
-    });
+    for (const [key, value] of this.#searchParams) {
+      search.append(key, value);
+    }
     return search;
   }
 
   #clone() {
     const instace = new Fetchtastic(this.#url.toString(), this.#controller);
-    instace.#catchers = this.#catchers;
+    instace.#catchers = new Map(this.#catchers);
     instace.#headers = new Headers(this.#headers);
     instace.#searchParams = this.#cloneSearchParams();
-    instace.#options = this.#options;
+    instace.#options = Object.assign({}, this.#options);
     instace.#body = this.#body;
     instace.#method = this.#method;
     return instace;
@@ -150,7 +142,7 @@ export class Fetchtastic {
    * @param data - The headers data.
    * @param replace - Specifies whether to replace the existing headers (default: false).
    */
-  headers(data?: HeadersInit, replace = false) {
+  setHeaders(data?: HeadersInit, replace = false) {
     const instance = this.#clone();
     const newHeaders = new Headers(data);
     if (!replace) {
@@ -213,7 +205,7 @@ export class Fetchtastic {
    * @param data - The search parameters data.
    * @param replace - Specifies whether to replace the existing search parameters (default: false).
    */
-  searchParams(data?: SearchParamInput, replace = false) {
+  setSearchParams(data?: SearchParamInput, replace = false) {
     const instance = this.#clone();
     let newSearchParams = new URLSearchParams();
     if (data) {
@@ -257,7 +249,7 @@ export class Fetchtastic {
    * Sets the body for the request.
    * @param body - The body data.
    */
-  body(body: BodyInit | null | unknown) {
+  setBody(body: BodyInit | null | unknown) {
     const instance = this.#clone();
     instance.#body = body;
     return instance;
@@ -269,15 +261,8 @@ export class Fetchtastic {
    * @param replace - Specifies whether to replace the existing options (default: false).
    */
   setOptions(options: FetchtasticOptions, replace = false) {
-    const { body, headers, ...otherOptions } = options;
     const instance = this.#clone();
-    if (Object.prototype.hasOwnProperty.call(options, 'body')) {
-      instance.#body = body ?? null;
-    }
-    if (Object.prototype.hasOwnProperty.call(options, 'headers')) {
-      instance.headers(headers, replace);
-    }
-    instance.#options = replace ? otherOptions : { ...instance.#options, ...otherOptions };
+    instance.#options = replace ? options : { ...instance.#options, ...options };
     return instance;
   }
 
@@ -354,8 +339,12 @@ export class Fetchtastic {
    * @returns A Promise that resolves to the JSON response.
    */
   json<T = unknown>(assertData?: DataAssertionFn<T>): Promise<T> {
-    const assertFn = (assertData ?? identity) as DataAssertionFn<T>;
-    return this.resolve().then(getResponseParser('JSON')).then(assertFn);
+    return this.resolve()
+      .then(getResponseParser('JSON'))
+      .then(json => {
+        if (assertData) return assertData(json);
+        return json;
+      });
   }
 
   /**
