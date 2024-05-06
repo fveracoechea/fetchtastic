@@ -26,7 +26,7 @@ export class Fetchtastic {
   #method: HttpMethod;
   #controller?: AbortController;
   #searchParams: URLSearchParams;
-  #body: BodyInit | null | unknown;
+  #body: unknown;
   #catchers: Map<number | string, Set<ErrorCatcher>>;
   #options: FetchtasticOptions;
 
@@ -67,6 +67,17 @@ export class Fetchtastic {
   }
 
   /**
+   * Body of the request.
+   * It can be a Blob, an ArrayBuffer, a TypedArray, a DataView, a FormData, a URLSearchParams,
+   * a string, or a ReadableStream object.
+   * Note that a request using the GET or HEAD method cannot have a body.
+   * @param body - The body data.
+   */
+  get body() {
+    return this.#body;
+  }
+
+  /**
    * Creates a new instance of Fetchtastic.
    * @param baseUrl - The base `URL` for the requests.
    * @param controller - An optional `AbortController` instance for aborting the request.
@@ -98,11 +109,7 @@ export class Fetchtastic {
     return instace;
   }
 
-  #setMethod<Method extends HttpMethod>(
-    method: Method,
-    url?: string,
-    body?: BodyInit | null | unknown,
-  ) {
+  #setMethod<Method extends HttpMethod>(method: Method, url?: string, body?: unknown) {
     const instance = url ? this.url(url) : this.#clone();
     instance.#method = method;
     if (body !== undefined) instance.#body = body;
@@ -268,10 +275,13 @@ export class Fetchtastic {
   }
 
   /**
-   * Sets the body for the request.
+   * Sets the body of the request.
+   * It can be a Blob, an ArrayBuffer, a TypedArray, a DataView, a FormData, a URLSearchParams,
+   * a string, or a ReadableStream object.
+   * Note that a request using the GET or HEAD method cannot have a body.
    * @param body - The body data.
    */
-  setBody(body: BodyInit | null | unknown) {
+  setBody(body: unknown) {
     const instance = this.#clone();
     instance.#body = body;
     return instance;
@@ -292,23 +302,23 @@ export class Fetchtastic {
     return this.#setMethod('GET', url);
   }
 
-  post(url?: string, body?: BodyInit | null | unknown) {
+  post(url?: string, body?: unknown) {
     return this.#setMethod('POST', url, body);
   }
 
-  put(url?: string, body?: BodyInit | null | unknown) {
+  put(url?: string, body?: unknown) {
     return this.#setMethod('PUT', url, body);
   }
 
-  delete(url?: string, body?: BodyInit | null | unknown) {
+  delete(url?: string, body?: unknown) {
     return this.#setMethod('DELETE', url, body);
   }
 
-  options(url?: string, body?: BodyInit | null | unknown) {
+  options(url?: string, body?: unknown) {
     return this.#setMethod('OPTIONS', url, body);
   }
 
-  patch(url?: string, body?: BodyInit | null | unknown) {
+  patch(url?: string, body?: unknown) {
     return this.#setMethod('PATCH', url, body);
   }
 
