@@ -42,8 +42,8 @@ const body = {
   pattern: 'All',
 };
 
-const getConfig = new Fetchtastic(endpoint).headers(headers);
-const postConfig = getConfig.body(body);
+const getConfig = new Fetchtastic(endpoint).setHeaders(headers);
+const postConfig = getConfig.setBody(body);
 
 beforeEach(() => {
   fetchMock.mockClear();
@@ -63,7 +63,12 @@ describe('GET Requests', () => {
     // checks the response
     expect(getConfig.get().json()).resolves.toMatchObject(data);
 
-    expect(fetchMock).toHaveBeenCalledWith(endpoint, getConfig.getOptions('GET'));
+    expect(fetchMock).toHaveBeenCalledWith(endpoint, {
+      ...getConfig.requestOptions,
+      method: 'GET',
+      body: JSON.stringify(body),
+      headers: new Headers(headers),
+    });
   });
 
   it('Rejects 404', async () => {
@@ -88,7 +93,12 @@ describe('GET Requests', () => {
         expect(error.message).toBe('Not Found');
       });
 
-    expect(fetchMock).toHaveBeenCalledWith(endpoint, getConfig.getOptions('GET'));
+    expect(fetchMock).toHaveBeenCalledWith(endpoint, {
+      ...getConfig.requestOptions,
+      method: 'GET',
+      body: JSON.stringify(body),
+      headers: new Headers(headers),
+    });
   });
 
   test('Fetch Error', () => {
@@ -96,7 +106,12 @@ describe('GET Requests', () => {
     fetchMock.mockImplementationOnce(() => Promise.reject(new Error('Failed to fetch')));
     // checks the response
     expect(getConfig.get().json()).rejects.toBeInstanceOf(Error);
-    expect(fetchMock).toHaveBeenCalledWith(endpoint, getConfig.getOptions('GET'));
+    expect(fetchMock).toHaveBeenCalledWith(endpoint, {
+      ...getConfig.requestOptions,
+      method: 'GET',
+      body: JSON.stringify(body),
+      headers: new Headers(headers),
+    });
   });
 });
 
@@ -113,7 +128,12 @@ describe('POST Requests', () => {
 
     // checks the response
     expect(postConfig.post().json()).resolves.toMatchObject(data);
-    expect(fetchMock).toHaveBeenCalledWith(endpoint, postConfig.getOptions('POST'));
+    expect(fetchMock).toHaveBeenCalledWith(endpoint, {
+      ...getConfig.requestOptions,
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: new Headers(headers),
+    });
   });
 
   test('Rejecting with 404', async () => {
@@ -139,7 +159,12 @@ describe('POST Requests', () => {
         expect(error.message).toBe('Not Found');
       });
 
-    expect(fetchMock).toHaveBeenCalledWith(endpoint, postConfig.getOptions('POST'));
+    expect(fetchMock).toHaveBeenCalledWith(endpoint, {
+      ...getConfig.requestOptions,
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: new Headers(headers),
+    });
   });
 
   test('Fetch Error', async () => {
@@ -155,6 +180,11 @@ describe('POST Requests', () => {
         expect(error.message).toBe('Failed to fetch');
       });
 
-    expect(fetchMock).toHaveBeenCalledWith(endpoint, postConfig.getOptions('POST'));
+    expect(fetchMock).toHaveBeenCalledWith(endpoint, {
+      ...getConfig.requestOptions,
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: new Headers(headers),
+    });
   });
 });

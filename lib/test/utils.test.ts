@@ -1,35 +1,33 @@
-import { identity, noop, pipe } from '../mod.ts';
+import { isHttpMethod, isStatusCode } from '../mod.ts';
 
 describe('Utility functions', () => {
-  test('Pipe', () => {
-    const length = jest.fn((s: string) => s.length);
-    const addOne = jest.fn((n: number) => n + 1);
-    const double = jest.fn((n: number) => n * 2);
+  test('isHttpMethod', () => {
+    expect(isHttpMethod('GET')).toBe(true);
+    expect(isHttpMethod('PUT')).toBe(true);
+    expect(isHttpMethod('OPTIONS')).toBe(true);
+    expect(isHttpMethod('put')).toBe(true);
+    expect(isHttpMethod('delete')).toBe(true);
 
-    const result = pipe('aaa', length, addOne, double);
-
-    expect(length).toBeCalledWith('aaa');
-    expect(addOne).toBeCalledWith(3);
-    expect(double).toBeCalledWith(4);
-    expect(result).toBe(8);
+    expect(isHttpMethod('GETx')).toBe(false);
+    expect(isHttpMethod(2)).toBe(false);
+    expect(isHttpMethod('')).toBe(false);
+    expect(isHttpMethod('put')).toBe(false);
+    expect(isHttpMethod('asdfsadf')).toBe(false);
   });
 
-  test('Identity', () => {
-    expect(identity('test')).toBe('test');
+  test('isStatusCode', () => {
+    expect(isStatusCode(100)).toBe(true);
+    expect(isStatusCode(400)).toBe(true);
+    expect(isStatusCode(404)).toBe(true);
+    expect(isStatusCode(500)).toBe(true);
+    expect(isStatusCode(501)).toBe(true);
+    expect(isStatusCode(200)).toBe(true);
 
-    expect(identity(2023)).toBe(2023);
-
-    expect(identity({ title: 'test', values: [1, 2, 3, 4] })).toMatchObject({
-      title: 'test',
-      values: [1, 2, 3, 4],
-    });
-  });
-
-  test('Noop', () => {
-    expect(noop()).toBe(undefined);
-
-    expect(noop(2023, 'test')).toBe(undefined);
-
-    expect(noop({ title: 'test' })).toBe(undefined);
+    expect(isStatusCode(1000)).toBe(false);
+    expect(isStatusCode(0)).toBe(false);
+    expect(isStatusCode(null)).toBe(false);
+    expect(isStatusCode('500')).toBe(false);
+    expect(isStatusCode(5000)).toBe(false);
+    expect(isStatusCode(21)).toBe(false);
   });
 });

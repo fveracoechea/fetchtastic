@@ -19,7 +19,7 @@ describe('Body', () => {
 
     const config = new Fetchtastic('https://catfact.ninja').post('/', data);
 
-    expect(config.getOptions('POST').body).toBe(JSON.stringify(data));
+    expect(config.body).toBe(JSON.stringify(data));
   });
 
   it('Sends HTML', async () => {
@@ -40,9 +40,9 @@ describe('Body', () => {
 
     const config = new Fetchtastic('https://catfact.ninja')
       .appendHeader('Content-Type', 'text/html')
-      .body(data);
+      .setBody(data);
 
-    expect(config.getOptions('POST').body).toBe(data);
+    expect(config.body).toBe(data);
   });
 
   it('Sends ReadableStream', async () => {
@@ -60,9 +60,10 @@ describe('Body', () => {
 
     const config = new Fetchtastic('https://catfact.ninja')
       .appendHeader('Content-Type', 'text/html')
-      .put('', stream);
+      .put('', stream)
+      .setOptions({ cache: 'no-cache' });
 
-    expect(config.getOptions('POST').body).toBeInstanceOf(ReadableStream);
+    expect(config.body).toBeInstanceOf(ReadableStream);
   });
 
   it('Sends FormData', async () => {
@@ -76,9 +77,11 @@ describe('Body', () => {
     );
 
     const config = new Fetchtastic('https://catfact.ninja')
+      .delete('/delete', { fake: '' })
       .appendHeader('Content-Type', 'text/html')
-      .body(data);
+      .setBody(data)
+      .unauthorized(() => console.error('unauthorized'));
 
-    expect(config.getOptions('PUT').body).toBeInstanceOf(FormData);
+    expect(config.body).toBeInstanceOf(FormData);
   });
 });
