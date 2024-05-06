@@ -39,7 +39,7 @@ export type SearchParamInput =
  * Options for configuring the behavior of Fetchtastic.
  * This type extends RequestInit but omits 'signal' and 'method' properties.
  */
-export type FetchtasticOptions = Omit<RequestInit, 'signal' | 'method'>;
+export type FetchtasticOptions = Omit<RequestInit, 'signal' | 'method' | 'body' | 'headers'>;
 
 /**
  * Represents options for making a fetch request.

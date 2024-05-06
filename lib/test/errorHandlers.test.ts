@@ -15,7 +15,7 @@ const data = {
   country: 'United States',
 };
 
-const config = new Fetchtastic('https://catfact.ninja/breeds').headers({
+const config = new Fetchtastic('https://catfact.ninja/breeds').setHeaders({
   Accept: 'application/json',
 });
 
