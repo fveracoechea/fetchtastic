@@ -10,7 +10,7 @@ Small wrapper around fetch designed to perform more predictable and type-safe ne
 
 | ✨  | Features    |                                                         |
 | --- | ----------- | ------------------------------------------------------- |
-| 🪶  | Lightweight | 3kB gzipped                                             |
+| 🪶  | Lightweight | Less than 3kB gzipped                                   |
 | 🧩  | Composable  | Safely reuse previous configurations                    |
 | 😀  | Intuitive   | Clean and easy to use API                               |
 | 🛡️  | Type safe   | Strongly typed, written in TypeScript                   |
