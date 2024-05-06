@@ -31,3 +31,4 @@ jobs:
           package_manager: pnpm
           build_script: --filter fetchtastic build
           script: pnpm size
+          skip_step: install
