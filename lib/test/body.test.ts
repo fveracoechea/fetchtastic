@@ -1,7 +1,15 @@
 import { Fetchtastic } from '../mod.ts';
 
+const fetchMock = jest.fn();
+global.fetch = fetchMock;
+
+beforeEach(() => {
+  fetchMock.mockClear();
+});
+
 describe('Body', () => {
   it('Sends stringified JSON', async () => {
+    const endpoint = 'https://catfact.ninja';
     const data = {
       title: 'Lorem Ipsum',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
@@ -17,9 +25,29 @@ describe('Body', () => {
       ],
     };
 
-    const config = new Fetchtastic('https://catfact.ninja').post('/', data);
+    // simulates a successful server response
+    fetchMock.mockImplementationOnce(() =>
+      Promise.resolve(
+        new Response(JSON.stringify(data), {
+          status: 200,
+        }),
+      ),
+    );
 
-    expect(config.body).toBe(JSON.stringify(data));
+    const config = new Fetchtastic(endpoint)
+      .appendHeader('Content-Type', 'application/json')
+      .post('/cats', data);
+
+    expect(config.body).toBe(data);
+
+    expect(config.resolve()).resolves.toBeInstanceOf(Response);
+
+    expect(fetchMock).toHaveBeenCalledWith(endpoint + '/cats', {
+      ...config.requestOptions,
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+    });
   });
 
   it('Sends HTML', async () => {

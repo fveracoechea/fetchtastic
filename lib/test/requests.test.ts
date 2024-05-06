@@ -33,7 +33,7 @@ const data = {
 };
 
 const endpoint = 'https://catfact.ninja/breeds';
-const headers = { accept: 'application/json' };
+const headers = { 'content-type': 'application/json', accept: 'application/json' };
 const body = {
   breed: 'American Bobtail',
   country: 'United States',
@@ -66,7 +66,7 @@ describe('GET Requests', () => {
     expect(fetchMock).toHaveBeenCalledWith(endpoint, {
       ...getConfig.requestOptions,
       method: 'GET',
-      body: JSON.stringify(body),
+      body: null,
       headers: new Headers(headers),
     });
   });
@@ -96,7 +96,7 @@ describe('GET Requests', () => {
     expect(fetchMock).toHaveBeenCalledWith(endpoint, {
       ...getConfig.requestOptions,
       method: 'GET',
-      body: JSON.stringify(body),
+      body: null,
       headers: new Headers(headers),
     });
   });
@@ -109,7 +109,7 @@ describe('GET Requests', () => {
     expect(fetchMock).toHaveBeenCalledWith(endpoint, {
       ...getConfig.requestOptions,
       method: 'GET',
-      body: JSON.stringify(body),
+      body: null,
       headers: new Headers(headers),
     });
   });

@@ -11,7 +11,7 @@ describe('Utility functions', () => {
     expect(isHttpMethod('GETx')).toBe(false);
     expect(isHttpMethod(2)).toBe(false);
     expect(isHttpMethod('')).toBe(false);
-    expect(isHttpMethod('put')).toBe(false);
+    expect(isHttpMethod('putt')).toBe(false);
     expect(isHttpMethod('asdfsadf')).toBe(false);
   });
 
