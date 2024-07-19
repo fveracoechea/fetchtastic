@@ -1,0 +1,5 @@
+{
+  "name": "@fveracoechea/fetchtastic",
+  "version": "1.0.0",
+  "exports": "./lib/mod.ts"
+}
