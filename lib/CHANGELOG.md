@@ -1,5 +1,16 @@
 # fetchtastic
 
+## 1.0.0
+
+### Major Changes
+
+- 6251f78: Make function names more consistent and cleanup utility functions.
+
+### Patch Changes
+
+- 6251f78: Update docs and fix size-limit github action.
+- 6251f78: Cleanup internals
+
 ## 0.3.5
 
 ### Patch Changes
