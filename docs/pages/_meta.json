@@ -2,7 +2,7 @@
   "index": "Home",
   "usage": "How do I use it?",
   "error-handling": "Error Handling",
-  "/reference/index.html": "API Reference",
+  "reference": "API Reference",
   "github_link": {
     "title": "Github",
     "href": "https://github.com/fveracoechea/fetchtastic"
