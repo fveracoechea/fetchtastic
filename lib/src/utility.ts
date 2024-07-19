@@ -1,3 +1,12 @@
+import { HttpMethod, HttpMethods } from './types.ts';
+
+/**
+ * Type guard function, returns `true` if the given value is a valid `HttpMethod`
+ */
+export function isHttpMethod(value: unknown): value is HttpMethod {
+  return typeof value === 'string' && HttpMethods.some(m => m === value.toUpperCase());
+}
+
 /**
  * HTTP status codes and their corresponding descriptions.
  * This object maps HTTP status code numbers to their standard textual descriptions.
@@ -10,7 +19,7 @@
  *   ...
  * }
  */
-export const StatusCodes = {
+export const StatusCodes = Object.freeze({
   100: 'Continue',
   101: 'Switching Protocols',
   102: 'Processing',
@@ -74,7 +83,7 @@ export const StatusCodes = {
   509: 'Bandwidth Limit Exceeded',
   510: 'Not Extended',
   511: 'Network Authentication Required',
-} as const;
+} as const);
 
 /**
  * Type guard function to check if the input is a valid HTTP status code.
@@ -82,6 +91,6 @@ export const StatusCodes = {
  * @returns A boolean indicating whether the input is a valid HTTP status code.
  * The input is considered valid if it is a number and exists as a key in the StatusCodes object.
  */
-export function isStatusCode<V = keyof typeof StatusCodes>(key: unknown): key is V {
+export function isStatusCode(key: unknown): key is keyof typeof StatusCodes {
   return typeof key === 'number' && key in StatusCodes;
 }

@@ -26,7 +26,8 @@ await api.post('/posts', body).appendHeader('Content-Type', 'application/json').
 
 ## Composable configuration
 
-You safely can reuse previous instances, since every method returns a new instance and does not modify the previous one.
+You safely can reuse previous instances, since every method returns a new instance and does not
+modify the previous one.
 
 <Steps>
 
@@ -64,8 +65,10 @@ await commentsAPI
 
 ## Aborting a request
 
-Fetch has the ability to abort requests using AbortController and signals under the hood.
-Compatible with browsers that support [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController). Otherwise, you could use a [polyfill](https://www.npmjs.com/package/abortcontroller-polyfill).
+Fetch has the ability to abort requests using AbortController and signals under the hood. Compatible
+with browsers that support
+[AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController). Otherwise, you
+could use a [polyfill](https://www.npmjs.com/package/abortcontroller-polyfill).
 
 ```typescript
 const controller = new AbortController();
@@ -97,7 +100,8 @@ controller.abort();
 
 ## Type-safety
 
-You can provide an assertion function to `json` resolver in order to perform a runtime validation. Otherwise, the result is going to be `unknown`.
+You can provide an assertion function to `json` resolver in order to perform a runtime validation.
+Otherwise, the result is going to be `unknown`.
 
 For example, you can do that by using:
 

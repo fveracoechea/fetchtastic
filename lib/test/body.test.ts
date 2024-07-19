@@ -1,7 +1,15 @@
 import { Fetchtastic } from '../mod.ts';
 
+const fetchMock = jest.fn();
+global.fetch = fetchMock;
+
+beforeEach(() => {
+  fetchMock.mockClear();
+});
+
 describe('Body', () => {
   it('Sends stringified JSON', async () => {
+    const endpoint = 'https://catfact.ninja';
     const data = {
       title: 'Lorem Ipsum',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
@@ -17,9 +25,29 @@ describe('Body', () => {
       ],
     };
 
-    const config = new Fetchtastic('https://catfact.ninja').post('/', data);
+    // simulates a successful server response
+    fetchMock.mockImplementationOnce(() =>
+      Promise.resolve(
+        new Response(JSON.stringify(data), {
+          status: 200,
+        }),
+      ),
+    );
 
-    expect(config.getOptions('POST').body).toBe(JSON.stringify(data));
+    const config = new Fetchtastic(endpoint)
+      .appendHeader('Content-Type', 'application/json')
+      .post('/cats', data);
+
+    expect(config.body).toBe(data);
+
+    expect(config.resolve()).resolves.toBeInstanceOf(Response);
+
+    expect(fetchMock).toHaveBeenCalledWith(endpoint + '/cats', {
+      ...config.requestOptions,
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+    });
   });
 
   it('Sends HTML', async () => {
@@ -40,9 +68,9 @@ describe('Body', () => {
 
     const config = new Fetchtastic('https://catfact.ninja')
       .appendHeader('Content-Type', 'text/html')
-      .body(data);
+      .setBody(data);
 
-    expect(config.getOptions('POST').body).toBe(data);
+    expect(config.body).toBe(data);
   });
 
   it('Sends ReadableStream', async () => {
@@ -60,9 +88,10 @@ describe('Body', () => {
 
     const config = new Fetchtastic('https://catfact.ninja')
       .appendHeader('Content-Type', 'text/html')
-      .put('', stream);
+      .put('', stream)
+      .setOptions({ cache: 'no-cache' });
 
-    expect(config.getOptions('POST').body).toBeInstanceOf(ReadableStream);
+    expect(config.body).toBeInstanceOf(ReadableStream);
   });
 
   it('Sends FormData', async () => {
@@ -76,9 +105,11 @@ describe('Body', () => {
     );
 
     const config = new Fetchtastic('https://catfact.ninja')
+      .delete('/delete', { fake: '' })
       .appendHeader('Content-Type', 'text/html')
-      .body(data);
+      .setBody(data)
+      .unauthorized(() => console.error('unauthorized'));
 
-    expect(config.getOptions('PUT').body).toBeInstanceOf(FormData);
+    expect(config.body).toBeInstanceOf(FormData);
   });
 });

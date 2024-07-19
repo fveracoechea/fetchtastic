@@ -1,4 +1,3 @@
-import { identity } from '../utils/helpers.ts';
 import { HttpError } from './HttpError.ts';
 import { getNewSearchParms, getResponseParser, shouldStringify } from './internals.ts';
 import {
@@ -16,9 +15,10 @@ export type ErrorCatcher = (
 ) => void | Promise<Response | void>;
 
 /**
- * Represents a configurable Fetchtastic instance that can be used to make HTTP requests.
- * Implements the `ConfigurableFetch` interface.
- * @preserve
+ * Represents an HTTP request configuration.
+ * It provides methods for setting headers, URL parameters, request body, and other options.
+ * It also provides convenience methods for performing common HTTP methods such as:
+ * GET, POST, PUT, DELETE, OPTIONS, PATCH, and HEAD.
  */
 export class Fetchtastic {
   #url: URL | string;
@@ -26,12 +26,12 @@ export class Fetchtastic {
   #method: HttpMethod;
   #controller?: AbortController;
   #searchParams: URLSearchParams;
-  #body: BodyInit | null | unknown;
+  #body: unknown;
   #catchers: Map<number | string, Set<ErrorCatcher>>;
-  #options: Omit<FetchtasticOptions, 'body' | 'headers'>;
+  #options: FetchtasticOptions;
 
   /**
-   * Gets the URL with search parameters.
+   * URL of the request, including any URL parameters.
    */
   get URL() {
     const search = this.#searchParams.toString();
@@ -39,38 +39,48 @@ export class Fetchtastic {
   }
 
   /**
-   * Gets the search parameters as a JSON object.
+   * Gets the URL search parameters.
    */
-  get searchParamsJSON() {
-    const json: Record<string, string> = {};
-    this.#searchParams.forEach((value, key) => {
-      json[key] = value;
-    });
-    return json;
+  get searchParams() {
+    return this.#searchParams;
   }
 
   /**
-   * Gets the headers as a JSON object.
+   * Gets the request headers.
    */
-  get headersJSON() {
-    const json: Record<string, string> = {};
-    this.#headers.forEach((value, key) => {
-      json[key] = value;
-    });
-    return json;
+  get headers() {
+    return this.#headers;
   }
 
   /**
-   * Gets the HTTP method associated with this request.
+   * HTTP method associated with the request.
    */
   get method() {
     return this.#method;
   }
 
   /**
+   * An object containing custom settings applied to the request.
+   * */
+  get requestOptions() {
+    return this.#options;
+  }
+
+  /**
+   * Body of the request.
+   * It can be a Blob, an ArrayBuffer, a TypedArray, a DataView, a FormData, a URLSearchParams,
+   * a string, or a ReadableStream object.
+   * Note that a request using the GET or HEAD method cannot have a body.
+   * @param body - The body data.
+   */
+  get body() {
+    return this.#body;
+  }
+
+  /**
    * Creates a new instance of Fetchtastic.
-   * @param baseUrl - The base URL for the requests.
-   * @param controller - An optional AbortController to control the request cancellation.
+   * @param baseUrl - The base `URL` for the requests.
+   * @param controller - An optional `AbortController` instance for aborting the request.
    */
   constructor(baseUrl?: string | URL, controller?: AbortController) {
     this.#body = null;
@@ -88,34 +98,41 @@ export class Fetchtastic {
     if (controller) this.#controller = controller;
   }
 
-  #cloneSearchParams() {
-    const search = new URLSearchParams();
-    this.#searchParams.forEach((value, name) => {
-      search.append(name, value);
-    });
-    return search;
-  }
-
   #clone() {
-    const instace = new Fetchtastic(this.#url.toString(), this.#controller);
-    instace.#catchers = this.#catchers;
-    instace.#headers = new Headers(this.#headers);
-    instace.#searchParams = this.#cloneSearchParams();
-    instace.#options = this.#options;
-    instace.#body = this.#body;
-    instace.#method = this.#method;
-    return instace;
+    const instance = new Fetchtastic(this.#url.toString(), this.#controller);
+    instance.#catchers = new Map(this.#catchers);
+    instance.#headers = new Headers(this.#headers);
+    instance.#searchParams = new URLSearchParams(this.#searchParams.toString());
+    instance.#options = Object.assign({}, this.#options);
+    instance.#body = this.#body;
+    instance.#method = this.#method;
+    return instance;
   }
 
-  #setMethod<Method extends HttpMethod>(
-    method: Method,
-    url?: string,
-    body?: BodyInit | null | unknown,
-  ) {
+  #setMethod<Method extends HttpMethod>(method: Method, url?: string, body?: unknown) {
     const instance = url ? this.url(url) : this.#clone();
     instance.#method = method;
     if (body !== undefined) instance.#body = body;
     return instance;
+  }
+
+  #getFinalRequestOptions(method: HttpMethod): FetchOptions {
+    let body: BodyInit | null;
+    if (this.#body && shouldStringify(this.#body, this.#headers)) {
+      body = JSON.stringify(this.#body);
+    } else {
+      body = (this.#body ?? null) as BodyInit | null;
+    }
+
+    const options: FetchOptions = {
+      ...this.#options,
+      method,
+      headers: this.#headers,
+      body,
+    };
+
+    if (this.#controller) options.signal = this.#controller.signal;
+    return options;
   }
 
   async #handleError(response: Response) {
@@ -138,6 +155,7 @@ export class Fetchtastic {
   /**
    * Registers an abort controller, in order to cancel the request if needed.
    * @param abortController - an `AbortController` instance
+   * @link https://developer.mozilla.org/en-US/docs/Web/API/AbortController
    */
   controller(abortController: AbortController) {
     const instance = this.#clone();
@@ -146,11 +164,12 @@ export class Fetchtastic {
   }
 
   /**
-   * Sets the headers for the request.
+   * Sets the headers of the request, it uses `Headers.set` behind the scenes.
    * @param data - The headers data.
    * @param replace - Specifies whether to replace the existing headers (default: false).
+   * @link https://developer.mozilla.org/en-US/docs/Web/API/Headers/set
    */
-  headers(data?: HeadersInit, replace = false) {
+  setHeaders(data?: HeadersInit, replace = false) {
     const instance = this.#clone();
     const newHeaders = new Headers(data);
     if (!replace) {
@@ -165,16 +184,16 @@ export class Fetchtastic {
   }
 
   /**
-   * Appends a header to the request.
+   * Appends a header to the request, it uses `Headers.append` under the hood.
    * @param name - The name of the header.
    * @param value - The value of the header.
    */
   appendHeader(name: FetchRequestHeader, value: string): this;
   appendHeader(name: string, value: string): this;
   appendHeader(name: string, value: string) {
-    const instace = this.#clone();
-    instace.#headers.append(name, value);
-    return instace;
+    const instance = this.#clone();
+    instance.#headers.append(name, value);
+    return instance;
   }
 
   /**
@@ -182,50 +201,52 @@ export class Fetchtastic {
    * @param name - The name of the header to delete.
    */
   deleteHeader(name: string) {
-    const instace = this.#clone();
-    if (instace.#headers.has(name)) {
-      instace.#headers.delete(name);
+    const instance = this.#clone();
+    if (instance.#headers.has(name)) {
+      instance.#headers.delete(name);
     }
-    return instace;
+    return instance;
   }
 
   /**
    * Sets the URL for the request.
-   * @param url - The URL for the request.
+   * @param url - The URL to set.
    * @param replace - Specifies whether to replace the existing URL (default: false).
    */
   url(url: URL): this;
   url(url: string, replace?: boolean): this;
   url(url: string | URL, replace = false) {
-    const instace = this.#clone();
+    const instance = this.#clone();
     if (replace || url instanceof URL) {
-      instace.#url = url;
+      instance.#url = url;
     } else {
-      const oldURL = instace.#url.toString();
+      const oldURL = instance.#url.toString();
       const split = oldURL.split('?');
-      instace.#url = split.length > 1 ? split[0] + url + '?' + split[1] : oldURL + url;
+      instance.#url = split.length > 1 ? split[0] + url + '?' + split[1] : oldURL + url;
     }
-    return instace;
+    return instance;
   }
 
   /**
    * Sets the search parameters for the request.
-   * @param data - The search parameters data.
+   * @param data - The URL parameters to set.
    * @param replace - Specifies whether to replace the existing search parameters (default: false).
    */
-  searchParams(data?: SearchParamInput, replace = false) {
+  setSearchParams(data?: SearchParamInput, replace = false) {
     const instance = this.#clone();
-    let newSearchParams = new URLSearchParams();
-    if (data) {
-      newSearchParams = getNewSearchParms(data);
-    }
+    const newSearchParams = data ? getNewSearchParms(data) : new URLSearchParams();
+
     if (!replace) {
-      instance.#searchParams.forEach((value, key) => {
+      for (const [key] of instance.#searchParams) {
         if (!newSearchParams.has(key)) {
-          newSearchParams.set(key, value);
+          const values = instance.#searchParams.getAll(key);
+          for (const value of values) {
+            newSearchParams.append(key, value);
+          }
         }
-      });
+      }
     }
+
     instance.#searchParams = newSearchParams;
     return instance;
   }
@@ -254,78 +275,50 @@ export class Fetchtastic {
   }
 
   /**
-   * Sets the body for the request.
+   * Sets the body of the request.
+   * It can be a Blob, an ArrayBuffer, a TypedArray, a DataView, a FormData, a URLSearchParams,
+   * a string, or a ReadableStream object.
+   * Note that a request using the GET or HEAD method cannot have a body.
    * @param body - The body data.
    */
-  body(body: BodyInit | null | unknown) {
+  setBody(body: unknown) {
     const instance = this.#clone();
     instance.#body = body;
     return instance;
   }
 
   /**
-   * Sets the options for the request.
-   * @param options - The options for the request.
+   * Sets any custom settings that you want to apply to the request.
+   * @param options - The options to set.
    * @param replace - Specifies whether to replace the existing options (default: false).
    */
   setOptions(options: FetchtasticOptions, replace = false) {
-    const { body, headers, ...otherOptions } = options;
     const instance = this.#clone();
-    if (Object.prototype.hasOwnProperty.call(options, 'body')) {
-      instance.#body = body ?? null;
-    }
-    if (Object.prototype.hasOwnProperty.call(options, 'headers')) {
-      instance.headers(headers, replace);
-    }
-    instance.#options = replace ? otherOptions : { ...instance.#options, ...otherOptions };
+    instance.#options = replace ? options : { ...instance.#options, ...options };
     return instance;
-  }
-
-  /**
-   * Gets the options for the request.
-   * @param method - The HTTP method for the request.
-   */
-  getOptions(method: HttpMethod): FetchOptions {
-    let body: BodyInit | null;
-    if (this.#body && shouldStringify(this.#body, this.#headers)) {
-      body = JSON.stringify(this.#body);
-    } else {
-      body = (this.#body ?? null) as BodyInit | null;
-    }
-
-    const options: FetchOptions = {
-      ...this.#options,
-      method,
-      headers: this.#headers,
-      body,
-    };
-
-    if (this.#controller) options.signal = this.#controller.signal;
-
-    return options;
   }
 
   get(url?: string) {
     return this.#setMethod('GET', url);
   }
 
-  post(url?: string, body?: BodyInit | null | unknown) {
+  post(url?: string, body?: unknown) {
     return this.#setMethod('POST', url, body);
   }
 
-  put(url?: string, body?: BodyInit | null | unknown) {
+  put(url?: string, body?: unknown) {
     return this.#setMethod('PUT', url, body);
   }
 
-  delete(url?: string, body?: BodyInit | null | unknown) {
+  delete(url?: string, body?: unknown) {
     return this.#setMethod('DELETE', url, body);
   }
 
-  options(url?: string, body?: BodyInit | null | unknown) {
+  options(url?: string, body?: unknown) {
     return this.#setMethod('OPTIONS', url, body);
   }
 
-  patch(url?: string, body?: BodyInit | null | unknown) {
+  patch(url?: string, body?: unknown) {
     return this.#setMethod('PATCH', url, body);
   }
 
@@ -334,12 +327,11 @@ export class Fetchtastic {
   }
 
   /**
-   * Resolves the fetch request and returns the response.
-   * @returns A Promise that resolves to the fetch response.
-   * @throws FetchError if the fetch request fails.
+   * Resolves the fetch request and returns the `Response`
+   * @throws `FetchError` if the fetch request fails.
    */
   async resolve() {
-    const options = this.getOptions(this.method);
+    const options = this.#getFinalRequestOptions(this.method);
     const response = await fetch(this.URL, options);
     if (!response.ok) {
       const newResponse = await this.#handleError(response);
@@ -349,42 +341,41 @@ export class Fetchtastic {
   }
 
   /**
-   * Send the fetch request and returns the response as JSON.
+   * Sends the request and returns the response as a `JSON` object.
    * @param assertData Optional. A function to assert and transform the response data.
-   * @returns A Promise that resolves to the JSON response.
    */
   json<T = unknown>(assertData?: DataAssertionFn<T>): Promise<T> {
-    const assertFn = (assertData ?? identity) as DataAssertionFn<T>;
-    return this.resolve().then(getResponseParser('JSON')).then(assertFn);
+    return this.resolve()
+      .then(getResponseParser('JSON'))
+      .then(json => {
+        if (assertData) return assertData(json);
+        return json;
+      });
   }
 
   /**
-   * Send the fetch request and returns the response as an ArrayBuffer.
-   * @returns A Promise that resolves to the ArrayBuffer response.
+   * Sends the fetch request and returns the response as an `ArrayBuffer`.
    */
   arrayBuffer(): Promise<ArrayBuffer> {
     return this.resolve().then(getResponseParser('ArrayBuffer'));
   }
 
   /**
-   * Resolves the fetch request and returns the response as a Blob.
-   * @returns A Promise that resolves to the Blob response.
+   * Resolves the fetch request and returns the response as a `Blob`.
    */
   blob(): Promise<Blob> {
     return this.resolve().then(getResponseParser('Blob'));
   }
 
   /**
-   * Resolves the fetch request and returns the response as a FormData.
-   * @returns A Promise that resolves to the FormData response.
+   * Resolves the fetch request and returns the response as a `FormData`.
    */
   formData(): Promise<FormData> {
     return this.resolve().then(getResponseParser('FormData'));
   }
 
   /**
-   * Send the fetch request and resolve the response as plain text.
-   * @returns A promise that resolves to the text response.
+   * Sends the fetch request and resolve the response as plain text.
    */
   text(): Promise<string> {
     return this.resolve().then(getResponseParser('Text'));

@@ -10,18 +10,19 @@ Small wrapper around fetch designed to perform more predictable and type-safe ne
 
 | ✨  | Features    |                                                         |
 | --- | ----------- | ------------------------------------------------------- |
-| 🪶  | Lightweight | 3kB gzipped                                             |
+| 🪶  | Lightweight | Less than 3kB gzipped                                   |
 | 🧩  | Composable  | Safely reuse previous configurations                    |
-| ⚡  | Intuitive   | Clean and easy to use API                               |
+| 😀  | Intuitive   | Clean and easy to use API                               |
 | 🛡️  | Type safe   | Strongly typed, written in TypeScript                   |
 | 🛠️  | Isomorphic  | Compatible with modern `browsers`, `Node.js` and `Deno` |
 | ✅  | Well Tested | Covered by unit tests                                   |
 
 ## 📖 Documentation
 
-Visit [fetchtastic-docs.vercel.app](https://fetchtastic-docs.vercel.app/) to view the full documentation.
+Visit [fetchtastic-docs.vercel.app](https://fetchtastic-docs.vercel.app/) to view the full
+documentation.
 
-## Getting Started
+## ⚡Getting Started
 
 npm
 
@@ -44,7 +45,7 @@ yarn add fetchtastic
 deno
 
 ```typescript
-import { fetchtastic } from 'https://deno.land/x/fetchtastic/lib/mod.ts';
+import { Fetchtastic } from 'https://deno.land/x/fetchtastic/lib/mod.ts';
 ```
 
 ### Basic usage
@@ -65,6 +66,9 @@ const blogData = await api
 await api.post('/albums', { title: 'My New Album' }).resolve();
 ```
 
-## Contributing
+## 🕹️ Contributing
 
-Contributions are welcome and highly appreciated. However, before you jump right into it, we would like you to review our [Contribution Guidelines](https://github.com/fveracoechea/fetchtastic/blob/main/CONTRIBUTING.md) to make sure you have a smooth experience.
+Contributions are welcome and highly appreciated. However, before you jump right into it, we would
+like you to review our
+[Contribution Guidelines](https://github.com/fveracoechea/fetchtastic/blob/main/CONTRIBUTING.md) to
+make sure you have a smooth experience.

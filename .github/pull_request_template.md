@@ -8,7 +8,8 @@ If this pull request is related to an open issue, please reference it here.
 
 ## How to Test
 
-Provide clear steps or instructions on how to test and validate the changes made in this pull request.
+Provide clear steps or instructions on how to test and validate the changes made in this pull
+request.
 
 ## Checklist
 

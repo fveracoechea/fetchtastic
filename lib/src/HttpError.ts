@@ -1,5 +1,5 @@
-import { StatusCodes, isStatusCode } from '../utils/statusCodes.ts';
 import { HttpMethod } from './types.ts';
+import { StatusCodes, isStatusCode } from './utility.ts';
 
 /**
  * Represents an error that occurs during an HTTP request made with Fetchtastic.
@@ -25,7 +25,13 @@ export class HttpError extends Error {
    * Stores the URL of the failed request.
    */
   url: string;
-
+  /**
+   * Creates a new instance of the `HttpError` class.
+   * @param {string} url - The URL of the failed request.
+   * @param {HttpMethod} method - The HTTP method used in the failed request.
+   * @param {Response} response - The `Response` object received from the failed request.
+   * @param {string} [message] - A custom error message (optional)
+   */
   constructor(url: string, method: HttpMethod, response: Response, message?: string) {
     super();
     this.name = 'HttpError';
@@ -37,6 +43,9 @@ export class HttpError extends Error {
     else this.#setMessage();
   }
 
+  /**
+   * Sets the error message based on the context of the HTTP error.
+   */
   #setMessage() {
     this.message = 'Fetch Error';
     const statusText = isStatusCode(this.status) && StatusCodes[this.status];
