@@ -91,7 +91,7 @@ resolve(): Promise<Response>
 
 Sends the request and returns the response as a `JSON` object.
 
-- `assertData`: A function to assert and transform the response data. If provided, the parsed data
+- `assertData` - A function to assert and transform the response data. If provided, the parsed data
   is passed to this function for validation.
 
 ```typescript
@@ -152,8 +152,8 @@ error is caught.
 
 Registers an given error handler for a specific status code.
 
-- `status`: HTTP status code of the error to be handled.
-- `catcher`: on-error callback function executed in case of error.
+- `status` - HTTP status code of the error to be handled.
+- `catcher` - on-error callback function executed in case of error.
 
 ```typescript
 onError(status: number, catcher: ErrorCatcher): Fetchtastic
