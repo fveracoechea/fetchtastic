@@ -4,7 +4,8 @@ The following types can be imported from `fetchtastic/core`
 
 ### HttpMethod
 
-`HttpMethod` is a type alias that represents a single HTTP method, It includes the following methods:
+`HttpMethod` is a type alias that represents a single HTTP method, It includes the following
+methods:
 
 - `OPTIONS`
 - `GET`
@@ -22,7 +23,8 @@ const method: HttpMethod = 'GET';
 
 ### ResponseParser
 
-`ResponseParser` is a type alias that represents a single response type, It includes the following parsers:
+`ResponseParser` is a type alias that represents a single response type, It includes the following
+parsers:
 
 - `ArrayBuffer`
 - `Blob`
@@ -38,7 +40,8 @@ const parser: ResponseParser = 'JSON';
 
 ### SearchParamInput
 
-`SearchParamInput` is a type alias that represents the different types of inputs that can be used for a search parameter. It can be one of the following types:
+`SearchParamInput` is a type alias that represents the different types of inputs that can be used
+for a search parameter. It can be one of the following types:
 
 - `string`
 - `URLSearchParams`
@@ -59,7 +62,8 @@ const input4: SearchParamInput = { key: 'value', key2: 123 };
 
 ### FetchtasticOptions
 
-`FetchtasticOptions` is a type alias that represents the options that can be passed to the `fetch` function. It is defined as:
+`FetchtasticOptions` is a type alias that represents the options that can be passed to the `fetch`
+function. It is defined as:
 
 ```typescript
 type FetchtasticOptions = Omit<RequestInit, 'signal' | 'method'>;
@@ -69,7 +73,8 @@ That means it includes all of the options from `RequestInit` except for `signal`
 
 ### FetchOptions
 
-`FetchOptions` is a type alias that extends `RequestInit` and includes the `method` property, which specifies the HTTP method to use for the request.
+`FetchOptions` is a type alias that extends `RequestInit` and includes the `method` property, which
+specifies the HTTP method to use for the request.
 
 ```typescript
 import { FetchOptions } from 'fetchtastic';
@@ -86,7 +91,8 @@ const options: FetchOptions = {
 
 ### FetchRequestHeader
 
-`FetchRequestHeader` is a type alias that represents the different types of headers that are most commonly included in a `fetch` request. It includes the following headers:
+`FetchRequestHeader` is a type alias that represents the different types of headers that are most
+commonly included in a `fetch` request. It includes the following headers:
 
 - `Accept`
 - `Content-Type`
@@ -109,7 +115,8 @@ const header: FetchRequestHeader = 'Accept';
 
 ### DataAssertionFn
 
-A function type that asserts and transforms data. It takes an `unknown` data parameter and returns a transformed value of type `T`.
+A function type that asserts and transforms data. It takes an `unknown` data parameter and returns a
+transformed value of type `T`.
 
 ```typescript
 import { DataAssertionFn } from 'fetchtastic';
@@ -122,4 +129,5 @@ const assertData: DataAssertionFn<number> = data => {
 };
 ```
 
-This type can be used to define a function that validates the response data returned by a `fetch` request, for example by checking that it matches a particular interface or schema.
+This type can be used to define a function that validates the response data returned by a `fetch`
+request, for example by checking that it matches a particular interface or schema.

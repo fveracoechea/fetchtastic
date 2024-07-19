@@ -19,7 +19,7 @@ export function isHttpMethod(value: unknown): value is HttpMethod {
  *   ...
  * }
  */
-export const StatusCodes = {
+export const StatusCodes = Object.freeze({
   100: 'Continue',
   101: 'Switching Protocols',
   102: 'Processing',
@@ -83,7 +83,7 @@ export const StatusCodes = {
   509: 'Bandwidth Limit Exceeded',
   510: 'Not Extended',
   511: 'Network Authentication Required',
-} as const;
+} as const);
 
 /**
  * Type guard function to check if the input is a valid HTTP status code.

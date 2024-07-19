@@ -99,14 +99,14 @@ export class Fetchtastic {
   }
 
   #clone() {
-    const instace = new Fetchtastic(this.#url.toString(), this.#controller);
-    instace.#catchers = new Map(this.#catchers);
-    instace.#headers = new Headers(this.#headers);
-    instace.#searchParams = new URLSearchParams(this.#searchParams.toString());
-    instace.#options = Object.assign({}, this.#options);
-    instace.#body = this.#body;
-    instace.#method = this.#method;
-    return instace;
+    const instance = new Fetchtastic(this.#url.toString(), this.#controller);
+    instance.#catchers = new Map(this.#catchers);
+    instance.#headers = new Headers(this.#headers);
+    instance.#searchParams = new URLSearchParams(this.#searchParams.toString());
+    instance.#options = Object.assign({}, this.#options);
+    instance.#body = this.#body;
+    instance.#method = this.#method;
+    return instance;
   }
 
   #setMethod<Method extends HttpMethod>(method: Method, url?: string, body?: unknown) {
@@ -191,9 +191,9 @@ export class Fetchtastic {
   appendHeader(name: FetchRequestHeader, value: string): this;
   appendHeader(name: string, value: string): this;
   appendHeader(name: string, value: string) {
-    const instace = this.#clone();
-    instace.#headers.append(name, value);
-    return instace;
+    const instance = this.#clone();
+    instance.#headers.append(name, value);
+    return instance;
   }
 
   /**
@@ -201,35 +201,35 @@ export class Fetchtastic {
    * @param name - The name of the header to delete.
    */
   deleteHeader(name: string) {
-    const instace = this.#clone();
-    if (instace.#headers.has(name)) {
-      instace.#headers.delete(name);
+    const instance = this.#clone();
+    if (instance.#headers.has(name)) {
+      instance.#headers.delete(name);
     }
-    return instace;
+    return instance;
   }
 
   /**
    * Sets the URL for the request.
-   * @param url - The URL for the request.
+   * @param url - The URL to set.
    * @param replace - Specifies whether to replace the existing URL (default: false).
    */
   url(url: URL): this;
   url(url: string, replace?: boolean): this;
   url(url: string | URL, replace = false) {
-    const instace = this.#clone();
+    const instance = this.#clone();
     if (replace || url instanceof URL) {
-      instace.#url = url;
+      instance.#url = url;
     } else {
-      const oldURL = instace.#url.toString();
+      const oldURL = instance.#url.toString();
       const split = oldURL.split('?');
-      instace.#url = split.length > 1 ? split[0] + url + '?' + split[1] : oldURL + url;
+      instance.#url = split.length > 1 ? split[0] + url + '?' + split[1] : oldURL + url;
     }
-    return instace;
+    return instance;
   }
 
   /**
    * Sets the search parameters for the request.
-   * @param data - The search parameters data.
+   * @param data - The URL parameters to set.
    * @param replace - Specifies whether to replace the existing search parameters (default: false).
    */
   setSearchParams(data?: SearchParamInput, replace = false) {
@@ -289,7 +289,7 @@ export class Fetchtastic {
 
   /**
    * Sets any custom settings that you want to apply to the request.
-   * @param options - The options for the request.
+   * @param options - The options to set.
    * @param replace - Specifies whether to replace the existing options (default: false).
    */
   setOptions(options: FetchtasticOptions, replace = false) {
@@ -327,9 +327,8 @@ export class Fetchtastic {
   }
 
   /**
-   * Resolves the fetch request and returns the response.
-   * @returns A Promise that resolves to the fetch response.
-   * @throws FetchError if the fetch request fails.
+   * Resolves the fetch request and returns the `Response`
+   * @throws `FetchError` if the fetch request fails.
    */
   async resolve() {
     const options = this.#getFinalRequestOptions(this.method);
@@ -342,9 +341,8 @@ export class Fetchtastic {
   }
 
   /**
-   * Send the fetch request and returns the response as JSON.
+   * Sends the request and returns the response as a `JSON` object.
    * @param assertData Optional. A function to assert and transform the response data.
-   * @returns A Promise that resolves to the JSON response.
    */
   json<T = unknown>(assertData?: DataAssertionFn<T>): Promise<T> {
     return this.resolve()
@@ -356,32 +354,28 @@ export class Fetchtastic {
   }
 
   /**
-   * Send the fetch request and returns the response as an ArrayBuffer.
-   * @returns A Promise that resolves to the ArrayBuffer response.
+   * Sends the fetch request and returns the response as an `ArrayBuffer`.
    */
   arrayBuffer(): Promise<ArrayBuffer> {
     return this.resolve().then(getResponseParser('ArrayBuffer'));
   }
 
   /**
-   * Resolves the fetch request and returns the response as a Blob.
-   * @returns A Promise that resolves to the Blob response.
+   * Resolves the fetch request and returns the response as a `Blob`.
    */
   blob(): Promise<Blob> {
     return this.resolve().then(getResponseParser('Blob'));
   }
 
   /**
-   * Resolves the fetch request and returns the response as a FormData.
-   * @returns A Promise that resolves to the FormData response.
+   * Resolves the fetch request and returns the response as a `FormData`.
    */
   formData(): Promise<FormData> {
     return this.resolve().then(getResponseParser('FormData'));
   }
 
   /**
-   * Send the fetch request and resolve the response as plain text.
-   * @returns A promise that resolves to the text response.
+   * Sends the fetch request and resolve the response as plain text.
    */
   text(): Promise<string> {
     return this.resolve().then(getResponseParser('Text'));

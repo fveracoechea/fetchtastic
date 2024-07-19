@@ -26,11 +26,11 @@ export class HttpError extends Error {
    */
   url: string;
   /**
-   * Constructs a new HttpError instance.
+   * Creates a new instance of the `HttpError` class.
    * @param {string} url - The URL of the failed request.
    * @param {HttpMethod} method - The HTTP method used in the failed request.
    * @param {Response} response - The `Response` object received from the failed request.
-   * @param {string} [message] - If not provided, a default message will be set based on the error context.
+   * @param {string} [message] - A custom error message (optional)
    */
   constructor(url: string, method: HttpMethod, response: Response, message?: string) {
     super();
@@ -45,7 +45,6 @@ export class HttpError extends Error {
 
   /**
    * Sets the error message based on the context of the HTTP error.
-   * @private
    */
   #setMessage() {
     this.message = 'Fetch Error';
