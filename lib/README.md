@@ -19,7 +19,8 @@ Small wrapper around fetch designed to perform more predictable and type-safe ne
 
 ## 📖 Documentation
 
-Visit [fetchtastic-docs.vercel.app](https://fetchtastic-docs.vercel.app/) to view the full documentation.
+Visit [fetchtastic-docs.vercel.app](https://fetchtastic-docs.vercel.app/) to view the full
+documentation.
 
 ## ⚡Getting Started
 
@@ -67,4 +68,7 @@ await api.post('/albums', { title: 'My New Album' }).resolve();
 
 ## 🕹️ Contributing
 
-Contributions are welcome and highly appreciated. However, before you jump right into it, we would like you to review our [Contribution Guidelines](https://github.com/fveracoechea/fetchtastic/blob/main/CONTRIBUTING.md) to make sure you have a smooth experience.
+Contributions are welcome and highly appreciated. However, before you jump right into it, we would
+like you to review our
+[Contribution Guidelines](https://github.com/fveracoechea/fetchtastic/blob/main/CONTRIBUTING.md) to
+make sure you have a smooth experience.
