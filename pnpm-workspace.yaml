@@ -1,4 +1,5 @@
 packages:
   - docs
+  - docs2
   - lib
   - example

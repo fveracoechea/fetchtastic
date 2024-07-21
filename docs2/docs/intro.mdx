@@ -1,0 +1,91 @@
+---
+sidebar_position: 1
+---
+
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+# Getting Started
+
+Install Fetchtastic using the package manaer of your preference:
+
+<Tabs groupId="package-manager">
+
+  <TabItem value="npm" label="npm">
+
+    ```sh
+    npm install fetchtastic
+    ```
+
+  </TabItem>
+
+  <TabItem value="deno" label="deno">
+     
+    ```typescript
+    // remote import
+    import { Fetchtastic } from "https://deno.land/x/fetchtastic/lib/mod.ts";
+    // npm specifier
+    import { Fetchtastic } from "npm:fetchtastic";
+    ```
+
+  </TabItem>
+ 
+   <TabItem value="pnpm" label="pnpm">
+
+    ```sh
+    pnpm add fetchtastic
+    ```
+
+  </TabItem>
+
+  <TabItem value="yarn" label="yarn">
+
+    ```sh
+    yarn add fetchtastic
+    ```
+
+  </TabItem>
+</Tabs>
+
+## Compatibility
+
+`Fetchtastic` runs everywhere fetch is available.
+
+    * Modern browsers
+    * Node.js >= v18
+    * Deno >= 0.41.0
+
+### Polyfills for Node.js < v18
+
+For older versions, the Node.js standard library does not provide a native
+implementation of fetch and other Browsers-only APIs so polyfilling is
+mandatory.
+
+```typescript
+import fetch, { FormData } from 'node-fetch';
+
+global.fetch = fetch;
+global.FormData = FormData;
+```
+
+## Import
+
+```typescript
+import { Fetchtastic } from 'fetchtastic';
+```
+
+## Fluid interface (Chaining)
+
+Simplifies code structure, enhances readability, and improves the overall
+developer experience by enabling a more natural and concise way of expressing
+operations.
+
+```typescript
+const request = new Fetchtastic('https://jsonplaceholder.typicode.com');
+
+const posts = await request
+  .appendHeader('Content-Type', 'application/json')
+  .searchParams({ page: 1, first: 12 })
+  .get('/posts')
+  .json();
+```

@@ -1,7 +1,6 @@
-# Error Handling
-
-Sicen [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) doesn't not reject on http
-error status, manually checking and handling every request error code can be very tedious:
+[fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) does not
+reject on http error status, so manually checking and handling every request
+error code can be very tedious:
 
 ```typescript
 
@@ -21,10 +20,11 @@ fetch("anything")
   .catch(error => { /* ... */ })
 ```
 
-Fetchtastic throws an [HttpError](/reference/http-error) when the response is not successful and
-contains helper methods to handle common codes.
+**Fetchtastic** throws an [HttpError](/reference/http-error) when the response
+is not successful and contains helper methods to handle common codes.
 
-We call those helper methods [Error Catchers](/reference/fetchtastic#error-catchers):
+We call those helper methods
+[Error Catchers](/reference/fetchtastic#error-catchers):
 
 ```typescript
 const api = new Fetchtastic('https://jsonplaceholder.typicode.com/posts');
@@ -52,8 +52,8 @@ await api
 
 ```
 
-The original config is passed along the error and can be used in order to perform an additional
-request, and modify the initial response:
+The original config is passed along the error and can be used in order to
+perform an additional request, and modify the initial response:
 
 ```typescript
 let authToken = '';
@@ -76,5 +76,6 @@ function getResource(callback) {
 }
 ```
 
-In the above example, you can notice that the execution flow is preserved as expected, `.then` will
-be called with the result of the original request or the replayed one.
+In the above example, you can notice that the execution flow is preserved as
+expected, `.then` will be called with the result of the original request or the
+replayed one.

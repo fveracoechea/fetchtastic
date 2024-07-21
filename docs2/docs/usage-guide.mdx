@@ -1,0 +1,164 @@
+---
+title: 'Usage Guide'
+sidebar_position: 2
+---
+
+## Minimal example
+
+### GET
+
+```typescript
+const api = new Fetchtastic('https://jsonplaceholder.typicode.com');
+
+const posts = await api.get('/posts').json();
+```
+
+### POST
+
+```typescript
+const api = new Fetchtastic('https://jsonplaceholder.typicode.com');
+
+const body = {
+  title: 'foo',
+  body: 'bar',
+  userId: 1,
+};
+
+await api
+  .post('/posts', body)
+  .appendHeader('Content-Type', 'application/json')
+  .resolve();
+```
+
+## Composable configuration
+
+You safely can reuse previous instances, since every method returns a new
+instance and does not modify the previous one.
+
+### 1. Global config
+
+```typescript
+const config = new Fetchtastic('https://jsonplaceholder.typicode.com')
+  .appendHeader('Accept', 'application/json')
+  .setOptions({ credentials: 'include', mode: 'cors' });
+```
+
+### 2. Endpoint level config
+
+```typescript
+const postsAPI = config
+  .searchParams({ page: 1, first: 12, sortBy: 'id' })
+  .url('/api/v1');
+
+const commentsAPI = config
+  .appendHeader('Content-Type', 'application/json')
+  .url('/api/v2');
+```
+
+### 3. Send Requests
+
+```typescript
+const blogPost = await postsAPI.get('/posts/1').json();
+
+await commentsAPI
+  .post('/posts/1/comments', {
+    text: 'Lorem ipsum dolor sit amet',
+    userId: 1,
+    postId: 2,
+  })
+  .json();
+```
+
+## Aborting a request
+
+Fetch has the ability to abort requests using AbortController and signals under
+the hood. Compatible with browsers that support
+[AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+Otherwise, you could use a
+[polyfill](https://www.npmjs.com/package/abortcontroller-polyfill).
+
+```typescript
+const controller = new AbortController();
+const api = new Fetchtastic('https://jsonplaceholder.typicode.com');
+
+api
+  .controller(controller)
+  .get('/posts/1/comments')
+  .json()
+  .then(data => storeData(data)) // should never be called
+  .catch((e: Error) => {
+    console.log(e.name); // AbortError
+    console.log(e.message); // The user aborted a request.
+  });
+// Abort it!
+controller.abort();
+```
+
+With this pattern you can also associate the same controller with multiple
+requests:
+
+```typescript
+const controller = new AbortController();
+
+api.controller(controller).get('/posts').json();
+api.controller(controller).get('/comments').json();
+// Abort both requests
+controller.abort();
+```
+
+## Type-safety
+
+You can provide an assertion function to `json` resolver in order to perform a
+runtime validation. Otherwise, the result is going to be `unknown`.
+
+For example, you can do that by using:
+
+### [Type guards](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates)
+
+```typescript
+type Post = {
+  id: number;
+  title: string;
+  body: string;
+};
+
+function isPost(data: unknown): data is Post {
+  return (
+    data != null &&
+    typeof data === 'object' &&
+    'title' in data &&
+    typeof data.title === 'string' &&
+    'body' in data &&
+    typeof data.body === 'string'
+  );
+}
+
+export function assertPosts(data: unknown) {
+  if (data && Array.isArray(data) && data.every(isPost)) {
+    return data;
+  }
+  throw new Error('Invalid data format');
+}
+
+const api = new Fetchtastic('https://jsonplaceholder.typicode.com');
+
+const posts = await api.get('/posts').json(assertPosts);
+```
+
+### [Zod](https://zod.dev/)
+
+```typescript
+import { z } from 'zod';
+
+const PostSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  body: z.string(),
+});
+
+const PostListSchema = z.array(PostSchema);
+
+const api = new Fetchtastic('https://jsonplaceholder.typicode.com');
+
+const posts = await api.get('/posts').json(PostListSchema.parse);
+```

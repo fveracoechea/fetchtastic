@@ -1,5 +1,9 @@
 import { HttpError } from './HttpError.ts';
-import { getNewSearchParms, getResponseParser, shouldStringify } from './internals.ts';
+import {
+  getNewSearchParms,
+  getResponseParser,
+  shouldStringify,
+} from './internals.ts';
 import {
   DataAssertionFn,
   FetchOptions,
@@ -9,6 +13,7 @@ import {
   SearchParamInput,
 } from './types.ts';
 
+// TODO: document this type
 export type ErrorCatcher = (
   error: HttpError,
   config: Fetchtastic,
@@ -109,7 +114,11 @@ export class Fetchtastic {
     return instance;
   }
 
-  #setMethod<Method extends HttpMethod>(method: Method, url?: string, body?: unknown) {
+  #setMethod<Method extends HttpMethod>(
+    method: Method,
+    url?: string,
+    body?: unknown,
+  ) {
     const instance = url ? this.url(url) : this.#clone();
     instance.#method = method;
     if (body !== undefined) instance.#body = body;
@@ -144,7 +153,10 @@ export class Fetchtastic {
     }
 
     for (const catcherFn of catchers) {
-      const result = catcherFn(new HttpError(this.URL, this.method, response.clone()), this);
+      const result = catcherFn(
+        new HttpError(this.URL, this.method, response.clone()),
+        this,
+      );
       if (result && result instanceof Promise) promises.push(result);
     }
 
@@ -222,7 +234,8 @@ export class Fetchtastic {
     } else {
       const oldURL = instance.#url.toString();
       const split = oldURL.split('?');
-      instance.#url = split.length > 1 ? split[0] + url + '?' + split[1] : oldURL + url;
+      instance.#url =
+        split.length > 1 ? split[0] + url + '?' + split[1] : oldURL + url;
     }
     return instance;
   }
@@ -234,7 +247,9 @@ export class Fetchtastic {
    */
   setSearchParams(data?: SearchParamInput, replace = false) {
     const instance = this.#clone();
-    const newSearchParams = data ? getNewSearchParms(data) : new URLSearchParams();
+    const newSearchParams = data
+      ? getNewSearchParms(data)
+      : new URLSearchParams();
 
     if (!replace) {
       for (const [key] of instance.#searchParams) {
@@ -294,7 +309,9 @@ export class Fetchtastic {
    */
   setOptions(options: FetchtasticOptions, replace = false) {
     const instance = this.#clone();
-    instance.#options = replace ? options : { ...instance.#options, ...options };
+    instance.#options = replace
+      ? options
+      : { ...instance.#options, ...options };
     return instance;
   }
 
