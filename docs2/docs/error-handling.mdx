@@ -26,15 +26,13 @@ try {
 }
 ```
 
-That is an improvement, but still has issues.
+It is an improvement, but still has issues.
 
-Here, we’re assuming user is in fact a user object, and assumes that we got a
-`200` response.
+Here, we’re assuming user is in fact a user object, as well that we got a `200`
+response. Fetch does not throw errors for non-200 statuses, so you could have
+actually received a `400`, `401`, `404`, `500`, or all kinds of other issues.
 
-Fetch does not throw errors for non-200 statuses, so you could have actually
-received a `400`, `401`, `404`, `500`, or all kinds of other issues.
-
-Therefore, manually checking and handling every request error code can be very
+That's why manually checking and handling every request error code can be very
 tedious:
 
 ```typescript
