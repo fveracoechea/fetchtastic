@@ -1,5 +1,5 @@
 packages:
-  - docs
+  # - docs
   - docs2
   - lib
-  - example
+  # - example

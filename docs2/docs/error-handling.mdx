@@ -119,21 +119,19 @@ expected, `.json()` will return the result of the original request or the
 replayed one.
 
 ```typescript
-const api = new Fetchtastic('/api')
-  .appendHeader('Content-Type', 'application/json')
-  .appendHeader('Authorization', getToken());
+const api = new Fetchtastic('/api');
 
 const sleep = (time: number) =>
   new Promise(resolve => setTimeout(resolve, time));
 
 export function getResource(id: number) {
-  return resource
+  return api
     .get(`/resource/${id}`)
     .onError(429, async (error, request) => {
       // Too many requests
       console.warn(error.message);
-      // wait 2 seconds
-      await sleep(2000);
+      // wait 3 seconds
+      await sleep(3000);
       // Replay the original request
       return request.resolve();
     })

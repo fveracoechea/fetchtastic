@@ -3,42 +3,35 @@ title: 'Usage Guide'
 sidebar_position: 2
 ---
 
-## Minimal example
-
-### GET
+## Basic usage
 
 ```typescript
-const api = new Fetchtastic('https://jsonplaceholder.typicode.com');
+const api = new Fetchtastic('https://jsonplaceholder.typicode.com')
+  .setOptions({ cache: 'default', mode: 'cors' })
+  .headers({
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  });
 
-const posts = await api.get('/posts').json();
-```
+// get request
+const posts = await api
+  .get('/posts')
+  .searchParams({ page: 1, per_page: 12 })
+  .json();
 
-### POST
-
-```typescript
-const api = new Fetchtastic('https://jsonplaceholder.typicode.com');
-
-const body = {
-  title: 'foo',
-  body: 'bar',
-  userId: 1,
-};
-
-await api
-  .post('/posts', body)
-  .appendHeader('Content-Type', 'application/json')
-  .resolve();
+// post request
+await api.post('/albums', { title: 'My New Album' }).resolve();
 ```
 
 ## Composable configuration
 
-You safely can reuse previous instances, since every method returns a new
-instance and does not modify the previous one.
+You safely can reuse previous instances. All methods return a new instance and
+does not modify the previous one.
 
 ### 1. Global config
 
 ```typescript
-const config = new Fetchtastic('https://jsonplaceholder.typicode.com')
+const api = new Fetchtastic('/api/v2')
   .appendHeader('Accept', 'application/json')
   .setOptions({ credentials: 'include', mode: 'cors' });
 ```
@@ -46,27 +39,21 @@ const config = new Fetchtastic('https://jsonplaceholder.typicode.com')
 ### 2. Endpoint level config
 
 ```typescript
-const postsAPI = config
-  .searchParams({ page: 1, first: 12, sortBy: 'id' })
-  .url('/api/v1');
+const postsApi = api
+  .url('/post')
+  .searchParams({ sortBy: 'date', order: 'desc' });
 
-const commentsAPI = config
-  .appendHeader('Content-Type', 'application/json')
-  .url('/api/v2');
+const albumsApi = api
+  .url('/albums')
+  .appendHeader('Content-Type', 'application/json');
 ```
 
 ### 3. Send Requests
 
 ```typescript
-const blogPost = await postsAPI.get('/posts/1').json();
+const posts = await postsApi.get().json();
 
-await commentsAPI
-  .post('/posts/1/comments', {
-    text: 'Lorem ipsum dolor sit amet',
-    userId: 1,
-    postId: 2,
-  })
-  .json();
+const album = await albumsApi.get('/10').json();
 ```
 
 ## Aborting a request
@@ -108,12 +95,34 @@ controller.abort();
 
 ## Type-safety
 
-You can provide an assertion function to `json` resolver in order to perform a
-runtime validation. Otherwise, the result is going to be `unknown`.
+By default, the `json()` method returns an `unknown` type, however there are two
+ways to infer type-safety for the resulting data types.
 
-For example, you can do that by using:
+### Generic types
 
-### [Type guards](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates)
+By providing a
+[generic](https://www.typescriptlang.org/docs/handbook/2/generics.html) type
+argument to `.json()` the resulting type will inferred:
+
+```typescript
+type Post = {
+  id: number;
+  title: string;
+  body: string;
+};
+
+const request = new Fetchtastic('https://jsonplaceholder.typicode.com');
+
+const post = await request.get('/posts/3').json<Post>();
+```
+
+### Runtime schema validation
+
+You can provide a function to the `json()` resolver that performs runtime
+validations in order to assert the returned type. Next are two examples to
+achieve that:
+
+#### [Type guards](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates)
 
 ```typescript
 type Post = {
@@ -133,19 +142,17 @@ function isPost(data: unknown): data is Post {
   );
 }
 
-export function assertPosts(data: unknown) {
-  if (data && Array.isArray(data) && data.every(isPost)) {
-    return data;
-  }
-  throw new Error('Invalid data format');
+export function assertIsPost(data: unknown) {
+  if (isPost(data)) return data;
+  else throw new Error('Invalid data');
 }
 
-const api = new Fetchtastic('https://jsonplaceholder.typicode.com');
+const request = new Fetchtastic('https://jsonplaceholder.typicode.com');
 
-const posts = await api.get('/posts').json(assertPosts);
+const post = await request.get('/posts/3').json(assertIsPost);
 ```
 
-### [Zod](https://zod.dev/)
+#### [Zod](https://zod.dev/)
 
 ```typescript
 import { z } from 'zod';
@@ -156,9 +163,5 @@ const PostSchema = z.object({
   body: z.string(),
 });
 
-const PostListSchema = z.array(PostSchema);
-
-const api = new Fetchtastic('https://jsonplaceholder.typicode.com');
-
-const posts = await api.get('/posts').json(PostListSchema.parse);
+const post = await new Fetchtastic().get('/posts/5').json(PostSchema.parse);
 ```
