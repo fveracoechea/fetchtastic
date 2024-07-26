@@ -21,6 +21,11 @@
     color: var(--ifm-color-primary-lighter);
 }
 
+[data-theme='dark'] .heroLogo svg {
+    width: 100px;
+    color: var(--ifm-color-primary);
+}
+
 @media screen and (max-width: 996px) {
     .heroBanner {
         padding: 2rem;

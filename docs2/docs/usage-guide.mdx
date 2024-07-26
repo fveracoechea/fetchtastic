@@ -14,8 +14,8 @@ const api = new Fetchtastic('https://jsonplaceholder.typicode.com')
   });
 
 // get request
-const posts = await api
-  .get('/posts')
+const albums = await api
+  .get('/albums')
   .searchParams({ page: 1, per_page: 12 })
   .json();
 

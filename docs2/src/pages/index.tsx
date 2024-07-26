@@ -1,7 +1,7 @@
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
-import Logo from '@site/static/img/logo-dark.svg';
+import HeroLogo from '@site/static/img/fetchtastic.svg';
 import Heading from '@theme/Heading';
 import Layout from '@theme/Layout';
 import clsx from 'clsx';
@@ -14,7 +14,7 @@ function HomepageHeader() {
     <header className={clsx('hero hero--dark', styles.heroBanner)}>
       <div className={clsx('container')}>
         <div className={styles.heroLogo}>
-          <Logo />
+          <HeroLogo />
         </div>
         <Heading as="h1" className="hero__title">
           {siteConfig.title}
@@ -37,8 +37,8 @@ export default function Home(): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />"
+      title="Home"
+      description="Predictable and type-safe network requests"
     >
       <HomepageHeader />
       <main>
