@@ -3,7 +3,7 @@ title: 'Usage Guide'
 sidebar_position: 2
 ---
 
-## Basic usage
+## Basic example
 
 ```typescript
 const api = new Fetchtastic('https://jsonplaceholder.typicode.com')
@@ -25,7 +25,7 @@ await api.post('/albums', { title: 'My New Album' }).resolve();
 
 ## Composable configuration
 
-You safely can reuse previous instances. All methods return a new instance and
+You can safely reuse previous instances. All methods return a new instance and
 does not modify the previous one.
 
 ### 1. Global config

@@ -4,8 +4,7 @@ import { themes as prismThemes } from 'prism-react-renderer';
 
 const config: Config = {
   title: 'Fetchtastic',
-  tagline:
-    'Small wrapper around fetch designed to perform more predictable and type- safe network requests.',
+  tagline: 'Predictable and type-safe network requests.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -61,17 +60,17 @@ const config: Config = {
     navbar: {
       title: 'Fetchtastic',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'cloud and lightning',
         src: 'img/logo.svg',
+        srcDark: 'img/logo-dark.svg',
       },
       items: [
+        { to: '/docs/usage-guide', label: 'Usage Guide', position: 'right' },
         {
-          type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
-          position: 'left',
-          label: 'Tutorial',
+          to: '/docs/category/api-reference',
+          label: 'API Reference',
+          position: 'right',
         },
-        { to: '/blog', label: 'Blog', position: 'left' },
         {
           href: 'https://github.com/fveracoechea/fetchtastic',
           label: 'GitHub',
@@ -130,8 +129,8 @@ const config: Config = {
       copyright: `Copyright © ${new Date().getFullYear()} Fetchtastic. Built with Docusaurus.`,
     },
     prism: {
-      theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
+      theme: prismThemes.oneLight,
+      darkTheme: prismThemes.oneDark,
       additionalLanguages: ['bash'],
     },
   } satisfies Preset.ThemeConfig,

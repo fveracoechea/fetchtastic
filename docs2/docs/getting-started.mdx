@@ -7,7 +7,7 @@ import Tabs from '@theme/Tabs';
 
 # Getting Started
 
-Install Fetchtastic using the package manaer of your preference:
+Install Fetchtastic using the package manager of your preference:
 
 <Tabs groupId="package-manager">
 
@@ -19,17 +19,6 @@ Install Fetchtastic using the package manaer of your preference:
 
   </TabItem>
 
-  <TabItem value="deno" label="deno">
-     
-    ```typescript
-    // remote import
-    import { Fetchtastic } from "https://deno.land/x/fetchtastic/lib/mod.ts";
-    // npm specifier
-    import { Fetchtastic } from "npm:fetchtastic";
-    ```
-
-  </TabItem>
- 
    <TabItem value="pnpm" label="pnpm">
 
     ```sh
@@ -47,13 +36,43 @@ Install Fetchtastic using the package manaer of your preference:
   </TabItem>
 </Tabs>
 
+## Import
+
+```typescript
+import { Fetchtastic } from 'fetchtastic';
+```
+
 ## Compatibility
 
 `Fetchtastic` runs everywhere fetch is available.
 
-    * Modern browsers
-    * Node.js >= v18
-    * Deno >= 0.41.0
+- Modern browsers
+- Deno
+- Node.js >= v18
+
+### Deno
+
+#### Remote import
+
+```typescript
+import { Fetchtastic } from 'https://deno.land/x/fetchtastic/lib/mod.ts';
+```
+
+#### Npm specifier
+
+```typescript
+import { Fetchtastic } from 'npm:fetchtastic';
+```
+
+#### JSR
+
+```sh
+deno add @fveracoechea/fetchtastic
+```
+
+```typescript
+import { Fetchtastic } from '@fveracoechea/fetchtastic';
+```
 
 ### Polyfills for Node.js < v18
 
@@ -68,12 +87,6 @@ global.fetch = fetch;
 global.FormData = FormData;
 ```
 
-## Import
-
-```typescript
-import { Fetchtastic } from 'fetchtastic';
-```
-
 ## Fluid interface (Chaining)
 
 Simplifies code structure, enhances readability, and improves the overall
@@ -84,8 +97,8 @@ operations.
 const request = new Fetchtastic('https://jsonplaceholder.typicode.com');
 
 const posts = await request
-  .appendHeader('Content-Type', 'application/json')
-  .searchParams({ page: 1, first: 12 })
   .get('/posts')
+  .searchParams({ page: 1, first: 12 })
+  .appendHeader('Content-Type', 'application/json')
   .json();
 ```
