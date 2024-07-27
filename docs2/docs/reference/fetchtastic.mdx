@@ -155,7 +155,7 @@ unless a catcher has been provided to handle it.
 
 ```typescript
 type ErrorCatcher = (
-  error: HttpError,
+  error: ResponseError,
   config: Fetchtastic,
 ) => void | Promise<Response | void>;
 ```

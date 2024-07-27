@@ -65,8 +65,8 @@ try {
 
 ## The solution
 
-**Fetchtastic** throws an [HttpError](/reference/http-error) when the response
-is not successful and contains helper methods to handle common codes.
+**Fetchtastic** throws an [ResponseError](/reference/http-error) when the
+response is not successful and contains helper methods to handle common codes.
 
 We call those helper methods
 [Error Catchers](/reference/fetchtastic#error-catchers):
@@ -88,7 +88,7 @@ try {
 
 } catch (error) {
   /* Uncaught errors */
-  if (error instanceof HttpError) {
+  if (error instanceof ResponseError) {
     console.log(error.url);
     console.log(error.status); // 418
     console.log(error.message); // I'm a Teapot
@@ -149,7 +149,7 @@ const api = new Fetchtastic('/api')
   .appendHeader('Content-Type', 'application/json')
   .appendHeader('Authorization', getToken());
 
-async function handleUnauthorized(error: HttpError, request: Fetchtastic) {
+async function handleUnauthorized(error: ResponseError, request: Fetchtastic) {
   // Renew credentials
   const credentials = await api.get('/renew-token').json();
   saveToken(credentials.token);
