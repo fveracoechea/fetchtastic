@@ -8,11 +8,7 @@ import { StatusCodes, isStatusCode } from './utility.ts';
  *
  * @extends Error
  */
-export class HttpError extends Error {
-  /**
-   * HTTP status code associated with the error.
-   */
-  status: number;
+export class ResponseError extends Error {
   /**
    * Indicates the HTTP method used in the failed request.
    */
@@ -21,10 +17,7 @@ export class HttpError extends Error {
    * Refers to the `Response` object received from the failed request.
    */
   response: Response;
-  /**
-   * Stores the URL of the failed request.
-   */
-  url: string;
+
   /**
    * Creates a new instance of the `HttpError` class.
    * @param {string} url - The URL of the failed request.
@@ -32,24 +25,24 @@ export class HttpError extends Error {
    * @param {Response} response - The `Response` object received from the failed request.
    * @param {string} [message] - A custom error message (optional)
    */
-  constructor(url: string, method: HttpMethod, response: Response, message?: string) {
+  constructor(response: Response, method: HttpMethod) {
     super();
-    this.name = 'HttpError';
-    this.url = url;
+    this.name = 'ResponseError';
     this.method = method;
-    this.status = response.status || 0;
     this.response = response;
-    if (message) this.message = message;
-    else this.#setMessage();
+    this.#setMessage();
   }
 
   /**
    * Sets the error message based on the context of the HTTP error.
+   * @private
    */
   #setMessage() {
     this.message = 'Fetch Error';
-    const statusText = isStatusCode(this.status) && StatusCodes[this.status];
-    if (this.status > 0 && statusText) {
+    const statusText =
+      isStatusCode(this.response.status) && StatusCodes[this.response.status];
+
+    if (this.response.status > 0 && statusText) {
       this.message = statusText;
     } else if (this.response.type === 'opaque') {
       this.message = 'Opaque Response (no-cors)';

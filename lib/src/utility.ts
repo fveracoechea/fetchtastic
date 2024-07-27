@@ -4,7 +4,10 @@ import { HttpMethod, HttpMethods } from './types.ts';
  * Type guard function, returns `true` if the given value is a valid `HttpMethod`
  */
 export function isHttpMethod(value: unknown): value is HttpMethod {
-  return typeof value === 'string' && HttpMethods.some(m => m === value.toUpperCase());
+  return (
+    typeof value === 'string' &&
+    HttpMethods.some(m => m === value.toUpperCase())
+  );
 }
 
 /**

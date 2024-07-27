@@ -1,16 +1,33 @@
+import { Fetchtastic } from './Fetchtastic.ts';
+import { ResponseError } from './ResponseError.ts';
+
 /**
  * HTTP methods supported by the HTTP protocol.
  * This array contains strings representing various HTTP methods.
  * The methods include OPTIONS, GET, HEAD, PUT, POST, DELETE, and PATCH.
  */
-export const HttpMethods = ['OPTIONS', 'GET', 'HEAD', 'PUT', 'POST', 'DELETE', 'PATCH'] as const;
+export const HttpMethods = [
+  'OPTIONS',
+  'GET',
+  'HEAD',
+  'PUT',
+  'POST',
+  'DELETE',
+  'PATCH',
+] as const;
 
 /**
  * Possible response data types that can be parsed by the client.
  * This array contains strings representing various response data types.
  * The types include ArrayBuffer, Blob, FormData, JSON, and Text.
  */
-export const ResponseParsers = ['ArrayBuffer', 'Blob', 'FormData', 'JSON', 'Text'] as const;
+export const ResponseParsers = [
+  'ArrayBuffer',
+  'Blob',
+  'FormData',
+  'JSON',
+  'Text',
+] as const;
 
 /**
  * Represents an HTTP method.
@@ -39,7 +56,10 @@ export type SearchParamInput =
  * Options for configuring the behavior of Fetchtastic.
  * This type extends RequestInit but omits 'signal' and 'method' properties.
  */
-export type FetchtasticOptions = Omit<RequestInit, 'signal' | 'method' | 'body' | 'headers'>;
+export type FetchtasticOptions = Omit<
+  RequestInit,
+  'signal' | 'method' | 'body' | 'headers'
+>;
 
 /**
  * Represents options for making a fetch request.
@@ -74,3 +94,11 @@ export type FetchRequestHeader =
  * This function takes an unknown data and returns a specified type.
  */
 export type DataAssertionFn<T = unknown> = (data: unknown) => T;
+
+/**
+ * Error catcher callback used to handle abort errors
+ * */
+export type ErrorCatcher = (
+  error: ResponseError,
+  config: Fetchtastic,
+) => void | Promise<Response | void>;

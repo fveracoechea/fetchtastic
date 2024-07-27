@@ -1,4 +1,4 @@
-import { HttpError } from './HttpError.ts';
+import { ResponseError } from './ResponseError.ts';
 import {
   getNewSearchParms,
   getResponseParser,
@@ -6,18 +6,13 @@ import {
 } from './internals.ts';
 import {
   DataAssertionFn,
+  ErrorCatcher,
   FetchOptions,
   FetchRequestHeader,
   FetchtasticOptions,
   HttpMethod,
   SearchParamInput,
 } from './types.ts';
-
-// TODO: document this type
-export type ErrorCatcher = (
-  error: HttpError,
-  config: Fetchtastic,
-) => void | Promise<Response | void>;
 
 /**
  * Represents an HTTP request configuration.
@@ -147,21 +142,17 @@ export class Fetchtastic {
   async #handleError(response: Response) {
     const promises: Promise<Response | void>[] = [];
     const catchers = this.#catchers.get(response.status);
+    const res = response.clone();
 
-    if (!catchers) {
-      throw new HttpError(this.URL, this.method, response.clone());
+    if (!catchers || catchers.size < 1) {
+      throw new ResponseError(res, this.method);
     }
-
-    for (const catcherFn of catchers) {
-      const result = catcherFn(
-        new HttpError(this.URL, this.method, response.clone()),
-        this,
-      );
+    for (const handler of catchers) {
+      const result = handler(new ResponseError(res, this.method), this);
       if (result && result instanceof Promise) promises.push(result);
     }
-
-    const results = await Promise.all(promises);
-    return results.findLast(res => res instanceof Response);
+    const results = await Promise.allSettled(promises);
+    return results.findLast(res => res.status === 'fulfilled')?.value;
   }
 
   /**
@@ -405,11 +396,8 @@ export class Fetchtastic {
    */
   onError(status: number, catcher: ErrorCatcher) {
     const handlers = this.#catchers.get(status);
-    if (handlers && handlers.size > 0) {
-      handlers.add(catcher);
-    } else {
-      this.#catchers.set(status, new Set([catcher]));
-    }
+    if (handlers && handlers.size > 0) handlers.add(catcher);
+    else this.#catchers.set(status, new Set([catcher]));
     return this;
   }
 

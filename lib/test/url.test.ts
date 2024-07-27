@@ -4,7 +4,9 @@ describe('Url operator', () => {
   it('Concats', () => {
     const expected = 'https://catfact.ninja/breeds/77';
 
-    const config = new Fetchtastic('https://catfact.ninja').url('/breeds').url('/77');
+    const config = new Fetchtastic('https://catfact.ninja')
+      .url('/breeds')
+      .url('/77');
 
     expect(config.URL).toBe(expected);
   });
@@ -12,7 +14,9 @@ describe('Url operator', () => {
   it('Concats with put', () => {
     const expected = 'https://catfact.ninja/breeds/77';
 
-    const config = new Fetchtastic('https://catfact.ninja').url('/breeds').put('/77', {});
+    const config = new Fetchtastic('https://catfact.ninja')
+      .url('/breeds')
+      .put('/77', {});
 
     expect(config.URL).toBe(expected);
   });
@@ -20,7 +24,9 @@ describe('Url operator', () => {
   it('Concats with patch', () => {
     const expected = 'https://catfact.ninja/breeds/77';
 
-    const config = new Fetchtastic('https://catfact.ninja').url('/breeds').patch('/77');
+    const config = new Fetchtastic('https://catfact.ninja')
+      .url('/breeds')
+      .patch('/77');
 
     expect(config.URL).toBe(expected);
   });
@@ -48,7 +54,8 @@ describe('Url operator', () => {
   });
 
   it('Includes search params', () => {
-    const expected = 'https://catfact.ninja/breeds?perPage=12&offset=2&first=10';
+    const expected =
+      'https://catfact.ninja/breeds?perPage=12&offset=2&first=10';
 
     const config = new Fetchtastic('https://catfact.ninja')
       .setSearchParams({ perPage: 12, offset: 2 })
