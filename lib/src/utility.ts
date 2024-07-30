@@ -15,12 +15,11 @@ export function isHttpMethod(value: unknown): value is HttpMethod {
  * This object maps HTTP status code numbers to their standard textual descriptions.
  * Each key represents an HTTP status code, and its corresponding value is the description.
  * The keys are numeric values, and the values are strings.
- * For example:
- * {
- *   200: 'OK',
- *   404: 'Not Found',
- *   ...
- * }
+ *
+ * ```ts
+ * const statusText = StatusCodes[501];
+ * console.log(description); // 'Not Implemented'
+ * ```
  */
 export const StatusCodes = Object.freeze({
   100: 'Continue',

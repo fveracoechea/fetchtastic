@@ -98,7 +98,8 @@ const request = new Fetchtastic('https://jsonplaceholder.typicode.com');
 
 const posts = await request
   .get('/posts')
-  .searchParams({ page: 1, first: 12 })
+  .setSearchParams({ page: 1, first: 12 })
   .appendHeader('Content-Type', 'application/json')
+  .notFound(() => Response.json({ message: 'Record not found' }))
   .json();
 ```

@@ -17,29 +17,10 @@ export const HttpMethods = [
 ] as const;
 
 /**
- * Possible response data types that can be parsed by the client.
- * This array contains strings representing various response data types.
- * The types include ArrayBuffer, Blob, FormData, JSON, and Text.
- */
-export const ResponseParsers = [
-  'ArrayBuffer',
-  'Blob',
-  'FormData',
-  'JSON',
-  'Text',
-] as const;
-
-/**
  * Represents an HTTP method.
  * This type is a union of strings representing various HTTP methods.
  */
 export type HttpMethod = (typeof HttpMethods)[number];
-
-/**
- * Represents a response parser for handling response data.
- * This type is a union of strings representing various response data types.
- */
-export type ResponseParser = (typeof ResponseParsers)[number];
 
 /**
  * Represents various types that can be used as search parameters in a URL.
@@ -60,14 +41,6 @@ export type FetchtasticOptions = Omit<
   RequestInit,
   'signal' | 'method' | 'body' | 'headers'
 >;
-
-/**
- * Represents options for making a fetch request.
- * This type extends RequestInit and includes the 'method' property as HttpMethod.
- */
-export interface FetchOptions extends RequestInit {
-  method: HttpMethod;
-}
 
 /**
  * Represents common request headers used in HTTP requests.
@@ -96,9 +69,9 @@ export type FetchRequestHeader =
 export type DataAssertionFn<T = unknown> = (data: unknown) => T;
 
 /**
- * Error catcher callback used to handle abort errors
+ * Callback function used to handle fetch response errors.
  * */
-export type ErrorCatcher = (
+export type CatcherCallback = (
   error: ResponseError,
   config: Fetchtastic,
 ) => void | Promise<Response | void>;

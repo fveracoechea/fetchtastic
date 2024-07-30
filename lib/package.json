@@ -26,6 +26,7 @@
     "node": ">=18"
   },
   "scripts": {
+    "gen-docs": "typedoc",
     "dev": "tsup --watch",
     "type-check": "tsc --project tsconfig.json",
     "build": "tsup",
@@ -46,11 +47,11 @@
     "jest": "^29.7.0",
     "prettier": "3.2.5",
     "rimraf": "^5.0.5",
-    "ts-jest": "^29.1.2",
+    "ts-jest": "^29.2.3",
     "ts-node": "^10.9.2",
     "tslib": "^2.6.2",
     "tsup": "^8.2.3",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.3"
   },
   "keywords": [
     "fetch",

@@ -65,12 +65,11 @@ try {
 
 ## The solution
 
-**Fetchtastic** throws an [ResponseError](/docs/reference/response-error) when
+**Fetchtastic** throws an [ResponseError](/docs/api/classes/ResponseError) when
 the response is not successful and contains helper methods to handle common
 codes.
 
-We call those helper methods
-[Error Catchers](/docs/reference/fetchtastic#error-catchers):
+We call those helper methods **Error Catchers**:
 
 ```typescript
 try {
@@ -90,12 +89,21 @@ try {
 } catch (error) {
   /* Uncaught errors */
   if (error instanceof ResponseError) {
-    console.log(error.url);
-    console.log(error.status); // 418
     console.log(error.message); // I'm a Teapot
+    console.log(error.response.status); // 418
+    console.log(await error.response.json())
   }
 }
 ```
+
+### Key Points
+
+- Error catchers are registered once and shared across instances.
+- The original request is passed along with the error, allowing for the creation
+  of reusable error handling functions.
+- Error catchers can be overwritten for specific instances as needed.
+- Catchers are optional, but if none are provided an error will still be thrown
+  for http error codes and it will be up to you to catch it.
 
 ### Fallback response
 
@@ -142,23 +150,41 @@ export function getResource(id: number) {
 
 ### Reusable error-catchers
 
+Error catchers are shared through instances, so you only need to register them
+once. They can also be overwritten if needed.
+
 The original `request` is passed along the error and can be used to create
 reusable functions:
 
 ```typescript
-const api = new Fetchtastic('/api')
-  .appendHeader('Content-Type', 'application/json')
-  .appendHeader('Authorization', getToken());
+let accessToken = null;
 
 async function handleUnauthorized(error: ResponseError, request: Fetchtastic) {
   // Renew credentials
-  const credentials = await api.get('/renew-token').json();
-  saveToken(credentials.token);
+  const data = await api.get('/renew-token').json();
+  accessToken = data.token;
   // Replay the original request with new credentials
-  return request.headers({ Authorization: credentials.token }).resolve();
+  return request.setHeaders({ Authorization: accessToken }).resolve();
 }
 
-const posts = api.url('/posts').unauthorized(handleUnauthorized);
+const api = new Fetchtastic('/api')
+  .appendHeader('Authorization', accessToken)
+  .unauthorized(handleUnauthorized);
 
-const albums = api.url('/albums').unauthorized(handleUnauthorized);
+// these will handle unauthorized requests
+const postsApi = api.url('/posts');
+const albumsApi = api.url('/albums');
+
+// Overwrite error catchers for specific instances
+const commentsApi = api
+  .url('/comments')
+  .unauthorized(async (error, request) => {
+    if (isLoggedIn()) {
+      return handleUnauthorized(error, request);
+    }
+
+    return Response.json({
+      message: 'Please login to your account',
+    });
+  });
 ```

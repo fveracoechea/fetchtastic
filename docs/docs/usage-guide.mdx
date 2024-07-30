@@ -13,46 +13,64 @@ const api = new Fetchtastic('https://jsonplaceholder.typicode.com')
     'Content-Type': 'application/json',
   });
 
-// get request
-const albums = await api
+// Send GET request with URL query params, resolve as JSON object
+const json = await api
   .get('/albums')
-  .searchParams({ page: 1, per_page: 12 })
+  .setSearchParams({ page: 1, per_page: 12 })
   .json();
 
-// post request
-await api.post('/albums', { title: 'My New Album' }).resolve();
+// Send POST request with JSON body, resolve as raw `Response`
+const response = await api
+  .url('/posts/1/comments')
+  .post({ title: 'foo', content: 'bar' })
+  .resolve();
+
+// Send PUT request with JSON body, resolve as plain text
+const text = await api
+  .url('/albums/20')
+  .put({ title: 'foo', body: 'bar', userId: 3 })
+  .text();
 ```
 
 ## Composable configuration
 
-You can safely reuse previous instances. All methods return a new instance and
-does not modify the previous one.
+You can safely reuse previous instances.
+
+All methods return a new instance and does not modify the previous one.
 
 ### 1. Global config
 
 ```typescript
 const api = new Fetchtastic('/api/v2')
-  .appendHeader('Accept', 'application/json')
-  .setOptions({ credentials: 'include', mode: 'cors' });
+  .setHeaders({
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  })
+  .unauthorized(async error => {
+    console.log(error.message, await error.response.json());
+    redirec('/login');
+  });
 ```
 
 ### 2. Endpoint level config
 
 ```typescript
 const postsApi = api
-  .url('/post')
-  .searchParams({ sortBy: 'date', order: 'desc' });
+  .url('/posts')
+  .setSearchParams({ sortBy: 'date', order: 'desc' });
 
 const albumsApi = api
   .url('/albums')
-  .appendHeader('Content-Type', 'application/json');
+  .setOptions({ cache: 'default', mode: 'cors' });
 ```
 
 ### 3. Send Requests
 
 ```typescript
+// URL: /api/v2/posts?sortBy=date&order=desc
 const posts = await postsApi.get().json();
 
+// URL: /api/v2/albums/10
 const album = await albumsApi.get('/10').json();
 ```
 
@@ -69,8 +87,8 @@ const controller = new AbortController();
 const api = new Fetchtastic('https://jsonplaceholder.typicode.com');
 
 api
-  .controller(controller)
   .get('/posts/1/comments')
+  .controller(controller)
   .json()
   .then(data => storeData(data)) // should never be called
   .catch((e: Error) => {
@@ -125,31 +143,30 @@ achieve that:
 #### [Type guards](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates)
 
 ```typescript
-type Post = {
+const request = new Fetchtastic('https://jsonplaceholder.typicode.com');
+
+type Album = {
   id: number;
   title: string;
-  body: string;
 };
 
-function isPost(data: unknown): data is Post {
+function isAlbum(data: unknown): data is Album {
   return (
     data != null &&
     typeof data === 'object' &&
+    'id' in data &&
+    typeof data.id === 'number' &&
     'title' in data &&
-    typeof data.title === 'string' &&
-    'body' in data &&
-    typeof data.body === 'string'
+    typeof data.title === 'string'
   );
 }
 
-export function assertIsPost(data: unknown) {
-  if (isPost(data)) return data;
+export function assertIsAlbum(data: unknown) {
+  if (isAlbum(data)) return data;
   else throw new Error('Invalid data');
 }
 
-const request = new Fetchtastic('https://jsonplaceholder.typicode.com');
-
-const post = await request.get('/posts/3').json(assertIsPost);
+const album = await request.get('/albums/3').json(assertIsAlbum);
 ```
 
 #### [Zod](https://zod.dev/)
@@ -157,11 +174,13 @@ const post = await request.get('/posts/3').json(assertIsPost);
 ```typescript
 import { z } from 'zod';
 
+const request = new Fetchtastic('https://jsonplaceholder.typicode.com');
+
 const PostSchema = z.object({
   id: z.number(),
   title: z.string(),
   body: z.string(),
 });
 
-const post = await new Fetchtastic().get('/posts/5').json(PostSchema.parse);
+const post = await request.get('/posts/5').json(PostSchema.parse);
 ```

@@ -13,6 +13,9 @@
     --ifm-color-primary-light: #3a67ca;
     --ifm-color-primary-lighter: #436ecc;
     --ifm-color-primary-lightest: #5f84d4;
+
+    --ifm-global-shadow-lw: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+    /*--ifm-color-gray-300: #282c34;*/
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */

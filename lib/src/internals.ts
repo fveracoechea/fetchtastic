@@ -1,4 +1,12 @@
-import { ResponseParser, SearchParamInput } from './types.ts';
+import { HttpMethod, SearchParamInput } from './types.ts';
+
+/**
+ * Represents options for making a fetch request.
+ * This type extends RequestInit and includes the 'method' property as HttpMethod.
+ */
+export type FetchOptions = Omit<RequestInit, 'method'> & {
+  method: HttpMethod;
+};
 
 export function getNewSearchParms(data: SearchParamInput) {
   let result: string | string[][] | URLSearchParams;
@@ -20,19 +28,6 @@ export function getNewSearchParms(data: SearchParamInput) {
   }
 
   return new URLSearchParams(result);
-}
-
-export function getResponseParser(parser: ResponseParser) {
-  return (response: Response) => {
-    const cases = {
-      JSON: () => response.json(),
-      Text: () => response.text(),
-      ArrayBuffer: () => response.arrayBuffer(),
-      Blob: () => response.blob(),
-      FormData: () => response.formData(),
-    };
-    return cases[parser]();
-  };
 }
 
 export function shouldStringify(body: unknown, headers: Headers): boolean {

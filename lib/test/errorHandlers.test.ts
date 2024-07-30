@@ -67,8 +67,8 @@ test('Catchers are called when response is not OK', async () => {
   expect(result).toBe('Testing Not Found');
   expect(otherCatcher1).not.toHaveBeenCalled();
   expect(otherCatcher2).not.toHaveBeenCalled();
-  expect(notFoundCatcher1).toHaveBeenCalled();
-  expect(notFoundCatcher2).toHaveBeenCalled();
+  expect(notFoundCatcher1).not.toHaveBeenCalled();
+  expect(notFoundCatcher2).not.toHaveBeenCalled();
   expect(notFoundCatcher3).toHaveBeenCalled();
 });
 

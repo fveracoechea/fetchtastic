@@ -30,6 +30,28 @@ const config: Config = {
     locales: ['en'],
   },
 
+  plugins: [
+    [
+      'docusaurus-plugin-typedoc',
+      {
+        entryPoints: ['../lib/src/index.ts'],
+        tsconfig: '../lib/tsconfig.json',
+        skipErrorChecking: true,
+        readme: 'none',
+        sidebar: { pretty: true },
+        indexFormat: 'table',
+        parametersFormat: 'table',
+        enumMembersFormat: 'table',
+        useCodeBlocks: true,
+        disableSources: true,
+        textContentMappings: {
+          'title.indexPage': 'API Reference',
+          'title.memberPage': '{name}',
+        },
+      },
+    ],
+  ],
+
   presets: [
     [
       'classic',
@@ -68,7 +90,7 @@ const config: Config = {
       items: [
         { to: '/docs/usage-guide', label: 'Usage Guide', position: 'right' },
         {
-          to: '/docs/category/api-reference',
+          to: '/docs/api',
           label: 'API Reference',
           position: 'right',
         },

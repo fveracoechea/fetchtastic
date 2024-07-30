@@ -16,7 +16,7 @@ describe('Url operator', () => {
 
     const config = new Fetchtastic('https://catfact.ninja')
       .url('/breeds')
-      .put('/77', {});
+      .put({}, '/77');
 
     expect(config.URL).toBe(expected);
   });
@@ -26,7 +26,7 @@ describe('Url operator', () => {
 
     const config = new Fetchtastic('https://catfact.ninja')
       .url('/breeds')
-      .patch('/77');
+      .patch(null, '/77');
 
     expect(config.URL).toBe(expected);
   });
@@ -37,7 +37,7 @@ describe('Url operator', () => {
     const config = new Fetchtastic('https://catfact.ninja')
       .get('/test')
       .url('/breeds')
-      .options('/77');
+      .options(null, '/77');
 
     expect(config.URL).toBe(expected);
   });
