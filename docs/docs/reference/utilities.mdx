@@ -1,0 +1,49 @@
+# Utilities
+
+## isHttpMethod
+
+Type guard. Returns `true` if the given value is a valid `HttpMethod`.
+
+```typescript
+export function isHttpMethod(value: unknown): value is HttpMethod;
+```
+
+The `isHttpMethod` function checks whether the provided value is a valid
+`HttpMethod`. It validates that the value is a string and matches one of the
+predefined `HttpMethods`.
+
+```typescript
+const result1 = isHttpMethod('GET'); // true
+const result2 = isHttpMethod('INVALID'); // false
+```
+
+## StatusCodes
+
+A readonly object of HTTP status codes and their corresponding descriptions.
+
+```typescript
+const StatusCodes = {
+  100: 'Continue',
+  101: 'Switching Protocols',
+  // ...
+};
+```
+
+The `StatusCodes` map provides a mapping of HTTP status codes to their
+descriptive phrases. It can be used to retrieve the description for a given
+status code.
+
+```typescript
+const description = StatusCodes[200];
+console.log(description); // Output: 'OK'
+```
+
+## isStatusCode
+
+Type guard. Checks ifthe given input is a valid HTTP status code. The input is
+considered valid if it is a number and exists as a key in the `StatusCodes`
+object.
+
+```typescript
+function isStatusCode(key: unknown): key is keyof typeof StatusCodes;
+```

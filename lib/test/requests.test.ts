@@ -1,4 +1,4 @@
-import { Fetchtastic, HttpError } from '../mod.ts';
+import { Fetchtastic, ResponseError } from '../mod.ts';
 
 const fetchMock = jest.fn();
 global.fetch = fetchMock;
@@ -33,7 +33,10 @@ const data = {
 };
 
 const endpoint = 'https://catfact.ninja/breeds';
-const headers = { 'content-type': 'application/json', accept: 'application/json' };
+const headers = {
+  'content-type': 'application/json',
+  accept: 'application/json',
+};
 const body = {
   breed: 'American Bobtail',
   country: 'United States',
@@ -81,15 +84,15 @@ describe('GET Requests', () => {
       ),
     );
     // checks the response
-    expect(getConfig.get().json()).rejects.toBeInstanceOf(HttpError);
+    expect(getConfig.get().json()).rejects.toBeInstanceOf(ResponseError);
 
     await getConfig
       .get()
       .json()
-      .catch((error: HttpError) => {
+      .catch((error: ResponseError) => {
         expect(error.method).toBe('GET');
-        expect(error.status).toBe(404);
-        expect(error.url).toBe(endpoint);
+        expect(error.response.status).toBe(404);
+        expect(error.response.url).toBe(endpoint);
         expect(error.message).toBe('Not Found');
       });
 
@@ -103,7 +106,9 @@ describe('GET Requests', () => {
 
   test('Fetch Error', () => {
     // simulates fetch failure
-    fetchMock.mockImplementationOnce(() => Promise.reject(new Error('Failed to fetch')));
+    fetchMock.mockImplementationOnce(() =>
+      Promise.reject(new Error('Failed to fetch')),
+    );
     // checks the response
     expect(getConfig.get().json()).rejects.toBeInstanceOf(Error);
     expect(fetchMock).toHaveBeenCalledWith(endpoint, {
@@ -147,15 +152,15 @@ describe('POST Requests', () => {
     );
 
     // checks the response
-    expect(postConfig.post().json()).rejects.toBeInstanceOf(HttpError);
+    expect(postConfig.post().json()).rejects.toBeInstanceOf(ResponseError);
 
     await postConfig
       .post()
       .json()
-      .catch((error: HttpError) => {
+      .catch((error: ResponseError) => {
         expect(error.method).toBe('POST');
-        expect(error.status).toBe(404);
-        expect(error.url).toBe(endpoint);
+        expect(error.response.status).toBe(404);
+        expect(error.response.url).toBe(endpoint);
         expect(error.message).toBe('Not Found');
       });
 
@@ -169,7 +174,9 @@ describe('POST Requests', () => {
 
   test('Fetch Error', async () => {
     // simulates fetch failure
-    fetchMock.mockImplementation(() => Promise.reject(new Error('Failed to fetch')));
+    fetchMock.mockImplementation(() =>
+      Promise.reject(new Error('Failed to fetch')),
+    );
     // checks the response
     expect(postConfig.post().json()).rejects.toBeInstanceOf(Error);
 

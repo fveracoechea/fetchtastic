@@ -36,7 +36,7 @@ describe('Body', () => {
 
     const config = new Fetchtastic(endpoint)
       .appendHeader('Content-Type', 'application/json')
-      .post('/cats', data);
+      .post(data, '/cats');
 
     expect(config.body).toBe(data);
 
@@ -88,7 +88,7 @@ describe('Body', () => {
 
     const config = new Fetchtastic('https://catfact.ninja')
       .appendHeader('Content-Type', 'text/html')
-      .put('', stream)
+      .put(stream)
       .setOptions({ cache: 'no-cache' });
 
     expect(config.body).toBeInstanceOf(ReadableStream);
@@ -105,7 +105,7 @@ describe('Body', () => {
     );
 
     const config = new Fetchtastic('https://catfact.ninja')
-      .delete('/delete', { fake: '' })
+      .delete({ fake: '' }, '/delete')
       .appendHeader('Content-Type', 'text/html')
       .setBody(data)
       .unauthorized(() => console.error('unauthorized'));

@@ -1,4 +1,4 @@
-import { Fetchtastic, HttpError } from '../mod.ts';
+import { Fetchtastic, ResponseError } from '../mod.ts';
 
 // SET UP
 
@@ -67,8 +67,8 @@ test('Catchers are called when response is not OK', async () => {
   expect(result).toBe('Testing Not Found');
   expect(otherCatcher1).not.toHaveBeenCalled();
   expect(otherCatcher2).not.toHaveBeenCalled();
-  expect(notFoundCatcher1).toHaveBeenCalled();
-  expect(notFoundCatcher2).toHaveBeenCalled();
+  expect(notFoundCatcher1).not.toHaveBeenCalled();
+  expect(notFoundCatcher2).not.toHaveBeenCalled();
   expect(notFoundCatcher3).toHaveBeenCalled();
 });
 
@@ -81,10 +81,10 @@ test('Catcher args are correct', done => {
     ),
   );
 
-  function badRequestCatcher(error: HttpError, config: Fetchtastic) {
-    expect(error).toBeInstanceOf(HttpError);
-    expect(error.status).toBe(400);
+  function badRequestCatcher(error: ResponseError, config: Fetchtastic) {
+    expect(error).toBeInstanceOf(ResponseError);
     expect(error.response).toBeInstanceOf(Response);
+    expect(error.response.status).toBe(400);
     expect(config).toBeInstanceOf(Fetchtastic);
     done();
   }
