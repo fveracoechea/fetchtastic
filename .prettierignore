@@ -5,3 +5,6 @@ dist/
 deployment/
 .changeset/
 .turbo/
+
+docs/docs/api
+docs/.docusaurus
