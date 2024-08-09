@@ -29,6 +29,6 @@
 
 | Function | Description |
 | ------ | ------ |
-| [fetchtastic](functions/fetchtastic.md) | Creates a new instance of Fetchtastic, that represents an HTTP request configuration. |
+| [fetchtastic](functions/fetchtastic.md) | Creates a new instance of Fetchtastic which represents an HTTP request configuration. |
 | [isHttpMethod](functions/isHttpMethod.md) | Type guard function, returns `true` if the given value is a valid `HttpMethod` |
 | [isStatusCode](functions/isStatusCode.md) | Type guard function to check if the input is a valid HTTP status code. |

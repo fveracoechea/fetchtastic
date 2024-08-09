@@ -4,7 +4,7 @@
 function fetchtastic(baseUrl?, controller?): Fetchtastic
 ```
 
-Creates a new instance of Fetchtastic, that represents an HTTP request configuration.
+Creates a new instance of Fetchtastic which represents an HTTP request configuration.
 
 ## Parameters
 
