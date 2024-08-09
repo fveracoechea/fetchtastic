@@ -1,10 +1,10 @@
-import { Fetchtastic } from '../mod.ts';
+import { Fetchtastic, fetchtastic } from '../mod.ts';
 
 describe('Url operator', () => {
   it('Concats', () => {
     const expected = 'https://catfact.ninja/breeds/77';
 
-    const config = new Fetchtastic('https://catfact.ninja')
+    const config = fetchtastic('https://catfact.ninja')
       .url('/breeds')
       .url('/77');
 

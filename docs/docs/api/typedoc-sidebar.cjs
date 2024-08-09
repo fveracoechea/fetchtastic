@@ -75,6 +75,11 @@ const typedocSidebar = { items: [
     "items": [
       {
         "type": "doc",
+        "id": "api/functions/fetchtastic",
+        "label": "fetchtastic"
+      },
+      {
+        "type": "doc",
         "id": "api/functions/isHttpMethod",
         "label": "isHttpMethod"
       },

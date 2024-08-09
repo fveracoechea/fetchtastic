@@ -1,8 +1,8 @@
-import { Fetchtastic } from '../mod.ts';
+import { Fetchtastic, fetchtastic } from '../mod.ts';
 
 describe('Headers operator', () => {
   it('Concats', async () => {
-    const config = new Fetchtastic()
+    const config = fetchtastic()
       .setHeaders({
         'Content-Type': 'application/json',
       })

@@ -133,7 +133,7 @@ Gets the URL search parameters.
 #### appendHeader(name, value)
 
 ```ts
-appendHeader(name, value): this
+appendHeader(name, value): Fetchtastic
 ```
 
 Appends a header to the request, it uses `Headers.append` under the hood.
@@ -147,12 +147,12 @@ Appends a header to the request, it uses `Headers.append` under the hood.
 
 ##### Returns
 
-`this`
+[`Fetchtastic`](Fetchtastic.md)
 
 #### appendHeader(name, value)
 
 ```ts
-appendHeader(name, value): this
+appendHeader(name, value): Fetchtastic
 ```
 
 ##### Parameters
@@ -164,7 +164,7 @@ appendHeader(name, value): this
 
 ##### Returns
 
-`this`
+[`Fetchtastic`](Fetchtastic.md)
 
 ***
 
@@ -174,7 +174,7 @@ appendHeader(name, value): this
 appendSearchParam(name, value): Fetchtastic
 ```
 
-Appends a search parameter to the request.
+Appends a search parameter to the request. it uses `URLSearchParams.append` under the hood.
 
 #### Parameters
 
@@ -316,7 +316,7 @@ Deletes a search parameter from the request.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `name` | `string` | The name of the search parameter to delete. |
+| `name` | `string` | The name of the search parameter to deletee |
 
 #### Returns
 
@@ -748,7 +748,7 @@ Handles 401 unauthorized HTTP responses
 #### url(url)
 
 ```ts
-url(url): this
+url(url): Fetchtastic
 ```
 
 Sets or modifies the URL in the request configuration.
@@ -761,7 +761,7 @@ Sets or modifies the URL in the request configuration.
 
 ##### Returns
 
-`this`
+[`Fetchtastic`](Fetchtastic.md)
 
 A new instance with the updated URL configuration.
 
@@ -781,7 +781,7 @@ request.url('/newpath', true);
 #### url(url, replace)
 
 ```ts
-url(url, replace?): this
+url(url, replace?): Fetchtastic
 ```
 
 ##### Parameters
@@ -793,4 +793,4 @@ url(url, replace?): this
 
 ##### Returns
 
-`this`
+[`Fetchtastic`](Fetchtastic.md)

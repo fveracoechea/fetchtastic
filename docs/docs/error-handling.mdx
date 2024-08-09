@@ -1,7 +1,10 @@
 ---
 title: 'Error Handling'
-sidebar_position: 3
 ---
+
+This section is dedicated to guiding you through the common challenges you might
+face when dealing with errors using the fetch API, and how Fetchtastic
+simplifies and enhances this process.
 
 ## The problem
 
@@ -67,15 +70,13 @@ try {
 
 **Fetchtastic** throws an [ResponseError](/docs/api/classes/ResponseError) when
 the response is not successful and contains helper methods to handle common
-codes.
-
-We call those helper methods **Error Catchers**:
+codes. We call those helper methods
+[Error Catchers](/docs/core-concepts#error-catchers):
 
 ```typescript
 try {
-  const request = new Fetchtastic('...');
 
-  const response = await request
+  const response = await fetchtastic('...')
     .badRequest(error => /* 400 */)
     .unauthorized(error => /* 401 */)
     .forbidden(error => /* 403 */)
@@ -96,21 +97,12 @@ try {
 }
 ```
 
-### Key Points
-
-- Error catchers are registered once and shared across instances.
-- The original request is passed along with the error, allowing for the creation
-  of reusable error handling functions.
-- Error catchers can be overwritten for specific instances as needed.
-- Catchers are optional, but if none are provided an error will still be thrown
-  for http error codes and it will be up to you to catch it.
-
 ### Fallback response
 
 An alternative response can be returned from error catchers.
 
 ```typescript
-const resource = new Fetchtastic('/api/attributes')
+const resource = fetchtastic('/api/attributes')
   .notFound(() =>
     Response.json({
       message: 'No data has been found',
@@ -128,7 +120,7 @@ expected, `.json()` will return the result of the original request or the
 replayed one.
 
 ```typescript
-const api = new Fetchtastic('/api');
+const api = fetchtastic('/api');
 
 const sleep = (time: number) =>
   new Promise(resolve => setTimeout(resolve, time));
@@ -167,7 +159,7 @@ async function handleUnauthorized(error: ResponseError, request: Fetchtastic) {
   return request.setHeaders({ Authorization: accessToken }).resolve();
 }
 
-const api = new Fetchtastic('/api')
+const api = fetchtastic('/api')
   .appendHeader('Authorization', accessToken)
   .unauthorized(handleUnauthorized);
 

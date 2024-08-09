@@ -78,6 +78,11 @@ const config: Config = {
   ],
 
   themeConfig: {
+    colorMode: {
+      defaultMode: 'dark',
+      disableSwitch: false,
+      respectPrefersColorScheme: false,
+    },
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
@@ -89,6 +94,11 @@ const config: Config = {
       },
       items: [
         { to: '/docs/usage-guide', label: 'Usage Guide', position: 'right' },
+        {
+          to: '/docs/core-concepts',
+          label: 'Core Concepts',
+          position: 'right',
+        },
         {
           to: '/docs/api',
           label: 'API Reference',

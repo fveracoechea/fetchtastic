@@ -181,8 +181,8 @@ export class Fetchtastic {
    * @param name - The name of the header.
    * @param value - The value of the header.
    */
-  appendHeader(name: FetchRequestHeader, value: string): this;
-  appendHeader(name: string, value: string): this;
+  appendHeader(name: FetchRequestHeader, value: string): Fetchtastic;
+  appendHeader(name: string, value: string): Fetchtastic;
   appendHeader(name: string, value: string) {
     const instance = this.#clone();
     instance.#headers.append(name, value);
@@ -220,8 +220,8 @@ export class Fetchtastic {
    * request.url('/newpath', true);
    * ```
    */
-  url(url: URL): this;
-  url(url: string, replace?: boolean): this;
+  url(url: URL): Fetchtastic;
+  url(url: string, replace?: boolean): Fetchtastic;
   url(url: string | URL, replace = false) {
     const instance = this.#clone();
     if (replace || url instanceof URL) {
@@ -260,7 +260,7 @@ export class Fetchtastic {
   }
 
   /**
-   * Appends a search parameter to the request.
+   * Appends a search parameter to the request. it uses `URLSearchParams.append` under the hood.
    * @param name - The name of the search parameter.
    * @param value - The value of the search parameter.
    */
@@ -489,4 +489,16 @@ export class Fetchtastic {
   serverError(catcher: CatcherCallback) {
     return this.onError(500, catcher);
   }
+}
+
+/**
+ * Creates a new instance of Fetchtastic which represents an HTTP request configuration.
+ * @param baseUrl - The base `URL` for the requests.
+ * @param controller - An optional `AbortController` instance for aborting the request.
+ */
+export function fetchtastic(
+  baseUrl?: string | URL,
+  controller?: AbortController,
+) {
+  return new Fetchtastic(baseUrl, controller);
 }

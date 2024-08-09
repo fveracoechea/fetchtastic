@@ -20,8 +20,8 @@ network requests.
 
 ## 📖 Documentation
 
-Visit [fetchtastic-docs.vercel.app](https://fetchtastic-docs.vercel.app/) to
-view the full documentation.
+Visit [fetchtastic-docs.vercel.app](https://fveracoechea.github.io/fetchtastic/)
+to view the full documentation.
 
 ## ⚡Getting Started
 
@@ -46,23 +46,20 @@ yarn add fetchtastic
 deno
 
 ```typescript
-import { Fetchtastic } from 'https://deno.land/x/fetchtastic/lib/mod.ts';
+import { fetchtastic } from 'https://deno.land/x/fetchtastic/lib/mod.ts';
 ```
 
 ### Basic usage
 
 ```typescript
-const api = new Fetchtastic('https://jsonplaceholder.typicode.com')
+const api = fetchtastic('https://jsonplaceholder.typicode.com')
   .setOptions({ cache: 'default', mode: 'cors' })
-  .setHeaders({
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-  });
+  .appendHeader('Content-Type', 'application/json');
 
-const blogData = await api
+const blogPosts = await api
   .get('/posts')
   .setSearchParams({ page: 1, per_page: 12 })
-  .json(PostSchema.parse);
+  .json();
 
 await api.url('/albums').post({ title: 'My New Album' }).resolve();
 ```

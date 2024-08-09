@@ -1,11 +1,16 @@
 ---
 sidebar_position: 1
+title: Getting Started
 ---
 
 import TabItem from '@theme/TabItem';
 import Tabs from '@theme/Tabs';
 
-# Getting Started
+In this guide, you’ll quickly learn how to get up and running with Fetchtastic.
+Let’s dive in and start making your network requests declarative and
+predictable!
+
+## Installation
 
 Install Fetchtastic using the package manager of your preference:
 
@@ -39,29 +44,36 @@ Install Fetchtastic using the package manager of your preference:
 ## Import
 
 ```typescript
-import { Fetchtastic } from 'fetchtastic';
+import { fetchtastic } from 'fetchtastic';
 ```
 
 ## Compatibility
 
-`Fetchtastic` runs everywhere fetch is available.
+**Fetchtastic** is built on standard web APIs like fetch, Headers, URL, and
+URLSearchParams, ensuring it integrates smoothly into any JavaScript or
+TypeScript project. By extending the native fetch API, it adds predictability
+and type safety to network requests, making them easier to manage and debug.
+
+So you can leverage familiar web standards for handling headers and URLs. It
+uses the Headers interface for managing request and response headers, and URL
+and URLSearchParams for constructing and manipulating URLs and query parameters.
+This adherence to web standards ensures compatibility and consistency across
+various JavaScript and TypeScript environments, whether you’re working in a
+browser, Node.js, or another runtime.
 
 - Modern browsers
+- Service Workers
 - Deno
 - Node.js >= v18
+- Netlify Edge Functions
+- Vercel Edge Functions
 
 ### Deno
-
-#### Remote import
-
-```typescript
-import { Fetchtastic } from 'https://deno.land/x/fetchtastic/lib/mod.ts';
-```
 
 #### Npm specifier
 
 ```typescript
-import { Fetchtastic } from 'npm:fetchtastic';
+import { fetchtastic } from 'npm:fetchtastic';
 ```
 
 #### JSR
@@ -71,35 +83,27 @@ deno add @fveracoechea/fetchtastic
 ```
 
 ```typescript
-import { Fetchtastic } from '@fveracoechea/fetchtastic';
+import { fetchtastic } from '@fveracoechea/fetchtastic';
+```
+
+#### Remote import
+
+```typescript
+import { fetchtastic } from 'https://deno.land/x/fetchtastic/lib/mod.ts';
 ```
 
 ### Polyfills for Node.js < v18
 
 For older versions, the Node.js standard library does not provide a native
 implementation of fetch and other Browsers-only APIs so polyfilling is
-mandatory.
+mandatory, you can do so by using these npm packages:
+
+- [node-fetch](https://www.npmjs.com/package/node-fetch/v/2.7.0)
+- [abortcontroller-polyfill](https://www.npmjs.com/package/abortcontroller-polyfill)
 
 ```typescript
 import fetch, { FormData } from 'node-fetch';
 
 global.fetch = fetch;
 global.FormData = FormData;
-```
-
-## Fluid interface (Chaining)
-
-Simplifies code structure, enhances readability, and improves the overall
-developer experience by enabling a more natural and concise way of expressing
-operations.
-
-```typescript
-const request = new Fetchtastic('https://jsonplaceholder.typicode.com');
-
-const posts = await request
-  .get('/posts')
-  .setSearchParams({ page: 1, first: 12 })
-  .appendHeader('Content-Type', 'application/json')
-  .notFound(() => Response.json({ message: 'Record not found' }))
-  .json();
 ```

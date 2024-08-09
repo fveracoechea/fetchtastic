@@ -1,12 +1,16 @@
 ---
 title: 'Usage Guide'
-sidebar_position: 2
 ---
+
+This guide is designed to help you get started with Fetchtastic, walking you
+through the process of setting up and using the library for predictable and
+type-safe network requests. You'll find step-by-step instructions, practical
+examples, and best practices
 
 ## Basic example
 
 ```typescript
-const api = new Fetchtastic('https://jsonplaceholder.typicode.com')
+const api = fetchtastic('https://jsonplaceholder.typicode.com')
   .setOptions({ cache: 'default', mode: 'cors' })
   .headers({
     Accept: 'application/json',
@@ -41,7 +45,7 @@ All methods return a new instance and does not modify the previous one.
 ### 1. Global config
 
 ```typescript
-const api = new Fetchtastic('/api/v2')
+const api = fetchtastic('/api/v2')
   .setHeaders({
     Accept: 'application/json',
     'Content-Type': 'application/json',
@@ -84,7 +88,7 @@ Otherwise, you could use a
 
 ```typescript
 const controller = new AbortController();
-const api = new Fetchtastic('https://jsonplaceholder.typicode.com');
+const api = fetchtastic('https://jsonplaceholder.typicode.com');
 
 api
   .get('/posts/1/comments')
@@ -129,9 +133,9 @@ type Post = {
   body: string;
 };
 
-const request = new Fetchtastic('https://jsonplaceholder.typicode.com');
-
-const post = await request.get('/posts/3').json<Post>();
+const post = await fetchtastic('https://jsonplaceholder.typicode.com')
+  .get('/posts/3')
+  .json<Post>();
 ```
 
 ### Runtime schema validation
@@ -143,8 +147,6 @@ achieve that:
 #### [Type guards](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates)
 
 ```typescript
-const request = new Fetchtastic('https://jsonplaceholder.typicode.com');
-
 type Album = {
   id: number;
   title: string;
@@ -166,7 +168,9 @@ export function assertIsAlbum(data: unknown) {
   else throw new Error('Invalid data');
 }
 
-const album = await request.get('/albums/3').json(assertIsAlbum);
+const album = await fetchtastic('https://jsonplaceholder.typicode.com')
+  .get('/albums/3')
+  .json(assertIsAlbum);
 ```
 
 #### [Zod](https://zod.dev/)
@@ -174,13 +178,13 @@ const album = await request.get('/albums/3').json(assertIsAlbum);
 ```typescript
 import { z } from 'zod';
 
-const request = new Fetchtastic('https://jsonplaceholder.typicode.com');
-
 const PostSchema = z.object({
   id: z.number(),
   title: z.string(),
   body: z.string(),
 });
 
-const post = await request.get('/posts/5').json(PostSchema.parse);
+const post = await fetchtastic('https://jsonplaceholder.typicode.com')
+  .get('/posts/5')
+  .json(PostSchema.parse);
 ```
