@@ -4,6 +4,6 @@
     "target": "ES2018",
     "moduleResolution": "NodeNext", // or "NodeNext"
     "esModuleInterop": true,
-    "allowImportingTsExtensions": true,
+    "allowImportingTsExtensions": true
   }
 }

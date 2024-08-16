@@ -4,10 +4,7 @@
     "allowImportingTsExtensions": true,
     "composite": false,
     "noEmit": true,
-    "lib": [
-      "dom",
-      "esnext"
-    ],
+    "lib": ["dom", "esnext"],
     "target": "ES2018",
     "moduleResolution": "NodeNext",
     "importHelpers": true,
@@ -29,8 +26,5 @@
     "noUnusedParameters": true,
     "skipLibCheck": true
   },
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "exclude": ["node_modules", "dist"]
 }
