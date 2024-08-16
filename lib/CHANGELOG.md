@@ -1,5 +1,15 @@
 # fetchtastic
 
+## 1.1.0
+
+### Minor Changes
+
+- 2656d93: Improved error handling, HttpError is now ResponseError
+
+### Patch Changes
+
+- 2656d93: Move docs to docusaurus
+
 ## 1.0.0
 
 ### Major Changes
