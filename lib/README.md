@@ -1,7 +1,7 @@
 # 🌩️ Fetchtastic
 
 Small wrapper around fetch designed to perform more predictable and type-safe
-network requests.
+network requests, with **zero** dependencies.
 
 [![GitHub issues](https://img.shields.io/github/issues-raw/fveracoechea/fetchtastic?color=blue)](https://github.com/fveracoechea/fetchtastic/issues)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/fveracoechea/fetchtastic)](https://github.com/fveracoechea/fetchtastic/pulse)
@@ -20,34 +20,26 @@ network requests.
 
 ## 📖 Documentation
 
-Visit [fetchtastic-docs.vercel.app](https://fveracoechea.github.io/fetchtastic/)
+Visit
+[fveracoechea.github.io/fetchtastic](https://fveracoechea.github.io/fetchtastic/)
 to view the full documentation.
 
 ## ⚡Getting Started
-
-npm
 
 ```sh
 npm install fetchtastic
 ```
 
-pnpm
+**Fetchtastic** is built on standard web APIs and runs everywhere fetch is
+available.
 
-```sh
-pnpm add fetchtastic
-```
-
-yarn
-
-```sh
-yarn add fetchtastic
-```
-
-deno
-
-```typescript
-import { fetchtastic } from 'https://deno.land/x/fetchtastic/lib/mod.ts';
-```
+- Modern browsers
+- Node.js >= v18
+- Deno
+- Service Workers
+- Netlify Edge Functions
+- Vercel Edge Functions
+- and more...
 
 ### Basic usage
 

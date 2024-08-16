@@ -9,6 +9,23 @@ You'll learn how to configure your network requests to ensure they are
 predictable and type-safe, explore the various methods available for handling
 responses, and understand how to effectively catch and manage errors.
 
+## Fluent Interface Design
+
+**Fetchtastic** combines its features through a fluent interface API design,
+enabling you to chain methods together in a clear and concise manner. This
+design allows you to configure your requests step-by-step, with each method call
+returning the modified instance, making it easy to build and customize requests
+without needing separate setup steps.
+
+```typescript
+const posts = await fetchtastic('https://jsonplaceholder.typicode.com')
+  .get('/posts')
+  .setSearchParams({ page: 1, first: 12 })
+  .appendHeader('Content-Type', 'application/json')
+  .notFound(() => Response.json({ message: 'Record not found' }))
+  .json();
+```
+
 ## Request configuration
 
 in **Fetchtastic**, it refers to the set of options and methods available to
@@ -162,20 +179,3 @@ the resulting data.
 - [ blob ](/docs/api/classes/Fetchtastic#blob)
 - [ formData ](/docs/api/classes/Fetchtastic#formdata)
 - [ text ](/docs/api/classes/Fetchtastic#text)
-
-## Fluent Interface Design
-
-**Fetchtastic** combines its features through a fluent interface API design,
-enabling you to chain methods together in a clear and concise manner. This
-design allows you to configure your requests step-by-step, with each method call
-returning the modified instance, making it easy to build and customize requests
-without needing separate setup steps.
-
-```typescript
-const posts = await fetchtastic('https://jsonplaceholder.typicode.com')
-  .get('/posts')
-  .setSearchParams({ page: 1, first: 12 })
-  .appendHeader('Content-Type', 'application/json')
-  .notFound(() => Response.json({ message: 'Record not found' }))
-  .json();
-```
