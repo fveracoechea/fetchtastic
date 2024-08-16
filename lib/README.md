@@ -1,6 +1,7 @@
 # 🌩️ Fetchtastic
 
-Small wrapper around fetch designed to perform more predictable and type-safe network requests.
+Small wrapper around fetch designed to perform more predictable and type-safe
+network requests, with **zero** dependencies.
 
 [![GitHub issues](https://img.shields.io/github/issues-raw/fveracoechea/fetchtastic?color=blue)](https://github.com/fveracoechea/fetchtastic/issues)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/fveracoechea/fetchtastic)](https://github.com/fveracoechea/fetchtastic/pulse)
@@ -19,56 +20,45 @@ Small wrapper around fetch designed to perform more predictable and type-safe ne
 
 ## 📖 Documentation
 
-Visit [fetchtastic-docs.vercel.app](https://fetchtastic-docs.vercel.app/) to view the full
-documentation.
+Visit
+[fveracoechea.github.io/fetchtastic](https://fveracoechea.github.io/fetchtastic/)
+to view the full documentation.
 
 ## ⚡Getting Started
-
-npm
 
 ```sh
 npm install fetchtastic
 ```
 
-pnpm
+**Fetchtastic** is built on standard web APIs and runs everywhere fetch is
+available.
 
-```sh
-pnpm add fetchtastic
-```
-
-yarn
-
-```sh
-yarn add fetchtastic
-```
-
-deno
-
-```typescript
-import { Fetchtastic } from 'https://deno.land/x/fetchtastic/lib/mod.ts';
-```
+- Modern browsers
+- Node.js >= v18
+- Deno
+- Service Workers
+- Netlify Edge Functions
+- Vercel Edge Functions
+- and more...
 
 ### Basic usage
 
 ```typescript
-const api = new Fetchtastic('https://jsonplaceholder.typicode.com')
+const api = fetchtastic('https://jsonplaceholder.typicode.com')
   .setOptions({ cache: 'default', mode: 'cors' })
-  .headers({
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-  });
+  .appendHeader('Content-Type', 'application/json');
 
-const blogData = await api
-  .searchParams({ page: 1, per_page: 12 })
+const blogPosts = await api
   .get('/posts')
-  .json(PostSchema.parse);
+  .setSearchParams({ page: 1, per_page: 12 })
+  .json();
 
-await api.post('/albums', { title: 'My New Album' }).resolve();
+await api.url('/albums').post({ title: 'My New Album' }).resolve();
 ```
 
 ## 🕹️ Contributing
 
-Contributions are welcome and highly appreciated. However, before you jump right into it, we would
-like you to review our
-[Contribution Guidelines](https://github.com/fveracoechea/fetchtastic/blob/main/CONTRIBUTING.md) to
-make sure you have a smooth experience.
+Contributions are welcome and highly appreciated. However, before you jump right
+into it, we would like you to review our
+[Contribution Guidelines](https://github.com/fveracoechea/fetchtastic/blob/main/CONTRIBUTING.md)
+to make sure you have a smooth experience.

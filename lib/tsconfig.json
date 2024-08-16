@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "rootDir": ".",
     "allowImportingTsExtensions": true,
     "composite": false,
     "noEmit": true,

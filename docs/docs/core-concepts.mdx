@@ -1,0 +1,181 @@
+---
+title: Core Concepts
+---
+
+This section covers the essential building blocks of Fetchtastic, including
+Request Configuration, Http Methods, Response Methods, and Error Catchers.
+
+You'll learn how to configure your network requests to ensure they are
+predictable and type-safe, explore the various methods available for handling
+responses, and understand how to effectively catch and manage errors.
+
+## Fluent Interface Design
+
+**Fetchtastic** combines its features through a fluent interface API design,
+enabling you to chain methods together in a clear and concise manner. This
+design allows you to configure your requests step-by-step, with each method call
+returning the modified instance, making it easy to build and customize requests
+without needing separate setup steps.
+
+```typescript
+const posts = await fetchtastic('https://jsonplaceholder.typicode.com')
+  .get('/posts')
+  .setSearchParams({ page: 1, first: 12 })
+  .appendHeader('Content-Type', 'application/json')
+  .notFound(() => Response.json({ message: 'Record not found' }))
+  .json();
+```
+
+## Request configuration
+
+in **Fetchtastic**, it refers to the set of options and methods available to
+customize a network request to your specific needs. By using these configuration
+options, you can control various aspects of how a request is made, ensuring that
+it meets the requirements of your application while maintaining predictability
+and type safety.
+
+Here’s a breakdown of what you can configure:
+
+#### Headers
+
+Specify custom headers to be included with your request, such as authorization
+tokens, content types, or any other metadata necessary for the server to process
+the request correctly.
+
+- [setHeaders](/docs/api/classes/Fetchtastic#setheaders)
+- [appendHeader](/docs/api/classes/Fetchtastic#appendheader)
+- [deleteHeader](/docs/api/classes/Fetchtastic#deleteheader)
+
+#### AbortController
+
+Integrate an
+[AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController)
+to manage the cancellation of requests. This is particularly useful for aborting
+ongoing requests when they are no longer needed, preventing unnecessary resource
+usage.
+
+- [controller](/docs/api/classes/Fetchtastic#controller)
+
+#### URL and Search Parameters
+
+Define the specific path of the URL to which the request will be sent. This
+allows you to target different endpoints within the same domain.
+
+As well add query parameters to the URL to pass additional data or filter
+results. These parameters can be easily appended to the URL, enabling you to
+modify the request without altering the main URL path.
+
+- [url](/docs/api/classes/Fetchtastic#url-1)
+- [setSearchParams](/docs/api/classes/Fetchtastic#setsearchparams)
+- [appendSearchParam](/docs/api/classes/Fetchtastic#appendsearchparam)
+- [deleteSearchParam](/docs/api/classes/Fetchtastic#deletesearchparam)
+
+:::info
+
+Request's url can also be extended using Http method functions.
+
+:::
+
+#### Request Body
+
+For methods like POST, PUT, or PATCH, configure the request body to include the
+data you want to send to the server. Fetchtastic ensures that the body is
+properly JSON stringified when content-type `application/json` has been
+specified in the headers.
+
+- [setBody](/docs/api/classes/Fetchtastic#setbody)
+
+:::info
+
+Request's body can also be set on some Http method functions.
+
+:::
+
+#### Other Options
+
+Beyond these, you can configure additional options such as credentials, referrer
+policy, mode (e.g., cors, same-origin), and more, to fine-tune the behavior of
+your request to suit specific scenarios.
+
+- [setOptions](/docs/api/classes/Fetchtastic#setoptions)
+
+## HTTP methods
+
+These functions when called, set a specific HTTP method to the request
+configuration. Likewise, you can pass optional url and body arguments to these
+methods if needed.
+
+- [get](/docs/api/classes/Fetchtastic#get)
+- [post](/docs/api/classes/Fetchtastic#post)
+- [put](/docs/api/classes/Fetchtastic#put)
+- [delete](/docs/api/classes/Fetchtastic#delete)
+- [options](/docs/api/classes/Fetchtastic#options)
+- [patch](/docs/api/classes/Fetchtastic#patch)
+- [head](/docs/api/classes/Fetchtastic#head)
+
+## Error Catchers
+
+They play a crucial role in managing and handling responses that aren't
+successful (those that return HTTP error codes like 404 or 500).
+
+Unlike the standard fetch API, which requires manual checking of response
+statuses, Fetchtastic automatically throws an error for any
+[non-OK](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) responses
+unless you've provided an error catcher to handle it.
+
+- [ onError ](/docs/api/classes/Fetchtastic#onerror)
+- [ badRequest ](/docs/api/classes/Fetchtastic#badrequest)
+- [ unauthorized ](/docs/api/classes/Fetchtastic#unauthorized)
+- [ forbidden ](/docs/api/classes/Fetchtastic#forbidden)
+- [ notFound ](/docs/api/classes/Fetchtastic#notfound)
+- [ timeout ](/docs/api/classes/Fetchtastic#timeout)
+- [ serverError ](/docs/api/classes/Fetchtastic#servererror)
+
+### Key Points
+
+- Error catchers are registered once and shared across instances.
+- The original request is passed along with the error, allowing for the creation
+  of reusable error handling functions.
+- Error catchers can be overwritten for specific instances as needed.
+- Catchers are optional, but if none are provided an error will still be thrown
+  for http error codes and it will be up to you to catch it.
+
+Here’s how Error Catchers work:
+
+#### Automatic Error Handling
+
+By default, Fetchtastic throws an
+[ResponseError](/docs/api/classes/ResponseError) when it encounters an HTTP
+response with a status code that isn’t in the 200–299 range. This ensures that
+you don’t accidentally overlook failed requests, making error handling a more
+explicit and intentional part of your code.
+
+#### Custom Error Catchers
+
+If you want more control over how errors are handled, you can provide a custom
+error catcher. This is a function that allows you to intercept these errors in a
+more declarative approach and decide what to do with them. For example, you
+might want to display a user-friendly message, log the error for further
+analysis, or retry the request under certain conditions.
+
+#### Fallback Handling:
+
+Error catchers can also act as a safety net, ensuring that unexpected errors
+don’t break your application. By catching and managing these errors, you can
+maintain a smooth user experience even when things go wrong.
+
+## Response methods
+
+These functions when called, execute the HTTP request and return a promise with
+its response.
+
+The primary objectives of these functions involve initiating the HTTP request
+with the existing configuration, with a focus on managing responses, and parsing
+the resulting data.
+
+- [ resolve ](/docs/api/classes/Fetchtastic#resolve)
+- [ json ](/docs/api/classes/Fetchtastic#json)
+- [ arrayBuffer ](/docs/api/classes/Fetchtastic#arraybuffer)
+- [ blob ](/docs/api/classes/Fetchtastic#blob)
+- [ formData ](/docs/api/classes/Fetchtastic#formdata)
+- [ text ](/docs/api/classes/Fetchtastic#text)

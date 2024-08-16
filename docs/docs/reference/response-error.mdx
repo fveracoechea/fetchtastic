@@ -1,0 +1,41 @@
+---
+title: Response Error
+sidebar_position: 2
+---
+
+# ResponseError
+
+Represents an error that occurs during an HTTP request made with `Fetchtastic`.
+It encapsulates information about the error, including the request URL, HTTP
+method, response details, and error message.
+
+Extends the built-in
+[Error](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error)
+
+```typescript
+import { ResponseError } from 'fetchtastic';
+```
+
+## Properties
+
+- `method` - Indicates the HTTP method used in the failed request.
+- `response` - Refers to the
+  [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response) object
+  received from the failed request.
+
+## Constructor
+
+```typescript
+constructor(response: Response, method: HttpMethod)
+```
+
+Creates a new instance of the `ResponseError` class.
+
+- `url` - URL of the failed request.
+- `method` - HTTP method used in the failed request.
+- `response` - `Response` object received from the failed request.
+- `message` - A custom error message **(optional)**.
+
+## Methods
+
+The `ResponseError` does not expose any public methods.

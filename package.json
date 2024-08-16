@@ -1,6 +1,10 @@
 {
   "name": "fetchtastic-monorepo",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:fveracoechea/fetchtastic.git"
+  },
   "size-limit": [
     {
       "name": "CommonJS",
@@ -18,6 +22,7 @@
     "test": "turbo run test",
     "type-check": "turbo run type-check",
     "dev": "turbo run dev",
+    "deploy:docs": "GIT_USER=fveracoechea SSH=true pnpm run --filter docs deploy",
     "lint": "turbo run lint",
     "size": "size-limit --json",
     "prettier-check": "prettier '**/*.{js,ts,jsx,tsx,json,md,mdx}' --check",
@@ -37,11 +42,11 @@
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "prettier": "^3.2.5",
     "size-limit": "^11.1.2",
-    "turbo": "^1.13.3",
+    "turbo": "^2.0.9",
     "typescript": "^5.4.5"
   },
   "engines": {
-    "node": ">=18.0.0",
+    "node": ">=20.0.0",
     "pnpm": ">=6"
   },
   "packageManager": "pnpm@9.0.6"

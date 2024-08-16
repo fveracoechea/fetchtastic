@@ -1,18 +1,13 @@
-import { HttpError } from './HttpError.ts';
-import { getNewSearchParms, getResponseParser, shouldStringify } from './internals.ts';
+import { ResponseError } from './ResponseError.ts';
+import { getNewSearchParms, shouldStringify } from './internals.ts';
 import {
+  CatcherCallback,
   DataAssertionFn,
-  FetchOptions,
   FetchRequestHeader,
   FetchtasticOptions,
   HttpMethod,
   SearchParamInput,
 } from './types.ts';
-
-export type ErrorCatcher = (
-  error: HttpError,
-  config: Fetchtastic,
-) => void | Promise<Response | void>;
 
 /**
  * Represents an HTTP request configuration.
@@ -27,7 +22,7 @@ export class Fetchtastic {
   #controller?: AbortController;
   #searchParams: URLSearchParams;
   #body: unknown;
-  #catchers: Map<number | string, Set<ErrorCatcher>>;
+  #catchers: Map<number | string, CatcherCallback>;
   #options: FetchtasticOptions;
 
   /**
@@ -103,20 +98,24 @@ export class Fetchtastic {
     instance.#catchers = new Map(this.#catchers);
     instance.#headers = new Headers(this.#headers);
     instance.#searchParams = new URLSearchParams(this.#searchParams.toString());
-    instance.#options = Object.assign({}, this.#options);
+    instance.#options = { ...this.#options };
     instance.#body = this.#body;
     instance.#method = this.#method;
     return instance;
   }
 
-  #setMethod<Method extends HttpMethod>(method: Method, url?: string, body?: unknown) {
+  #setMethod<Method extends HttpMethod>(
+    method: Method,
+    body?: unknown,
+    url?: string,
+  ) {
     const instance = url ? this.url(url) : this.#clone();
     instance.#method = method;
     if (body !== undefined) instance.#body = body;
     return instance;
   }
 
-  #getFinalRequestOptions(method: HttpMethod): FetchOptions {
+  #getFinalRequestOptions(method: HttpMethod): RequestInit {
     let body: BodyInit | null;
     if (this.#body && shouldStringify(this.#body, this.#headers)) {
       body = JSON.stringify(this.#body);
@@ -124,7 +123,7 @@ export class Fetchtastic {
       body = (this.#body ?? null) as BodyInit | null;
     }
 
-    const options: FetchOptions = {
+    const options: RequestInit = {
       ...this.#options,
       method,
       headers: this.#headers,
@@ -135,21 +134,15 @@ export class Fetchtastic {
     return options;
   }
 
-  async #handleError(response: Response) {
-    const promises: Promise<Response | void>[] = [];
-    const catchers = this.#catchers.get(response.status);
+  #handleError(response: Response) {
+    const catcher = this.#catchers.get(response.status);
+    const res = response.clone();
 
-    if (!catchers) {
-      throw new HttpError(this.URL, this.method, response.clone());
+    if (!catcher) {
+      throw new ResponseError(res, this.method);
     }
 
-    for (const catcherFn of catchers) {
-      const result = catcherFn(new HttpError(this.URL, this.method, response.clone()), this);
-      if (result && result instanceof Promise) promises.push(result);
-    }
-
-    const results = await Promise.all(promises);
-    return results.findLast(res => res instanceof Response);
+    return catcher(new ResponseError(res, this.method), this);
   }
 
   /**
@@ -169,9 +162,9 @@ export class Fetchtastic {
    * @param replace - Specifies whether to replace the existing headers (default: false).
    * @link https://developer.mozilla.org/en-US/docs/Web/API/Headers/set
    */
-  setHeaders(data?: HeadersInit, replace = false) {
+  setHeaders(headers?: HeadersInit, replace = false) {
     const instance = this.#clone();
-    const newHeaders = new Headers(data);
+    const newHeaders = new Headers(headers);
     if (!replace) {
       instance.#headers.forEach((value, key) => {
         if (!newHeaders.has(key)) {
@@ -188,8 +181,8 @@ export class Fetchtastic {
    * @param name - The name of the header.
    * @param value - The value of the header.
    */
-  appendHeader(name: FetchRequestHeader, value: string): this;
-  appendHeader(name: string, value: string): this;
+  appendHeader(name: FetchRequestHeader, value: string): Fetchtastic;
+  appendHeader(name: string, value: string): Fetchtastic;
   appendHeader(name: string, value: string) {
     const instance = this.#clone();
     instance.#headers.append(name, value);
@@ -209,12 +202,26 @@ export class Fetchtastic {
   }
 
   /**
-   * Sets the URL for the request.
-   * @param url - The URL to set.
-   * @param replace - Specifies whether to replace the existing URL (default: false).
+   * Sets or modifies the URL in the request configuration.
+   *
+   * @param {URL|string} url - The new URL or a string to append to the existing URL.
+   * @param {boolean} [replace=false] - If `true`, replaces the existing URL with the new string; otherwise, appends the string to the existing URL.
+   * @returns {this} A new instance with the updated URL configuration.
+   *
+   * @example
+   * ```ts
+   * const request = new Fetchtastic()
+   * request.url(new URL('https://example.com'));
+   *
+   * // Append a string to the existing URL
+   * request.url('/path');
+   *
+   * // Replace the existing URL with a new string
+   * request.url('/newpath', true);
+   * ```
    */
-  url(url: URL): this;
-  url(url: string, replace?: boolean): this;
+  url(url: URL): Fetchtastic;
+  url(url: string, replace?: boolean): Fetchtastic;
   url(url: string | URL, replace = false) {
     const instance = this.#clone();
     if (replace || url instanceof URL) {
@@ -222,7 +229,8 @@ export class Fetchtastic {
     } else {
       const oldURL = instance.#url.toString();
       const split = oldURL.split('?');
-      instance.#url = split.length > 1 ? split[0] + url + '?' + split[1] : oldURL + url;
+      instance.#url =
+        split.length > 1 ? split[0] + url + '?' + split[1] : oldURL + url;
     }
     return instance;
   }
@@ -232,9 +240,9 @@ export class Fetchtastic {
    * @param data - The URL parameters to set.
    * @param replace - Specifies whether to replace the existing search parameters (default: false).
    */
-  setSearchParams(data?: SearchParamInput, replace = false) {
+  setSearchParams(data: SearchParamInput, replace = false) {
     const instance = this.#clone();
-    const newSearchParams = data ? getNewSearchParms(data) : new URLSearchParams();
+    const newSearchParams = getNewSearchParms(data);
 
     if (!replace) {
       for (const [key] of instance.#searchParams) {
@@ -252,7 +260,7 @@ export class Fetchtastic {
   }
 
   /**
-   * Appends a search parameter to the request.
+   * Appends a search parameter to the request. it uses `URLSearchParams.append` under the hood.
    * @param name - The name of the search parameter.
    * @param value - The value of the search parameter.
    */
@@ -264,7 +272,7 @@ export class Fetchtastic {
 
   /**
    * Deletes a search parameter from the request.
-   * @param name - The name of the search parameter to delete.
+   * @param name - The name of the search parameter to deletee
    */
   deleteSearchParam(name: string) {
     const instance = this.#clone();
@@ -294,45 +302,97 @@ export class Fetchtastic {
    */
   setOptions(options: FetchtasticOptions, replace = false) {
     const instance = this.#clone();
-    instance.#options = replace ? options : { ...instance.#options, ...options };
+    instance.#options = replace
+      ? options
+      : { ...instance.#options, ...options };
     return instance;
   }
 
+  /**
+   * Sets the HTTP method to GET and optionally sets the request URL.
+   *
+   * @param {string} [url] - If provided appends to the existing URL.
+   * @returns {Fetchtastic} A new instance with the updated GET request configuration.
+   * */
   get(url?: string) {
-    return this.#setMethod('GET', url);
+    return this.#setMethod('GET', null, url);
   }
 
-  post(url?: string, body?: unknown) {
-    return this.#setMethod('POST', url, body);
+  /**
+   * Sets the HTTP method to POST and optionally sets the request URL and body.
+   *
+   * @param {unknown} [body] - The body of the POST request. If not provided, the existing body is used.
+   * @param {string} [url] - Appends to the existing URL.
+   * @returns {Fetchtastic} A new instance with the updated POST request configuration.
+   *
+   * */
+  post(body?: unknown, url?: string) {
+    return this.#setMethod('POST', body, url);
   }
 
-  put(url?: string, body?: unknown) {
-    return this.#setMethod('PUT', url, body);
+  /**
+   * Sets the HTTP method to PUT and optionally sets the request URL and body.
+   *
+   * @param {unknown} [body] - The body of the PUT request. If not provided, the existing body is used.
+   * @param {string} [url] - if provided appends to the existing URL.
+   * @returns {Fetchtastic} A new instance with the updated PUT request configuration.
+   * */
+  put(body?: unknown, url?: string) {
+    return this.#setMethod('PUT', body, url);
   }
 
-  delete(url?: string, body?: unknown) {
-    return this.#setMethod('DELETE', url, body);
+  /**
+   * Sets the HTTP method to DELETE and optionally sets the request URL and body.
+   *
+   * @param {unknown} [body] - The body of the DELETE request. If not provided, the existing body is used.
+   * @param {string} [url] - if provided appends to the existing URL.
+   * @returns {Fetchtastic} A new instance with the updated DELETE request configuration.
+   * */
+  delete(body?: unknown, url?: string) {
+    return this.#setMethod('DELETE', body, url);
   }
 
-  options(url?: string, body?: unknown) {
-    return this.#setMethod('OPTIONS', url, body);
+  /**
+   * Sets the HTTP method to OPTIONS and optionally sets the request URL and body.
+   *
+   * @param {unknown} [body] - The body of the OPTIONS request. If not provided, the existing body is used.
+   * @param {string} [url] - if provided appends to the existing URL.
+   * @returns {Fetchtastic} A new instance with the updated OPTIONS request configuration.
+   * */
+  options(body?: unknown, url?: string) {
+    return this.#setMethod('OPTIONS', body, url);
   }
 
-  patch(url?: string, body?: unknown) {
-    return this.#setMethod('PATCH', url, body);
+  /**
+   * Sets the HTTP method to PATCH and optionally sets the request URL and body.
+   *
+   * @param {unknown} [body] - The body of the PATCH request. If not provided, the existing body is used.
+   * @param {string} [url] - if provided appends to the existing URL.
+   * @returns {Fetchtastic} A new instance with the updated PATCH request configuration.
+   * */
+  patch(body?: unknown, url?: string) {
+    return this.#setMethod('PATCH', body, url);
   }
 
+  /**
+   * Sets the HTTP method to HEAD and optionally sets the request URL.
+   *
+   * @param {string} [url] - if provided appends to the existing URL.
+   * @returns {Fetchtastic} A new instance with the updated HEAD request configuration.
+   * */
   head(url?: string) {
-    return this.#setMethod('HEAD', url);
+    return this.#setMethod('HEAD', null, url);
   }
 
   /**
    * Resolves the fetch request and returns the `Response`
-   * @throws `FetchError` if the fetch request fails.
+   * @throws `ResponseError` if the fetch request fails.
    */
   async resolve() {
-    const options = this.#getFinalRequestOptions(this.method);
-    const response = await fetch(this.URL, options);
+    const response = await fetch(
+      this.URL,
+      this.#getFinalRequestOptions(this.method),
+    );
     if (!response.ok) {
       const newResponse = await this.#handleError(response);
       if (newResponse) return newResponse;
@@ -344,41 +404,38 @@ export class Fetchtastic {
    * Sends the request and returns the response as a `JSON` object.
    * @param assertData Optional. A function to assert and transform the response data.
    */
-  json<T = unknown>(assertData?: DataAssertionFn<T>): Promise<T> {
-    return this.resolve()
-      .then(getResponseParser('JSON'))
-      .then(json => {
-        if (assertData) return assertData(json);
-        return json;
-      });
+  async json<T = unknown>(assertData?: DataAssertionFn<T>): Promise<T> {
+    const json = await (await this.resolve()).json();
+    if (assertData) return assertData(json);
+    return json;
   }
 
   /**
    * Sends the fetch request and returns the response as an `ArrayBuffer`.
    */
-  arrayBuffer(): Promise<ArrayBuffer> {
-    return this.resolve().then(getResponseParser('ArrayBuffer'));
+  arrayBuffer() {
+    return this.resolve().then(res => res.arrayBuffer());
   }
 
   /**
    * Resolves the fetch request and returns the response as a `Blob`.
    */
-  blob(): Promise<Blob> {
-    return this.resolve().then(getResponseParser('Blob'));
+  blob() {
+    return this.resolve().then(res => res.blob());
   }
 
   /**
    * Resolves the fetch request and returns the response as a `FormData`.
    */
-  formData(): Promise<FormData> {
-    return this.resolve().then(getResponseParser('FormData'));
+  formData() {
+    return this.resolve().then(res => res.formData());
   }
 
   /**
    * Sends the fetch request and resolve the response as plain text.
    */
-  text(): Promise<string> {
-    return this.resolve().then(getResponseParser('Text'));
+  text() {
+    return this.resolve().then(res => res.text());
   }
 
   /**
@@ -386,55 +443,62 @@ export class Fetchtastic {
    * @param status HTTP status code
    * @param catcher on-error callback function
    */
-  onError(status: number, catcher: ErrorCatcher) {
-    const handlers = this.#catchers.get(status);
-    if (handlers && handlers.size > 0) {
-      handlers.add(catcher);
-    } else {
-      this.#catchers.set(status, new Set([catcher]));
-    }
+  onError(status: number, catcher: CatcherCallback) {
+    this.#catchers.set(status, catcher);
     return this;
   }
 
   /**
    * Handles 400 bad-request HTTP responses
    */
-  badRequest(catcher: ErrorCatcher) {
+  badRequest(catcher: CatcherCallback) {
     return this.onError(400, catcher);
   }
 
   /**
    * Handles 401 unauthorized HTTP responses
    */
-  unauthorized(catcher: ErrorCatcher) {
+  unauthorized(catcher: CatcherCallback) {
     return this.onError(401, catcher);
   }
 
   /**
    * Handles 403 forbidden HTTP responses
    */
-  forbidden(catcher: ErrorCatcher) {
+  forbidden(catcher: CatcherCallback) {
     return this.onError(403, catcher);
   }
 
   /**
    * Handles 404 not-found HTTP responses
    */
-  notFound(catcher: ErrorCatcher) {
+  notFound(catcher: CatcherCallback) {
     return this.onError(404, catcher);
   }
 
   /**
    * Handles 408 request-timeout HTTP responses
    */
-  timeout(catcher: ErrorCatcher) {
+  timeout(catcher: CatcherCallback) {
     return this.onError(408, catcher);
   }
 
   /**
    * Handles 500 internal-server-error HTTP responses
    */
-  serverError(catcher: ErrorCatcher) {
+  serverError(catcher: CatcherCallback) {
     return this.onError(500, catcher);
   }
+}
+
+/**
+ * Creates a new instance of Fetchtastic which represents an HTTP request configuration.
+ * @param baseUrl - The base `URL` for the requests.
+ * @param controller - An optional `AbortController` instance for aborting the request.
+ */
+export function fetchtastic(
+  baseUrl?: string | URL,
+  controller?: AbortController,
+) {
+  return new Fetchtastic(baseUrl, controller);
 }

@@ -1,28 +1,26 @@
+import { Fetchtastic } from './Fetchtastic.ts';
+import { ResponseError } from './ResponseError.ts';
+
 /**
  * HTTP methods supported by the HTTP protocol.
  * This array contains strings representing various HTTP methods.
  * The methods include OPTIONS, GET, HEAD, PUT, POST, DELETE, and PATCH.
  */
-export const HttpMethods = ['OPTIONS', 'GET', 'HEAD', 'PUT', 'POST', 'DELETE', 'PATCH'] as const;
-
-/**
- * Possible response data types that can be parsed by the client.
- * This array contains strings representing various response data types.
- * The types include ArrayBuffer, Blob, FormData, JSON, and Text.
- */
-export const ResponseParsers = ['ArrayBuffer', 'Blob', 'FormData', 'JSON', 'Text'] as const;
+export const HttpMethods = [
+  'OPTIONS',
+  'GET',
+  'HEAD',
+  'PUT',
+  'POST',
+  'DELETE',
+  'PATCH',
+] as const;
 
 /**
  * Represents an HTTP method.
  * This type is a union of strings representing various HTTP methods.
  */
 export type HttpMethod = (typeof HttpMethods)[number];
-
-/**
- * Represents a response parser for handling response data.
- * This type is a union of strings representing various response data types.
- */
-export type ResponseParser = (typeof ResponseParsers)[number];
 
 /**
  * Represents various types that can be used as search parameters in a URL.
@@ -39,15 +37,10 @@ export type SearchParamInput =
  * Options for configuring the behavior of Fetchtastic.
  * This type extends RequestInit but omits 'signal' and 'method' properties.
  */
-export type FetchtasticOptions = Omit<RequestInit, 'signal' | 'method' | 'body' | 'headers'>;
-
-/**
- * Represents options for making a fetch request.
- * This type extends RequestInit and includes the 'method' property as HttpMethod.
- */
-export interface FetchOptions extends RequestInit {
-  method: HttpMethod;
-}
+export type FetchtasticOptions = Omit<
+  RequestInit,
+  'signal' | 'method' | 'body' | 'headers'
+>;
 
 /**
  * Represents common request headers used in HTTP requests.
@@ -74,3 +67,11 @@ export type FetchRequestHeader =
  * This function takes an unknown data and returns a specified type.
  */
 export type DataAssertionFn<T = unknown> = (data: unknown) => T;
+
+/**
+ * Callback function used to handle fetch response errors.
+ * */
+export type CatcherCallback = (
+  error: ResponseError,
+  config: Fetchtastic,
+) => void | Promise<Response | void>;

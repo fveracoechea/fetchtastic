@@ -1,0 +1,14 @@
+{
+  "overrides": [
+    {
+      "files": ["*.spec.ts"],
+      "env": {
+        "jest": true
+      },
+      "rules": {
+        "max-lines-per-function": 0,
+        "no-console": 0
+      }
+    }
+  ]
+}

@@ -1,19 +1,12 @@
 {
-  "printWidth": 100,
+  "printWidth": 80,
   "trailingComma": "all",
   "proseWrap": "always",
   "semi": true,
   "singleQuote": true,
   "arrowParens": "avoid",
-  "plugins": [
-    "@trivago/prettier-plugin-sort-imports"
-  ],
-  "importOrder": [
-    "^react(.*)$",
-    "<THIRD_PARTY_MODULES>",
-    "^[../]",
-    "^[./]"
-  ],
+  "plugins": ["@trivago/prettier-plugin-sort-imports"],
+  "importOrder": ["^react(.*)$", "<THIRD_PARTY_MODULES>", "^[../]", "^[./]"],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true
 }

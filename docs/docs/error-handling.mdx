@@ -1,0 +1,182 @@
+---
+title: 'Error Handling'
+---
+
+This section is dedicated to guiding you through the common challenges you might
+face when dealing with errors using the fetch API, and how Fetchtastic
+simplifies and enhances this process.
+
+## The problem
+
+[fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) in
+JavaScript is awesome.
+
+```typescript
+const res = await fetch('/user');
+const user = await res.json();
+```
+
+While nice and simple, this code has a number of issues.
+
+You could say “oh, yeah, handle errors”, and rewrite it like this:
+
+```typescript
+try {
+  const res = await fetch('/user');
+  const user = await res.json();
+} catch (err) {
+  // Handle the error
+}
+```
+
+It is an improvement, but still has issues.
+
+Here, we’re assuming user is in fact a user object, as well that we got a `200`
+response. Fetch does not throw errors for non-200 statuses, so you could have
+actually received a `400`, `401`, `404`, `500`, or all kinds of other issues.
+
+That's why manually checking and handling every request error code can be very
+tedious:
+
+```typescript
+try {
+  const response = await fetch('/anything');
+
+  if (!response.ok) {
+    switch (response.status) {
+      case 400:
+        // bad request
+        break;
+
+      case 401:
+        // not authorized
+        break;
+
+      case 404:
+        // not found
+        break;
+
+      case 500:
+        // internal server error
+        break;
+    }
+  }
+} catch (error) {
+  // Another error
+}
+```
+
+## The solution
+
+**Fetchtastic** throws an [ResponseError](/docs/api/classes/ResponseError) when
+the response is not successful and contains helper methods to handle common
+codes. We call those helper methods
+[Error Catchers](/docs/core-concepts#error-catchers):
+
+```typescript
+try {
+
+  const response = await fetchtastic('...')
+    .badRequest(error => /* 400 */)
+    .unauthorized(error => /* 401 */)
+    .forbidden(error => /* 403 */)
+    .notFound(error => /* 404 */)
+    .timeout(error => /* 408 */)
+    .serverError(error => /* 500 */)
+    .onError(429, error => /* Too many requests */)
+    .onError(501, error => /* Not implemented */)
+    .resolve();
+
+} catch (error) {
+  /* Uncaught errors */
+  if (error instanceof ResponseError) {
+    console.log(error.message); // I'm a Teapot
+    console.log(error.response.status); // 418
+    console.log(await error.response.json())
+  }
+}
+```
+
+### Fallback response
+
+An alternative response can be returned from error catchers.
+
+```typescript
+const resource = fetchtastic('/api/attributes')
+  .notFound(() =>
+    Response.json({
+      message: 'No data has been found',
+    }),
+  )
+  .json();
+```
+
+### Replaying requests
+
+We can perform an additional request, and modify the initial response if needed.
+
+In the following example, you can notice that the execution flow is preserved as
+expected, `.json()` will return the result of the original request or the
+replayed one.
+
+```typescript
+const api = fetchtastic('/api');
+
+const sleep = (time: number) =>
+  new Promise(resolve => setTimeout(resolve, time));
+
+export function getResource(id: number) {
+  return api
+    .get(`/resource/${id}`)
+    .onError(429, async (error, request) => {
+      // Too many requests
+      console.warn(error.message);
+      // wait 3 seconds
+      await sleep(3000);
+      // Replay the original request
+      return request.resolve();
+    })
+    .json();
+}
+```
+
+### Reusable error-catchers
+
+Error catchers are shared through instances, so you only need to register them
+once. They can also be overwritten if needed.
+
+The original `request` is passed along the error and can be used to create
+reusable functions:
+
+```typescript
+let accessToken = null;
+
+async function handleUnauthorized(error: ResponseError, request: Fetchtastic) {
+  // Renew credentials
+  const data = await api.get('/renew-token').json();
+  accessToken = data.token;
+  // Replay the original request with new credentials
+  return request.setHeaders({ Authorization: accessToken }).resolve();
+}
+
+const api = fetchtastic('/api')
+  .appendHeader('Authorization', accessToken)
+  .unauthorized(handleUnauthorized);
+
+// these will handle unauthorized requests
+const postsApi = api.url('/posts');
+const albumsApi = api.url('/albums');
+
+// Overwrite error catchers for specific instances
+const commentsApi = api
+  .url('/comments')
+  .unauthorized(async (error, request) => {
+    if (isLoggedIn()) {
+      return handleUnauthorized(error, request);
+    }
+
+    return Response.json({
+      message: 'Please login to your account',
+    });
+  });
+```
