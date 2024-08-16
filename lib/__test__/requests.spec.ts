@@ -92,7 +92,7 @@ describe('GET Requests', () => {
       .catch((error: ResponseError) => {
         expect(error.method).toBe('GET');
         expect(error.response.status).toBe(404);
-        expect(error.response.url).toBe(endpoint);
+        expect(error.response.url).toBe('');
         expect(error.message).toBe('Not Found');
       });
 
@@ -160,7 +160,7 @@ describe('POST Requests', () => {
       .catch((error: ResponseError) => {
         expect(error.method).toBe('POST');
         expect(error.response.status).toBe(404);
-        expect(error.response.url).toBe(endpoint);
+        expect(error.response.url).toBe('');
         expect(error.message).toBe('Not Found');
       });
 

@@ -107,7 +107,7 @@ export class Fetchtastic {
   #setMethod<Method extends HttpMethod>(
     method: Method,
     body?: unknown,
-    url = '',
+    url?: string,
   ) {
     const instance = url ? this.url(url) : this.#clone();
     instance.#method = method;
@@ -315,7 +315,7 @@ export class Fetchtastic {
    * @returns {Fetchtastic} A new instance with the updated GET request configuration.
    * */
   get(url?: string) {
-    return this.#setMethod('GET', url);
+    return this.#setMethod('GET', null, url);
   }
 
   /**
@@ -381,7 +381,7 @@ export class Fetchtastic {
    * @returns {Fetchtastic} A new instance with the updated HEAD request configuration.
    * */
   head(url?: string) {
-    return this.#setMethod('HEAD', url);
+    return this.#setMethod('HEAD', null, url);
   }
 
   /**
